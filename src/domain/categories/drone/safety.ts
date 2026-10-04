@@ -91,6 +91,49 @@ export const GLOBAL_ALERTS: readonly SafetyAlert[] = [
     verificado_em: VERIFICADO_EM,
   },
   {
+    id: "pessoas-primeiro",
+    nivel: "perigo",
+    titulo: "Pessoas primeiro: distância e posição de quem assiste",
+    texto:
+      "Quedas acontecem por erro de pilotagem ou defeito, e quem está perto do drone corre risco. A segurança das pessoas vem antes do drone.",
+    acoes: [
+      "Quem assiste fica atrás de você; ninguém entre você e o drone.",
+      "Enquanto aprende, mantenha o drone a pelo menos 3 m de você (e não mais que uns 10 m).",
+      "Se alguém entrar na área de voo, pouse na hora e só decole com a área livre.",
+    ],
+    fontes: [SRC.ardupilotSafety],
+    verificado_em: VERIFICADO_EM,
+  },
+  {
+    id: "ligar-desligar",
+    nivel: "atencao",
+    titulo: "Ordem certa de ligar e desligar",
+    texto:
+      "Com a bateria conectada, trate o drone como armado: os motores podem girar a qualquer momento.",
+    acoes: [
+      "Ligue o rádio primeiro, com o acelerador todo para baixo; só depois conecte a bateria do drone.",
+      "Depois de pousar, desarme e desconecte a bateria antes de desligar o rádio.",
+      "Não pegue o drone e o rádio ao mesmo tempo: dá para esbarrar no acelerador.",
+      "Não voe além do tempo seguro da bateria: é ruim para ela e pode derrubar o drone.",
+    ],
+    fontes: [SRC.ardupilotSafety],
+    verificado_em: VERIFICADO_EM,
+  },
+  {
+    id: "emergencia",
+    nivel: "info",
+    titulo: "Se algo der errado",
+    texto:
+      "Tenha à mão uma toalha grande, um extintor e um kit de primeiros socorros: para o ArduPilot, a toalha é o equipamento de segurança mais importante, seguida do extintor e do kit.",
+    acoes: [
+      "Drone em estado estranho ou depois de uma queda: jogue a toalha sobre as hélices e desconecte a bateria.",
+      "Bateria pegando fogo: afaste as pessoas e não respire a fumaça; se não der para controlar, chame os bombeiros.",
+      "Ferimento sério: ligue para o SAMU 192 (gratuito, 24 horas).",
+    ],
+    fontes: [SRC.ardupilotSafety, SRC.samu192],
+    verificado_em: VERIFICADO_EM,
+  },
+  {
     id: "simulador",
     nivel: "info",
     titulo: "Treine no simulador primeiro",

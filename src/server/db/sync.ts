@@ -8,6 +8,7 @@ import {
   arquetipos,
   catalogoMeta,
   componentes,
+  dronesProntos,
   ferramentas,
   perfisFirmware,
   tabelasEmpuxo,
@@ -52,7 +53,8 @@ export function syncDroneCatalog(db: Db, loaded: LoadedCatalog, agora = new Date
     catalog.empuxo.length +
     catalog.ferramentas.length +
     catalog.arquetipos.length +
-    catalog.perfis_firmware.length;
+    catalog.perfis_firmware.length +
+    catalog.prontos.length;
   if (currentHash(db, "drone") === hash) return { fonte: "drone", mudou: false, itens, hash };
 
   db.transaction((tx) => {
@@ -62,6 +64,7 @@ export function syncDroneCatalog(db: Db, loaded: LoadedCatalog, agora = new Date
     tx.delete(ferramentas).run();
     tx.delete(arquetipos).run();
     tx.delete(perfisFirmware).run();
+    tx.delete(dronesProntos).run();
 
     for (const bloco of chunks(catalog.componentes)) {
       tx.insert(componentes)
@@ -120,6 +123,20 @@ export function syncDroneCatalog(db: Db, loaded: LoadedCatalog, agora = new Date
     for (const p of catalog.perfis_firmware) {
       tx.insert(perfisFirmware)
         .values({ id: p.id, firmware: p.firmware, versao_min: p.versao_min, dados: p })
+        .run();
+    }
+    for (const r of catalog.prontos) {
+      tx.insert(dronesProntos)
+        .values({
+          id: r.id,
+          arquetipo_id: r.arquetipo_id,
+          tipo: r.tipo,
+          marca: r.marca,
+          modelo: r.modelo,
+          preco_min_usd: r.preco_referencia_usd?.min ?? null,
+          preco_max_usd: r.preco_referencia_usd?.max ?? null,
+          dados: r,
+        })
         .run();
     }
     saveMeta(tx, "drone", hash, itens, agora);

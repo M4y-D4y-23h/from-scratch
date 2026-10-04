@@ -117,6 +117,12 @@ export const SRC = {
     url: "https://www.decea.mil.br/drone/",
     acessado_em: ACESSO,
   } satisfies Source,
+  samu192: {
+    titulo: "Ministério da Saúde: SAMU 192 (serviço gratuito, 24 horas)",
+    tipo: "documentacao_oficial",
+    url: "https://www.gov.br/saude/pt-br/composicao/saes/samu-192",
+    acessado_em: ACESSO,
+  } satisfies Source,
   anatelRestrita: {
     titulo: "Anatel: Ato nº 14.448/2017 (requisitos técnicos de equipamentos de radiação restrita)",
     tipo: "norma",

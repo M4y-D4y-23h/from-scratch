@@ -13,7 +13,8 @@ try {
   console.log(
     `Catálogo OK: ${arquivos.length} arquivo(s), ${catalog.componentes.length} peça(s), ` +
       `${catalog.empuxo.length} tabela(s) de empuxo, ${catalog.ferramentas.length} ferramenta(s), ` +
-      `${catalog.arquetipos.length} arquétipo(s), ${catalog.perfis_firmware.length} perfil(is) de firmware.`,
+      `${catalog.arquetipos.length} arquétipo(s), ${catalog.perfis_firmware.length} perfil(is) de firmware, ` +
+      `${catalog.prontos.length} drone(s) pronto(s) de referência.`,
   );
 } catch (error) {
   if (!(error instanceof CatalogError)) throw error;

@@ -134,6 +134,24 @@ describe('Arquétipo 2 (FPV 5"): builds de referência com o catálogo real', ()
     expect(projeto.dificuldade.rotulo).toBe("Avançado");
   });
 
+  it("montar × comprar pronto: BNF + rádio, óculos e baterias empata com montar", () => {
+    const plano = result.faixas[0]!;
+    const projeto = buildProjectReport(plano.build, archetype, catalog, config);
+    const mach = projeto.prontos.opcoes.find(
+      (o) => o.id === "iflight-mach-r5-ultra-trainer-analog",
+    );
+    expect(mach?.veredito).toBe("parecido");
+    // O BNF não traz rádio, bateria do rádio, óculos nem baterias de voo.
+    expect(mach?.complementos.map((c) => c.id).sort()).toEqual(
+      [
+        "betafpv-vr04",
+        "cnhl-ministar-1500-6s-120c",
+        "radiomaster-18650-3200-par",
+        "radiomaster-pocket-elrs",
+      ].sort(),
+    );
+  });
+
   it("custos: tudo com preço, exceto o rabicho XT60 (genérico) e o EPI sem preço pesquisado", () => {
     for (const plano of result.faixas) {
       expect(plano.custos.sem_preco.sort()).toEqual(
@@ -222,5 +240,9 @@ describe("Arquétipo 3 (Tiny Whoop): builds de referência com o catálogo real"
     expect(projeto.dificuldade.nota).toBeLessThan(2);
     const locais = projeto.locais.map((l) => l.local);
     expect(locais).toEqual(expect.arrayContaining(["comprar_pronto", "em_casa"]));
+    // O kit pronto completo (RTF) sai mais barato que montar; o aviso deixa isso claro.
+    const kit = projeto.prontos.opcoes.find((o) => o.id === "betafpv-meteor75-pro-ii-fpv-kit");
+    expect(kit?.veredito).toBe("pronto_mais_barato");
+    expect(kit?.baterias).toEqual({ pronto: 2, projeto: 8 });
   });
 });

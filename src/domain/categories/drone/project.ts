@@ -9,6 +9,7 @@ import { computeCosts, type CostReport } from "./costs";
 import { computeDifficulty, type DifficultyReport } from "./difficulty";
 import { conditionMatches, type ResolvedParam, resolveFirmwareParams } from "./firmware";
 import { computeLocations, type LocationGroup } from "./locations";
+import { compareReadyMade, type ReadyMadeComparison } from "./ready-made";
 import { projectAlerts } from "./safety";
 import type { Archetype, BuildStepTemplate } from "./schema";
 
@@ -29,6 +30,8 @@ export type ProjectReport = {
   /** Parâmetros que dependem de dado que falta (ex.: capacidade da bateria). */
   parametros_pendentes: string[];
   passos: BuildStepTemplate[];
+  /** Montar × comprar pronto, com os prontos de referência do arquétipo. */
+  prontos: ReadyMadeComparison;
 };
 
 export function buildProjectReport(
@@ -47,16 +50,18 @@ export function buildProjectReport(
     firmwareProfile: profile,
   });
   const params = profile ? resolveFirmwareParams(profile, build) : { parametros: [], faltando: [] };
+  const custos = computeCosts(build, archetype, catalog, ferramentasQueTenho);
   return {
     build,
     validacao: report,
     metricas: metrics,
-    custos: computeCosts(build, archetype, catalog, ferramentasQueTenho),
+    custos,
     dificuldade: computeDifficulty(build, archetype, config),
     locais: computeLocations(build, archetype, catalog),
     alertas: projectAlerts(build, archetype, metrics),
     parametros: params.parametros,
     parametros_pendentes: params.faltando,
     passos: archetype.passos.filter((p) => conditionMatches(p.condicao, build)),
+    prontos: compareReadyMade(build, custos, archetype, catalog),
   };
 }

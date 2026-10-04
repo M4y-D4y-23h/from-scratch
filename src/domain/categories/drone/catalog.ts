@@ -10,6 +10,7 @@ import {
   type ComponentCategory,
   componentSchema,
   firmwareProfileSchema,
+  readyMadeSchema,
   type ThrustData,
   thrustDataSchema,
   toolSchema,
@@ -28,6 +29,8 @@ export const droneCatalogSchema = z.object({
   ferramentas: z.array(toolSchema),
   arquetipos: z.array(archetypeSchema),
   perfis_firmware: z.array(firmwareProfileSchema),
+  /** Drones prontos de referência, para comparar montar × comprar pronto. */
+  prontos: z.array(readyMadeSchema).default([]),
   /** Parâmetros de importação (câmbio, tributos) para converter preços em US$. */
   importacao: importParamsSchema.optional(),
 });
@@ -142,6 +145,7 @@ export function checkCatalog(catalog: DroneCatalog, options: CheckOptions = {}):
     ["ferramenta", catalog.ferramentas.map((t) => t.id)],
     ["arquétipo", catalog.arquetipos.map((a) => a.id)],
     ["perfil de firmware", catalog.perfis_firmware.map((p) => p.id)],
+    ["drone pronto", catalog.prontos.map((p) => p.id)],
   ] as const) {
     for (const id of duplicates(ids)) problemas.push(`${tipo} com id repetido: ${id}`);
   }
@@ -180,7 +184,28 @@ export function checkCatalog(catalog: DroneCatalog, options: CheckOptions = {}):
     }
   }
 
-  if (!catalog.importacao && catalog.componentes.some((c) => c.preco_referencia_usd)) {
+  for (const r of catalog.prontos) {
+    const onde = `drone pronto ${r.id}`;
+    if (!catalog.arquetipos.some((a) => a.id === r.arquetipo_id)) {
+      problemas.push(`${onde}: arquétipo "${r.arquetipo_id}" não existe`);
+    }
+    for (const cat of r.cobre_categorias) {
+      if (!COMPONENT_CATEGORIES.has(cat)) problemas.push(`${onde}: categoria "${cat}" não existe`);
+    }
+    if (!r.preco_estimado_brl && !r.preco_referencia_usd) {
+      problemas.push(`${onde}: sem preço (em R$ ou em US$)`);
+    }
+    if (r.status_verificacao === "verificado" && !hasCheckableSource(r.fontes)) {
+      problemas.push(`${onde}: marcado como verificado sem fonte com link e data`);
+    }
+    checkSources(onde, [...r.fontes, ...(r.preco_referencia_usd?.fontes ?? [])], problemas);
+    checkWhereToBuy(onde, r.onde_comprar, problemas);
+  }
+
+  if (
+    !catalog.importacao &&
+    [...catalog.componentes, ...catalog.prontos].some((c) => c.preco_referencia_usd)
+  ) {
     problemas.push("há preços em US$, mas falta parametros/importacao.json para converter em R$");
   }
 

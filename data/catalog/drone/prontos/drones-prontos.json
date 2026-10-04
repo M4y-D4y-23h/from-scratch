@@ -1,0 +1,311 @@
+[
+  {
+    "id": "dji-mini-4k-fly-more",
+    "arquetipo_id": "a1-gps-filmagem",
+    "marca": "DJI",
+    "modelo": "Mini 4K Fly More Combo",
+    "tipo": "RTF",
+    "descricao_leiga": "Drone pronto de menos de 249 g com GPS, retorno para casa, câmera 4K e vídeo no celular. Vem com controle e 3 baterias.",
+    "cobre_categorias": [
+      "kit",
+      "frame",
+      "motor",
+      "esc",
+      "helice",
+      "modulo_energia",
+      "fc",
+      "gps",
+      "receptor",
+      "radio_tx",
+      "bateria_radio",
+      "bateria",
+      "camera_fpv",
+      "vtx",
+      "antena",
+      "receptor_video",
+      "telemetria"
+    ],
+    "baterias_inclusas": 3,
+    "massa_g": 249,
+    "tempo_voo_fabricante_min": 31,
+    "preco_referencia_usd": {
+      "min": 449,
+      "max": 449,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da DJI (EUA)",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da DJI (EUA): página do produto",
+          "tipo": "loja",
+          "url": "https://store.dji.com/product/dji-mini-4k",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Em 04/10/2026. Na loja dos EUA o produto aparece como indisponível na região; no Brasil ele é vendido por revendas, com preço próprio."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "fabricante",
+        "termo_busca": "DJI Mini 4K Fly More Combo"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "DJI Mini 4K Fly More"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "DJI Store: DJI Mini 4K (preço, conteúdo e especificações resumidas)",
+        "tipo": "loja",
+        "url": "https://store.dji.com/product/dji-mini-4k",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "diferencas": [
+      "Pronto para voar: sem montagem, sem solda e sem configurar firmware.",
+      "Menos de 250 g: sem cadastro na ANAC (ao ar livre ainda vale o pedido no SARPAS).",
+      "Câmera 4K/30 fps para filmar; o projeto usa uma câmera FPV analógica, feita para pilotar.",
+      "Sistema fechado: conserto e peças só da DJI; não dá para trocar a controladora, o rádio ou o firmware.",
+      "Não ensina como um drone funciona por dentro, que é o objetivo de montar."
+    ],
+    "notas": [
+      "DJI: menos de 249 g, vídeo 4K/30 fps, transmissão de vídeo até 10 km, até 31 min de voo, retorno para casa, resistência a vento de 38 km/h (nível 5).",
+      "O Fly More Combo traz, além do padrão (1 bateria), mais 2 baterias, hub de carga, hélices extras e bolsa. Padrão: US$ 299."
+    ]
+  },
+  {
+    "id": "iflight-mach-r5-ultra-trainer-analog",
+    "arquetipo_id": "a2-fpv-5pol",
+    "marca": "iFlight",
+    "modelo": "Mach R5 Ultra Trainer 6S Analog (BNF)",
+    "tipo": "BNF",
+    "descricao_leiga": "FPV de 5\" pronto, com vídeo analógico e receptor embutido: você só pareia o seu rádio. Feito para treino de corrida.",
+    "cobre_categorias": [
+      "frame",
+      "motor",
+      "helice",
+      "stack",
+      "conector",
+      "receptor",
+      "camera_fpv",
+      "vtx",
+      "antena"
+    ],
+    "baterias_inclusas": 0,
+    "massa_g": 285,
+    "tempo_voo_fabricante_min": 14,
+    "preco_referencia_usd": {
+      "min": 309.99,
+      "max": 309.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da iFlight",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da iFlight: página do produto",
+          "tipo": "loja",
+          "url": "https://shop.iflight.com/Mach-R5-Ultra-Trainer-6S-Pro3841",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Em 04/10/2026."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "fabricante",
+        "termo_busca": "iFlight Mach R5 Ultra Trainer 6S analog"
+      },
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "iFlight Mach R5 Ultra Trainer"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "iFlight: Mach R5 Ultra Trainer 6S (especificação oficial)",
+        "tipo": "pagina_fabricante",
+        "url": "https://shop.iflight.com/Mach-R5-Ultra-Trainer-6S-Pro3841",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "diferencas": [
+      "Chega montado e configurado: sem solda e sem Betaflight do zero.",
+      "Drone de treino de corrida (190 mm, motor 2207 2100KV, até 245 km/h segundo a iFlight), não de freestyle: o perigo é o mesmo do 5\" montado.",
+      "Mais de 250 g: precisa de cadastro na ANAC, como o 5\" montado.",
+      "Confira se o receptor embutido é do mesmo sistema do seu rádio (ExpressLRS 2,4 GHz no projeto)."
+    ],
+    "notas": [
+      "iFlight: controladora Borg Mini H7 com receptor, ESC Borg 60RS, VTX analógico de 200 mW, 285 g sem bateria, ~517 g com bateria 6S 1550 mAh.",
+      "Tempo informado pela iFlight: até ~14 min pairando, sem carga, com 6S 1550 mAh. Freestyle de verdade dura bem menos."
+    ]
+  },
+  {
+    "id": "betafpv-air65-ii-freestyle-bnf",
+    "arquetipo_id": "a3-tiny-whoop",
+    "marca": "BETAFPV",
+    "modelo": "Air65 II Freestyle (BNF ELRS)",
+    "tipo": "BNF",
+    "descricao_leiga": "O mesmo whoop de 65 mm do projeto, já montado e configurado pela BETAFPV. Você só pareia o rádio.",
+    "cobre_categorias": ["frame", "motor", "helice", "fc_aio", "antena", "camera_fpv", "acessorio"],
+    "baterias_inclusas": 0,
+    "massa_g": 17.8,
+    "tempo_voo_fabricante_min": 5,
+    "preco_referencia_usd": {
+      "min": 99.99,
+      "max": 99.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da BETAFPV",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da BETAFPV: página do produto",
+          "tipo": "loja",
+          "url": "https://betafpv.com/products/air65-ii-brushless-whoop-quadcopter",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Em 04/10/2026 (versão Freestyle)."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "fabricante",
+        "termo_busca": "BETAFPV Air65 II Freestyle ELRS"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "betafpv air65"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: Air65 II Brushless Whoop Quadcopter (especificação oficial)",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/air65-ii-brushless-whoop-quadcopter",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "diferencas": [
+      "É praticamente o drone da faixa econômica do projeto, montado de fábrica.",
+      "Você ainda compra rádio, óculos, baterias e carregador (estão somados aqui)."
+    ],
+    "notas": [
+      "BETAFPV: 17,8 g sem bateria; 5:00 de voo com LAVA II 1S 320 mAh (de 4,35 V a 3,3 V). Vem sem bateria."
+    ]
+  },
+  {
+    "id": "betafpv-air75-ii-freestyle-bnf",
+    "arquetipo_id": "a3-tiny-whoop",
+    "marca": "BETAFPV",
+    "modelo": "Air75 II Freestyle (BNF ELRS)",
+    "tipo": "BNF",
+    "descricao_leiga": "O mesmo whoop de 75 mm do projeto, já montado e configurado pela BETAFPV. Você só pareia o rádio.",
+    "cobre_categorias": ["frame", "motor", "helice", "fc_aio", "antena", "camera_fpv", "acessorio"],
+    "baterias_inclusas": 0,
+    "massa_g": 21.3,
+    "tempo_voo_fabricante_min": 7.5,
+    "preco_referencia_usd": {
+      "min": 99.99,
+      "max": 99.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da BETAFPV",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da BETAFPV: página do produto",
+          "tipo": "loja",
+          "url": "https://betafpv.com/products/air75-ii-brushless-whoop-quadcopter",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Em 04/10/2026 (versão Freestyle)."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "fabricante",
+        "termo_busca": "BETAFPV Air75 II Freestyle ELRS"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "betafpv air75"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: Air75 II Brushless Whoop Quadcopter (especificação oficial)",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/air75-ii-brushless-whoop-quadcopter",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "diferencas": [
+      "É praticamente o drone das faixas equilibrada e premium do projeto, montado de fábrica.",
+      "Você ainda compra rádio, óculos, baterias e carregador (estão somados aqui)."
+    ],
+    "notas": [
+      "BETAFPV: 21,3 g sem bateria; 7:30 de voo com LAVA II 1S 480 mAh (de 4,35 V a 3,3 V). Vem sem bateria."
+    ]
+  },
+  {
+    "id": "betafpv-meteor75-pro-ii-fpv-kit",
+    "arquetipo_id": "a3-tiny-whoop",
+    "marca": "BETAFPV",
+    "modelo": "Meteor75 Pro II FPV Kit (RTF)",
+    "tipo": "RTF",
+    "descricao_leiga": "Kit completo para começar: whoop de 75 mm, rádio, óculos FPV, 2 baterias, carregador e bolsa.",
+    "cobre_categorias": [
+      "frame",
+      "motor",
+      "helice",
+      "fc_aio",
+      "antena",
+      "camera_fpv",
+      "acessorio",
+      "bateria",
+      "carregador",
+      "radio_tx",
+      "bateria_radio",
+      "oculos_fpv"
+    ],
+    "baterias_inclusas": 2,
+    "massa_g": 45,
+    "tempo_voo_fabricante_min": 10.5,
+    "preco_referencia_usd": {
+      "min": 208.99,
+      "max": 208.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da BETAFPV",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da BETAFPV: página do produto",
+          "tipo": "loja",
+          "url": "https://betafpv.com/products/meteor75-pro-fpv-kit",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Em 04/10/2026; estava sem estoque."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "fabricante",
+        "termo_busca": "BETAFPV Meteor75 Pro II FPV Kit"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "betafpv meteor75 kit"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: Meteor75 Pro II FPV Kit (conteúdo e especificações)",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/meteor75-pro-fpv-kit",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "diferencas": [
+      "Tudo numa caixa: dá para voar no mesmo dia, sem configurar nada.",
+      "O rádio do kit (LiteRadio 2 SE) tem formato de controle de videogame; o do projeto serve também para drones maiores no futuro.",
+      "Vem com 2 baterias; o projeto prevê mais para voar por mais tempo."
+    ],
+    "notas": [
+      "BETAFPV: drone de 45 g com bateria LAVA II 1S 580 mAh, 10:30 de voo; óculos VR03, rádio LiteRadio 2 SE (bateria interna), carregador BT2.0 com medidor."
+    ]
+  }
+]

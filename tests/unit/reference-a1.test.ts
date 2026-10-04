@@ -62,6 +62,9 @@ describe("Arquétipo 1: builds de referência com o catálogo real", () => {
 
   it("usa a telemetria pelo ELRS (ADR-0017) e compra o kit ARF", () => {
     for (const plano of result.faixas) {
+      // Câmera FPV de 19 mm (a de whoop, menor e mais barata, não serve no frame de 500 mm).
+      const camera = plano.build.itens.find((i) => i.slot === "camera")?.componente;
+      expect(camera?.categoria === "camera_fpv" && camera.specs.formato).toBe("micro_19mm");
       expect(plano.build.opcoes.telemetria).toBe("elrs_mavlink");
       expect(plano.build.itens.some((i) => i.componente.id === "holybro-x500-v2-arf")).toBe(true);
       const motores = plano.build.itens.find((i) => i.slot === "motores");
@@ -151,6 +154,22 @@ describe("Arquétipo 1: projeto completo (painéis)", () => {
     expect(projeto.dificuldade.formula).toContain("0.6 × nível máximo");
     expect(projeto.dificuldade.dominios.length).toBeGreaterThanOrEqual(6);
     expect(projeto.dificuldade.horas_totais[0]).toBeGreaterThan(0);
+  });
+
+  it("montar × comprar pronto: o DJI Mini 4K sai mais barato e o aviso aparece", () => {
+    const dji = projeto.prontos.opcoes.find((o) => o.id === "dji-mini-4k-fly-more");
+    expect(dji?.veredito).toBe("pronto_mais_barato");
+    expect(dji?.complementos).toEqual([]);
+    expect(projeto.prontos.aviso).toContain("pode sair mais barato");
+  });
+
+  it("recomendações de segurança do ArduPilot e o SAMU 192 em todo projeto", () => {
+    const ids = projeto.alertas.map((a) => a.id);
+    expect(ids).toEqual(
+      expect.arrayContaining(["pessoas-primeiro", "ligar-desligar", "emergencia"]),
+    );
+    const emergencia = projeto.alertas.find((a) => a.id === "emergencia");
+    expect(emergencia?.acoes.join(" ")).toContain("SAMU 192");
   });
 
   it("onde fazer: casa, campo e compras", () => {

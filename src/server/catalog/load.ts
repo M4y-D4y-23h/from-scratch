@@ -16,6 +16,7 @@ import {
   buildStepTemplateSchema,
   componentSchema,
   firmwareProfileSchema,
+  readyMadeSchema,
   thrustDataSchema,
   toolSchema,
 } from "@/domain/categories/drone/schema";
@@ -30,6 +31,7 @@ import {
  *   arquetipos/*.json    um arquétipo por arquivo (sem os passos)
  *   passos/<id>.json     lista de passos do arquétipo <id>
  *   firmware/*.json      um perfil de parâmetros por arquivo
+ *   prontos/*.json       lista de drones prontos de referência (montar × comprar pronto)
  *   parametros/importacao.json   câmbio e tributos de importação (com data e fonte)
  */
 
@@ -115,6 +117,7 @@ export function parseCatalogFiles(
     ferramentas: [],
     arquetipos: [],
     perfis_firmware: [],
+    prontos: [],
   };
   const passosPorArquetipo = new Map<string, DroneCatalog["arquetipos"][number]["passos"]>();
   const arquetiposSemPassos: Array<{ caminho: string; dados: DroneCatalog["arquetipos"][number] }> =
@@ -158,6 +161,9 @@ export function parseCatalogFiles(
         if (perfil) catalog.perfis_firmware.push(perfil);
         break;
       }
+      case "prontos":
+        catalog.prontos.push(...(parseFile(file, z.array(readyMadeSchema), problemas) ?? []));
+        break;
       default:
         problemas.push(
           `${file.caminho}: pasta desconhecida (veja a organização em src/server/catalog/load.ts)`,

@@ -48,6 +48,7 @@ function catalog(over: Partial<DroneCatalog> = {}): DroneCatalog {
     ferramentas: [TOOL],
     arquetipos: [{ ...TEST_ARCHETYPE, perfil_firmware: TEST_FIRMWARE.id, passos: [STEP] }],
     perfis_firmware: [TEST_FIRMWARE],
+    prontos: [],
     ...over,
   };
 }

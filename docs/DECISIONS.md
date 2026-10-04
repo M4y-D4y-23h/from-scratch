@@ -558,3 +558,32 @@ Datas no formato AAAA-MM-DD. "Verificado em" indica quando a informação extern
   carga de LiHV e prática de voo). Com a fórmula e os limites da SPEC B.8, nenhum build com algum
   passo de nível 2 chega a "Iniciante"; se o dono quiser o whoop como "Iniciante", o ajuste é nos
   limites dos rótulos, não nos níveis dos passos.
+
+## ADR-0021: montar × comprar pronto e recomendações de segurança
+
+- **Data:** 2026-10-04 · **Status:** aceita (decisões 7 e 8 do dono do projeto)
+- **Contexto:** o dono pediu que o app diga quando um drone pronto sai mais barato, com estimativa
+  de preço, e que traga recomendações de segurança além do EPI da SPEC B.6.
+- **Decisão (drones prontos):**
+  - Nova pasta do catálogo `prontos/` (espelhada na tabela `drones_prontos`, migração
+    `0001_drones_prontos`): drones prontos de referência por arquétipo, com preço da loja oficial
+    (US$, mesma conversão de importação das peças), data, fonte, o que vem na caixa
+    (`cobre_categorias`, `baterias_inclusas`) e diferenças em relação a montar, sem número
+    inventado.
+  - A comparação (`ready-made.ts`, no relatório do projeto) soma o preço do pronto com as peças
+    do projeto que ele não traz (num BNF: rádio, óculos, baterias) e compara a faixa inteira com
+    as peças do projeto: "pronto mais barato", "montar mais barato" ou "parecido". As ferramentas
+    que montar exige aparecem à parte.
+  - Aviso fixo em todo projeto: o pronto pode sair mais barato; o ganho de montar é aprender,
+    consertar e escolher cada peça. A documentação do ArduPilot diz o mesmo ("pouca vantagem de
+    custo em montar, principalmente nos drones menores").
+  - Referências de 04/10/2026: DJI Mini 4K Fly More (A1), iFlight Mach R5 Ultra Trainer analógico
+    BNF (A2), BETAFPV Air65 II e Air75 II BNF e o kit RTF Meteor75 Pro II (A3).
+- **Decisão (segurança):** três alertas globais novos, com fonte: "pessoas primeiro" (quem assiste
+  atrás do piloto, distância enquanto aprende, pousar se alguém entrar na área), "ordem de ligar
+  e desligar" (rádio antes da bateria, bateria fora antes de desligar o rádio) e "se algo der
+  errado" (toalha, extintor e kit de primeiros socorros, nessa ordem, como recomenda o ArduPilot;
+  SAMU 192). Toalha, extintor e kit continuam como EPI essencial, sem preço pesquisado.
+- **Consequências:** com o catálogo atual, o DJI Mini 4K (R$ 4,3–4,7 mil) sai mais barato que as
+  peças do Arquétipo 1 (R$ 6,2–8,0 mil); o kit RTF do whoop (R$ 1,9–2,2 mil) também; no 5", o BNF
+  com rádio, óculos e baterias empata com montar.

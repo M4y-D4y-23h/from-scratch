@@ -16,7 +16,7 @@ import type { DroneCatalog } from "@/domain/categories/drone/catalog";
  * Tabelas do banco local (SPEC B.5). Duas famílias:
  *
  * 1. Espelho do catálogo (catalogo_*, componentes, tabelas_empuxo, ferramentas, arquetipos,
- *    perfis_firmware, termos_glossario): reconstruídas a partir dos arquivos versionados sempre
+ *    perfis_firmware, drones_prontos, termos_glossario): reconstruídas a partir dos arquivos versionados sempre
  *    que o hash deles muda (ADR-0015). Nunca edite essas tabelas à mão: edite os arquivos.
  *    Cada linha guarda o item inteiro validado em "dados" e algumas colunas para busca/filtro.
  *
@@ -30,6 +30,7 @@ type TabelaEmpuxo = DroneCatalog["empuxo"][number];
 type Ferramenta = DroneCatalog["ferramentas"][number];
 type Arquetipo = DroneCatalog["arquetipos"][number];
 type PerfilFirmware = DroneCatalog["perfis_firmware"][number];
+type DronePronto = DroneCatalog["prontos"][number];
 
 const criadoEm = () =>
   integer("criado_em", { mode: "timestamp_ms" })
@@ -111,6 +112,22 @@ export const perfisFirmware = sqliteTable("perfis_firmware", {
   versao_min: text("versao_min").notNull(),
   dados: text("dados", { mode: "json" }).$type<PerfilFirmware>().notNull(),
 });
+
+/** Drones prontos de referência (montar × comprar pronto). */
+export const dronesProntos = sqliteTable(
+  "drones_prontos",
+  {
+    id: text("id").primaryKey(),
+    arquetipo_id: text("arquetipo_id").notNull(),
+    tipo: text("tipo").notNull(),
+    marca: text("marca").notNull(),
+    modelo: text("modelo").notNull(),
+    preco_min_usd: real("preco_min_usd"),
+    preco_max_usd: real("preco_max_usd"),
+    dados: text("dados", { mode: "json" }).$type<DronePronto>().notNull(),
+  },
+  (t) => [index("drones_prontos_arquetipo_idx").on(t.arquetipo_id)],
+);
 
 export const termosGlossario = sqliteTable("termos_glossario", {
   termo: text("termo").primaryKey(),

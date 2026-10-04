@@ -99,7 +99,10 @@
       "slot": "camera",
       "categorias": ["camera_fpv"],
       "quantidade": 1,
-      "obrigatorio": true
+      "obrigatorio": true,
+      "filtro_specs": {
+        "formato": "micro_19mm"
+      }
     },
     {
       "slot": "vtx",

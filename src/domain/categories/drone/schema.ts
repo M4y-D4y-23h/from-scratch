@@ -531,6 +531,42 @@ export const thrustDataSchema = z.object({
 export type ThrustData = z.infer<typeof thrustDataSchema>;
 
 // ---------------------------------------------------------------------------
+// Drones prontos (para comparar montar × comprar pronto)
+// ---------------------------------------------------------------------------
+
+/**
+ * Drone pronto de referência para o arquétipo. A comparação soma o preço dele com o que ainda
+ * falta comprar (as peças do projeto cujas categorias ele não traz) e mostra o resultado ao lado
+ * do custo de montar. Preço sempre da loja oficial, com data (SPEC B.1.2).
+ */
+export const readyMadeSchema = z.object({
+  id: z.string().regex(/^[a-z0-9][a-z0-9-]*$/),
+  arquetipo_id: z.string().min(1),
+  marca: z.string().min(1),
+  modelo: z.string().min(1),
+  /** RTF: vem com rádio (e tela ou óculos); BNF: só o drone, você usa o seu rádio. */
+  tipo: z.enum(["RTF", "BNF"]),
+  descricao_leiga: z.string().min(1),
+  /** Categorias de peça do projeto que o pronto já traz; as demais continuam na lista de compras. */
+  cobre_categorias: z.array(z.string()).min(1),
+  /** Baterias de voo na caixa (o projeto pode prever mais). */
+  baterias_inclusas: z.int().min(0).optional(),
+  /** Massa informada pelo fabricante (g). */
+  massa_g: z.number().positive().optional(),
+  /** Tempo de voo informado pelo fabricante (min), nas condições dele (veja as notas). */
+  tempo_voo_fabricante_min: z.number().positive().optional(),
+  preco_estimado_brl: priceRangeSchema.optional(),
+  preco_referencia_usd: usdPriceSchema.optional(),
+  onde_comprar: z.array(whereToBuySchema).min(1),
+  fontes: z.array(sourceSchema).min(1),
+  status_verificacao: verificationStatusSchema.default("nao_verificado"),
+  /** O que muda em relação a montar, sem número inventado. */
+  diferencas: z.array(z.string()).default([]),
+  notas: z.array(z.string()).default([]),
+});
+export type ReadyMade = z.infer<typeof readyMadeSchema>;
+
+// ---------------------------------------------------------------------------
 // Ferramentas, consumíveis e EPI
 // ---------------------------------------------------------------------------
 

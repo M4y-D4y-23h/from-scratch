@@ -227,6 +227,7 @@ describe("solver: peça que só vem na caixa de outra", () => {
       ferramentas: [],
       arquetipos: [],
       perfis_firmware: [],
+      prontos: [],
     };
     const archetype = {
       ...TEST_ARCHETYPE,
@@ -257,6 +258,7 @@ describe("catálogo", () => {
     ferramentas: [],
     arquetipos: [],
     perfis_firmware: [],
+    prontos: [],
   };
 
   it("item genérico (conector) pode ficar sem preço; peça comum não", () => {

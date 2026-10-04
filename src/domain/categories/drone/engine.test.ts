@@ -96,6 +96,7 @@ function catalogWith(over: Partial<DroneCatalog> = {}): DroneCatalog {
     ],
     arquetipos: [ARCHETYPE],
     perfis_firmware: [TEST_FIRMWARE],
+    prontos: [],
     importacao: IMPORT,
     ...over,
   };
