@@ -316,3 +316,27 @@ Datas no formato AAAA-MM-DD. "Verificado em" indica quando a informação extern
 - Parâmetros de firmware entram no domínio como dados versionados (por versão do ArduCopter), não
   como texto solto do LLM.
 - Pontos que dependem de você estão no plano da Fase 1 (`docs/PROGRESS.md`).
+
+## ADR-0014: banco local com SQLite + Drizzle, driver `better-sqlite3`
+
+- **Data:** 2026-10-04 · **Status:** aceita · **Verificado em:** 2026-10-04
+- **Contexto:** a SPEC (B.3) pede SQLite + Drizzle com um driver que funcione no Windows, macOS e
+  Linux "sem dor de cabeça" (sem Visual Studio Build Tools).
+- **Decisão:**
+  - **`better-sqlite3` 13** como driver. O pacote já traz os binários prontos (N-API) dentro dele,
+    na pasta `prebuilds/`: `win32-x64`, `win32-arm64`, `darwin-x64`, `darwin-arm64`, `linux-x64`,
+    `linux-arm64` e `linuxmusl`. Não tem script de instalação, então nada é compilado ao instalar
+    (conferido no `package.json` e na pasta do pacote). API síncrona, simples para scripts de seed
+    e para as rotas do servidor. O Drizzle tem driver oficial para ele (`drizzle-orm/better-sqlite3`).
+  - **`drizzle-kit`** (ferramenta do próprio Drizzle, só em desenvolvimento) para gerar as
+    migrações SQL a partir do schema em TypeScript.
+  - **`tsx`** (só em desenvolvimento) para rodar scripts `.ts` (seed, checagem do catálogo) do
+    mesmo jeito no PowerShell e no Linux, sem etapa de compilação.
+  - `esbuild` (usado pelo `drizzle-kit` e pelo `tsx`) entra no `allowBuilds` como `false`: o script
+    dele só confere o binário, que já vem pronto como dependência opcional de cada sistema (ADR-0003).
+- **Alternativas descartadas:**
+  - `node:sqlite` (embutido no Node): ainda é experimental no Node 22 (mostra `ExperimentalWarning`)
+    e o `drizzle-orm` 0.45 não tem driver para ele. Reavaliar quando estabilizar.
+  - `@libsql/client`: funciona, mas é assíncrono e traz um cliente de rede (Turso) que não usamos.
+- **Consequências:** o arquivo do banco fica em `data/local/` (ignorado pelo git) e é recriado a
+  partir do catálogo versionado. O CI no Windows prova que a instalação continua sem compilação.

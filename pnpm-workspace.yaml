@@ -8,3 +8,6 @@ allowBuilds:
   # O postinstall só é um plano B para baixar o binário nativo; o binário
   # certo para cada sistema (incluindo Windows) já vem como dependência opcional.
   unrs-resolver: false
+  # esbuild (usado pelo drizzle-kit e pelo tsx): o script só confere o binário,
+  # que já vem pronto para cada sistema como dependência opcional.
+  esbuild: false
