@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { baseBuild, TEST_FIRMWARE } from "./__fixtures__/builds";
+import { baseBuild, TEST_FIRMWARE, tweakSlot } from "./__fixtures__/builds";
 import { conditionMatches, resolveFirmwareParams } from "./firmware";
 import { firmwareProfileSchema } from "./schema";
 
@@ -100,5 +100,25 @@ describe("parâmetros de firmware do projeto", () => {
     expect(conditionMatches({ tem_categoria: ["gps"] }, baseBuild())).toBe(true);
     expect(conditionMatches({ sem_categoria: ["gps"] }, baseBuild())).toBe(false);
     expect(conditionMatches({ tem_componente: ["gps-teste"] }, baseBuild())).toBe(true);
+  });
+
+  it("condições pela química da bateria e pelo firmware do ESC (valem para qualquer peça)", () => {
+    // baseBuild: bateria LiPo e ESC BLHeli_S.
+    expect(conditionMatches({ bateria_quimica: ["LiHV"] }, baseBuild())).toBe(false);
+    expect(conditionMatches({ bateria_quimica: ["LiPo"] }, baseBuild())).toBe(true);
+    const lihv = tweakSlot(baseBuild(), "bateria", { quimica: "LiHV" });
+    expect(conditionMatches({ bateria_quimica: ["LiHV"] }, lihv)).toBe(true);
+
+    const bidir = { esc_firmware: ["Bluejay", "BLHeli_32", "AM32"] as const };
+    expect(conditionMatches({ esc_firmware: [...bidir.esc_firmware] }, baseBuild())).toBe(false);
+    const bluejay = tweakSlot(baseBuild(), "escs", { firmware: "Bluejay" });
+    expect(conditionMatches({ esc_firmware: [...bidir.esc_firmware] }, bluejay)).toBe(true);
+  });
+
+  it("química ou firmware desconhecido não liga o ajuste", () => {
+    const semQuimica = tweakSlot(baseBuild(), "bateria", { quimica: undefined });
+    expect(conditionMatches({ bateria_quimica: ["LiPo"] }, semQuimica)).toBe(false);
+    const semFirmware = tweakSlot(baseBuild(), "escs", { firmware: undefined });
+    expect(conditionMatches({ esc_firmware: ["BLHeli_S"] }, semFirmware)).toBe(false);
   });
 });

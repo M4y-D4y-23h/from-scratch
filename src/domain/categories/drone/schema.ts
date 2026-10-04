@@ -211,12 +211,21 @@ export const propSpecsSchema = z.object({
   fixacao: propMountSchema.optional(),
 });
 
+export const ESC_FIRMWARES = [
+  "BLHeli_S",
+  "BLHeli_32",
+  "AM32",
+  "Bluejay",
+  "SimonK",
+  "outro",
+] as const;
+
 const escCommon = {
   corrente_continua_a: z.number().positive().optional(),
   corrente_pico_a: z.number().positive().optional(),
   celulas_min: z.int().min(1).optional(),
   celulas_max: z.int().min(1).optional(),
-  firmware: z.enum(["BLHeli_S", "BLHeli_32", "AM32", "Bluejay", "SimonK", "outro"]).optional(),
+  firmware: z.enum(ESC_FIRMWARES).optional(),
   protocolos: z
     .array(z.enum(["PWM", "OneShot125", "Multishot", "DShot150", "DShot300", "DShot600"]))
     .optional(),
@@ -374,6 +383,9 @@ export const powerModuleSpecsSchema = z.object({
   pdb: z.boolean().optional(),
 });
 
+/** LiHV carrega até 4,35 V por célula (LiPo e Li-ion, 4,2 V): carregar errado estraga ou incendeia. */
+export const BATTERY_CHEMISTRIES = ["LiPo", "LiHV", "Li-ion"] as const;
+
 export const batterySpecsSchema = z.object({
   celulas: z.int().min(1).optional(),
   capacidade_mah: z.number().positive().optional(),
@@ -381,7 +393,7 @@ export const batterySpecsSchema = z.object({
   c_continuo: z.number().positive().optional(),
   c_pico: z.number().positive().optional(),
   conector: batteryConnectorSchema.optional(),
-  quimica: z.enum(["LiPo", "LiHV", "Li-ion"]).optional(),
+  quimica: z.enum(BATTERY_CHEMISTRIES).optional(),
 });
 
 export const chargerSpecsSchema = z.object({
@@ -600,8 +612,13 @@ export const stepConditionSchema = z.object({
   sem_categoria: z.array(z.string()).optional(),
   /** Opção de telemetria escolhida. */
   telemetria: z.array(z.string()).optional(),
-  /** O build precisa ter alguma destas peças (ids do catálogo). */
+  /** O build precisa ter alguma destas peças (ids do catálogo). Use só para ajuste de uma peça
+   *  específica (ex.: calibração de um módulo); para propriedades, prefira as condições abaixo. */
   tem_componente: z.array(z.string()).optional(),
+  /** Química da bateria do build (ex.: LiHV muda a tensão de célula cheia). */
+  bateria_quimica: z.array(z.enum(BATTERY_CHEMISTRIES)).min(1).optional(),
+  /** Firmware do ESC do build (ex.: DShot bidirecional exige Bluejay, BLHeli_32 ou AM32). */
+  esc_firmware: z.array(z.enum(ESC_FIRMWARES)).min(1).optional(),
 });
 
 export const buildStepTemplateSchema = z.object({

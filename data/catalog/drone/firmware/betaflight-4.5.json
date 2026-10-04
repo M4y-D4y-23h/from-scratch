@@ -117,7 +117,7 @@
       "nome": "dshot_bidir",
       "valor": "ON",
       "condicao": {
-        "tem_componente": ["betafpv-matrix-1s-5in1-ii"]
+        "esc_firmware": ["Bluejay", "BLHeli_32", "AM32"]
       },
       "explicacao": "Liga a telemetria de rotação pelo próprio sinal do motor, que alimenta o filtro RPM (voo mais suave). Só funciona com ESC Bluejay, BLHeli_32 ou AM32; com BLHeli_S de fábrica deixe desligado, ou os motores não armam.",
       "fontes": [
@@ -177,7 +177,7 @@
       "valor": 440,
       "unidade": "centésimos de volt por célula",
       "condicao": {
-        "tem_componente": ["betafpv-lava-ii-1s-320", "betafpv-lava-ii-1s-480"]
+        "bateria_quimica": ["LiHV"]
       },
       "explicacao": "Bateria LiHV cheia tem 4,35 V. Com o padrão (4,30 V), a placa conta células dividindo a tensão por esse valor e acha que a 1S cheia é uma 2S, disparando o alerta de bateria baixa. Com 4,40 V a contagem fica certa.",
       "fontes": [

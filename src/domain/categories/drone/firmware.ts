@@ -1,4 +1,4 @@
-import { type Build, firstOf } from "./build";
+import { type Build, escOf, firstOf } from "./build";
 import type { FirmwareProfile } from "./schema";
 
 /*
@@ -18,6 +18,15 @@ export function conditionMatches(cond: StepCondition | undefined, build: Build):
   if (cond.sem_categoria?.some((c) => categorias.has(c))) return false;
   if (cond.telemetria && !cond.telemetria.includes(build.opcoes.telemetria)) return false;
   if (cond.tem_componente && !cond.tem_componente.some((id) => ids.has(id))) return false;
+  // Química ou firmware desconhecido não liga o ajuste: o catálogo exige a química das baterias.
+  if (cond.bateria_quimica) {
+    const quimica = firstOf(build, "bateria")?.componente.specs.quimica;
+    if (!quimica || !cond.bateria_quimica.includes(quimica)) return false;
+  }
+  if (cond.esc_firmware) {
+    const firmware = escOf(build)?.specs.firmware;
+    if (!firmware || !cond.esc_firmware.includes(firmware)) return false;
+  }
   return true;
 }
 

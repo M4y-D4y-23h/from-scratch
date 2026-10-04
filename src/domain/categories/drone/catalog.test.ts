@@ -58,6 +58,15 @@ describe("checkCatalog", () => {
     expect(checkCatalog(catalog())).toEqual([]);
   });
 
+  it("bateria sem química é problema (define a tensão de carga e ajustes do firmware)", () => {
+    const base = [parts.motor(), parts.prop(), parts.frame()];
+    const semQuimica = tweak(parts.battery(), { quimica: undefined });
+    expect(checkCatalog(catalog({ componentes: [...base, semQuimica] }))).toEqual([
+      `componente ${semQuimica.id}: bateria sem química (LiPo, LiHV ou Li-ion)`,
+    ]);
+    expect(checkCatalog(catalog({ componentes: [...base, parts.battery()] }))).toEqual([]);
+  });
+
   it("conhece todas as categorias do schema", () => {
     expect(COMPONENT_CATEGORIES.has("fc_aio")).toBe(true);
     expect(COMPONENT_CATEGORIES.size).toBeGreaterThan(25);

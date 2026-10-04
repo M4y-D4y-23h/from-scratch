@@ -165,6 +165,10 @@ export function checkCatalog(catalog: DroneCatalog, options: CheckOptions = {}):
         problemas.push(`${onde}: inclui "${inc.componente_id}", que não existe`);
       }
     }
+    // A química define a tensão de carga (LiHV 4,35 V por célula) e ajustes do firmware.
+    if (c.categoria === "bateria" && !c.specs.quimica) {
+      problemas.push(`${onde}: bateria sem química (LiPo, LiHV ou Li-ion)`);
+    }
     if (brl?.status === "verificado" && !hasCheckableSource(brl.fontes)) {
       problemas.push(`${onde}: preço verificado sem fonte com link e data`);
     }
