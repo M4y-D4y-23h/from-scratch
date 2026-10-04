@@ -22,20 +22,29 @@ export type AuwResult = {
   margem_g: number;
   /** Peças que voam e não têm massa no catálogo. */
   faltando: string[];
+  /** Peças cuja massa foi estimada (massa_estimada_g), não publicada. */
+  estimadas: string[];
   selo: VerificationStatus;
 };
 
 export function computeAuw(build: Build, config: DroneConfig): AuwResult {
   let massaPecas = 0;
   const faltando: string[] = [];
+  const estimadas: string[] = [];
   const selos: VerificationStatus[] = [];
   for (const item of build.itens) {
     if (GROUND_CATEGORIES.has(item.componente.categoria)) continue;
     if (item.quantidade_no_drone <= 0) continue;
-    const massa = item.componente.massa_g;
+    const publicada = item.componente.massa_g;
+    const estimada = item.componente.massa_estimada_g?.valor;
+    const massa = publicada ?? estimada;
     if (massa === undefined) {
       faltando.push(item.componente.id);
       continue;
+    }
+    if (publicada === undefined) {
+      estimadas.push(item.componente.id);
+      selos.push("estimativa");
     }
     massaPecas += massa * item.quantidade_no_drone;
     selos.push(item.componente.status_verificacao);
@@ -46,6 +55,7 @@ export function computeAuw(build: Build, config: DroneConfig): AuwResult {
     massa_pecas_g: massaPecas,
     margem_g: margem,
     faltando,
+    estimadas,
     selo: faltando.length === 0 ? deriveStatus(selos, "estimativa") : "nao_verificado",
   };
 }

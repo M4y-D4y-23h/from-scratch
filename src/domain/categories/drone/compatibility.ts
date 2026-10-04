@@ -26,6 +26,7 @@ import {
   mountFits,
   type ThrustData,
 } from "./schema";
+import { resolveFirmwareParams } from "./firmware";
 import { SRC } from "./sources";
 
 /*
@@ -426,7 +427,7 @@ const canHover: RuleFn = ({ build }, m) => {
     });
   }
   return result(base, m.propulsion.paira ? "passou" : "falhou", {
-    tecnica: `Empuxo total ${fmt(m.propulsion.empuxo_total_g ?? 0, 0)} g para ${fmt(m.auw.massa_total_g ?? 0, 0)} g de peso.`,
+    tecnica: `Empuxo total ${fmt(m.propulsion.empuxo_total_g ?? 0, 0)} g para ${fmt(m.auw.massa_total_g ?? 0, 0)} g de peso.${m.auw.estimadas.length > 0 ? ` Massa estimada (sem dado do fabricante): ${m.auw.estimadas.join(", ")}.` : ""}`,
     sugestao: "Reduza o peso ou use motores/hélices/bateria com mais empuxo.",
     selo: m.propulsion.selo,
   });
@@ -962,7 +963,14 @@ const compassDistance: RuleFn = (ctx) => {
   if (!isArduPilot(ctx)) return null;
   const gps = firstOf(ctx.build, "gps")?.componente;
   if (!gps) return null;
-  const mast = firstOf(ctx.build, "mastro_gps")?.componente;
+  const mastItem = firstOf(ctx.build, "mastro_gps")?.componente;
+  const frame = firstOf(ctx.build, "frame")?.componente;
+  // Suporte avulso ou o que já vem com o frame (ex.: X500 V2).
+  const mast: { componente: Component; altura?: number } | undefined = mastItem
+    ? { componente: mastItem, altura: mastItem.specs.altura_mm }
+    : frame?.specs.mastro_gps_mm !== undefined
+      ? { componente: frame, altura: frame.specs.mastro_gps_mm }
+      : undefined;
   const min = ctx.config.bussola.distancia_min_mm;
   const base: RuleBase = {
     regra_id: "bussola_longe_da_potencia",
@@ -970,7 +978,7 @@ const compassDistance: RuleFn = (ctx) => {
     severidade: "bloqueante",
     explicacao_leiga:
       "Fios grossos da bateria e dos motores criam campo magnético que engana a bússola. Com a bússola enganada, o drone voa em círculos e pode errar o caminho de volta. O mastro afasta o GPS dessa interferência.",
-    componentes: mast ? [gps, mast] : [gps],
+    componentes: mast ? [gps, mast.componente] : [gps],
     fontes: [ctx.config.fontes.bussola, SRC.ardupilotMagInterference],
   };
   if (!mast) {
@@ -981,7 +989,7 @@ const compassDistance: RuleFn = (ctx) => {
       selo: "estimativa",
     });
   }
-  const h = mast.specs.altura_mm;
+  const h = mast.altura;
   if (h === undefined) {
     return result(base, "sem_dado", { tecnica: "O catálogo não informa a altura do mastro." });
   }
@@ -989,7 +997,7 @@ const compassDistance: RuleFn = (ctx) => {
     tecnica: `Mastro de ${h} mm (mínimo ${min} mm acima da placa onde passam os fios de potência).`,
     sugestao: `Use mastro de pelo menos ${min} mm.`,
     valores: { altura_mm: h, minimo_mm: min },
-    selo: deriveStatus([mast.status_verificacao], "estimativa"),
+    selo: deriveStatus([mast.componente.status_verificacao], "estimativa"),
   });
 };
 
@@ -1014,7 +1022,9 @@ const failsafeToRtl: RuleFn = (ctx) => {
       "Se o rádio perder o sinal ou a bateria ficar baixa, o drone precisa voltar sozinho para o ponto de decolagem em vez de cair ou fugir.",
     fontes: [SRC.ardupilotRadioFailsafe, SRC.ardupilotBatteryFailsafe, SRC.ardupilotFence],
   };
-  const params = ctx.firmwareProfile?.parametros;
+  const params = ctx.firmwareProfile
+    ? resolveFirmwareParams(ctx.firmwareProfile, ctx.build).parametros
+    : undefined;
   if (!params) {
     return result(base, "sem_dado", {
       tecnica: "Não há perfil de parâmetros de firmware para este build.",

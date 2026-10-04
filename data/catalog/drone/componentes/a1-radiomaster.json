@@ -1,0 +1,298 @@
+[
+  {
+    "id": "radiomaster-pocket-elrs",
+    "categoria": "radio_tx",
+    "marca": "RadioMaster",
+    "modelo": "Pocket (ELRS 2,4 GHz, FCC)",
+    "descricao_leiga": "Controle remoto pequeno e leve, com ExpressLRS. É com ele que você pilota; o celular fica como tela.",
+    "massa_g": 288,
+    "preco_referencia_usd": {
+      "min": 71.5,
+      "max": 71.5,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da RadioMaster",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da RadioMaster: página do produto",
+          "tipo": "loja",
+          "url": "https://radiomasterrc.com/products/pocket-radio-controller-m2",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Variante ELRS / FCC em 04/10/2026."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "RadioMaster Pocket ELRS"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "radiomaster pocket elrs"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "RadioMaster: Pocket Radio Controller (M2)",
+        "tipo": "pagina_fabricante",
+        "url": "https://radiomasterrc.com/products/pocket-radio-controller-m2",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ExpressLRS: MAVLink (requisitos: TX e RX baseados em ESP, ELRS 3.5.0+, TX Backpack 1.5.0+)",
+        "tipo": "documentacao_oficial",
+        "url": "https://www.expresslrs.org/software/mavlink/",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "Módulo ELRS interno com TX Backpack (descrição oficial). O modo MAVLink do ELRS exige transmissor baseado em ESP: confira a versão do firmware (ELRS 3.5.0+ e Backpack 1.5.0+).",
+      "Usa 2 baterias 18650 (não inclusas); carrega por USB-C."
+    ],
+    "specs": {
+      "link": "elrs_2g4",
+      "modulo": "interno",
+      "esp": true,
+      "backpack_wifi": true,
+      "firmware_radio": "EdgeTX",
+      "alimentacao": "2 baterias 18650 (não inclusas)"
+    }
+  },
+  {
+    "id": "radiomaster-boxer-elrs",
+    "categoria": "radio_tx",
+    "marca": "RadioMaster",
+    "modelo": "Boxer (ELRS 2,4 GHz, FCC)",
+    "descricao_leiga": "Controle remoto de tamanho maior, mais confortável para segurar e com mais botões. Também ExpressLRS.",
+    "massa_g": 532.5,
+    "preco_referencia_usd": {
+      "min": 153.99,
+      "max": 153.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da RadioMaster",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da RadioMaster: página do produto",
+          "tipo": "loja",
+          "url": "https://radiomasterrc.com/products/boxer-radio-controller-m2",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Variante ELRS / FCC em 04/10/2026."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "RadioMaster Boxer ELRS"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "radiomaster boxer elrs"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "RadioMaster: Boxer Radio Controller (M2)",
+        "tipo": "pagina_fabricante",
+        "url": "https://radiomasterrc.com/products/boxer-radio-controller-m2",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ExpressLRS: MAVLink (requisitos: TX e RX baseados em ESP, ELRS 3.5.0+, TX Backpack 1.5.0+)",
+        "tipo": "documentacao_oficial",
+        "url": "https://www.expresslrs.org/software/mavlink/",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "Módulo ELRS interno com TX Backpack (descrição oficial). O modo MAVLink do ELRS exige transmissor baseado em ESP: confira a versão do firmware (ELRS 3.5.0+ e Backpack 1.5.0+).",
+      "Módulo ELRS interno com ventoinha; 100 mW de fábrica. Bateria 2S LiPo ou 2 x 18650 (não inclusas)."
+    ],
+    "specs": {
+      "link": "elrs_2g4",
+      "modulo": "interno",
+      "esp": true,
+      "backpack_wifi": true,
+      "firmware_radio": "EdgeTX",
+      "alimentacao": "2 baterias 18650 ou LiPo 2S (não inclusas)"
+    }
+  },
+  {
+    "id": "radiomaster-rp3-v2",
+    "categoria": "receptor",
+    "marca": "RadioMaster",
+    "modelo": "RP3 V2 ExpressLRS 2,4 GHz",
+    "descricao_leiga": "Receptor que fica no drone e recebe os comandos do rádio. Tem duas antenas e manda telemetria de volta com até 100 mW.",
+    "massa_g": 4.6,
+    "dimensoes_mm": {
+      "comprimento": 22,
+      "largura": 13,
+      "altura": 4
+    },
+    "preco_referencia_usd": {
+      "min": 19.99,
+      "max": 19.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da RadioMaster",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da RadioMaster: página do produto",
+          "tipo": "loja",
+          "url": "https://radiomasterrc.com/products/rp3-expresslrs-2-4ghz-nano-receiver",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Variante FCC em 04/10/2026."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "RadioMaster RP3 V2 ELRS"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "receptor elrs rp3"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "RadioMaster: RP3 V2 ExpressLRS 2.4GHz Nano Receiver",
+        "tipo": "pagina_fabricante",
+        "url": "https://radiomasterrc.com/products/rp3-expresslrs-2-4ghz-nano-receiver",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ExpressLRS: MAVLink (requisitos: TX e RX baseados em ESP, ELRS 3.5.0+, TX Backpack 1.5.0+)",
+        "tipo": "documentacao_oficial",
+        "url": "https://www.expresslrs.org/software/mavlink/",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "MCU ESP8285 (tem Wi-Fi): atende ao requisito do modo MAVLink do ELRS.",
+      "Massa de 4,6 g já com as duas antenas. O fabricante não publica a corrente: o app usa um consumo presumido."
+    ],
+    "specs": {
+      "link": "elrs_2g4",
+      "saidas": ["CRSF", "MAVLink"],
+      "esp": true,
+      "tensao_v_min": 5,
+      "tensao_v_max": 5
+    }
+  },
+  {
+    "id": "radiomaster-rp4td",
+    "categoria": "receptor",
+    "marca": "RadioMaster",
+    "modelo": "RP4TD ExpressLRS 2,4 GHz True Diversity",
+    "descricao_leiga": "Receptor com dois rádios completos (diversidade verdadeira): o sinal fica mais firme quando o drone gira ou se afasta.",
+    "massa_estimada_g": {
+      "valor": 4.5,
+      "motivo": "O fabricante publica 1,4 g sem antenas; somamos as duas antenas T de 65 mm, como as do RP3 V2 (que pesa 4,6 g com elas)."
+    },
+    "dimensoes_mm": {
+      "comprimento": 23.7,
+      "largura": 16.3,
+      "altura": 4
+    },
+    "preco_referencia_usd": {
+      "min": 24.99,
+      "max": 24.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da RadioMaster",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da RadioMaster: página do produto",
+          "tipo": "loja",
+          "url": "https://radiomasterrc.com/products/rp4td-expresslrs-2-4ghz-diversity-receiver",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Variante FCC em 04/10/2026."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "RadioMaster RP4TD ELRS"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "receptor elrs rp4td"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "RadioMaster: RP4TD ExpressLRS 2.4GHz True Diversity Receiver",
+        "tipo": "pagina_fabricante",
+        "url": "https://radiomasterrc.com/products/rp4td-expresslrs-2-4ghz-diversity-receiver",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ExpressLRS: MAVLink (requisitos: TX e RX baseados em ESP, ELRS 3.5.0+, TX Backpack 1.5.0+)",
+        "tipo": "documentacao_oficial",
+        "url": "https://www.expresslrs.org/software/mavlink/",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "MCU ESP32 (tem Wi-Fi): atende ao requisito do modo MAVLink do ELRS. Telemetria de até 2 x 100 mW.",
+      "O fabricante não publica a corrente: o app usa um consumo presumido."
+    ],
+    "specs": {
+      "link": "elrs_2g4",
+      "saidas": ["CRSF", "MAVLink"],
+      "esp": true,
+      "tensao_v_min": 4.5,
+      "tensao_v_max": 12
+    }
+  },
+  {
+    "id": "radiomaster-18650-3200-par",
+    "categoria": "bateria_radio",
+    "marca": "RadioMaster",
+    "modelo": "Bateria 18650 3200 mAh 3,7 V (par)",
+    "descricao_leiga": "Par de baterias recarregáveis para o rádio (Pocket e Boxer usam duas).",
+    "massa_g": 92.4,
+    "preco_referencia_usd": {
+      "min": 11.99,
+      "max": 11.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da RadioMaster",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da RadioMaster: página do produto",
+          "tipo": "loja",
+          "url": "https://radiomasterrc.com/products/18650-3200mah-3-7v-battery-2pcs-for-tx16s-boxer-tx12-mt12-radios",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Variante 3200 mAh em 04/10/2026."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "RadioMaster 18650 3200mAh"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "bateria 18650 3200mah"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "RadioMaster: 18650 3200mAh 3.7V Battery (2pcs)",
+        "tipo": "pagina_fabricante",
+        "url": "https://radiomasterrc.com/products/18650-3200mah-3-7v-battery-2pcs-for-tx16s-boxer-tx12-mt12-radios",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": ["46,22 g cada (fabricante)."],
+    "notas_seguranca": [
+      "Baterias de lítio: não use se o plástico externo estiver rasgado (risco de curto)."
+    ],
+    "specs": {
+      "tipo": "18650 Li-ion 3200 mAh",
+      "unidades": 2
+    }
+  }
+]

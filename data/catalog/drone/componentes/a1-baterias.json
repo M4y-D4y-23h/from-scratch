@@ -1,0 +1,59 @@
+[
+  {
+    "id": "cnhl-3300-4s-30c-xt60",
+    "categoria": "bateria",
+    "marca": "CNHL",
+    "modelo": "3300 mAh 14,8 V 4S 30C (XT60)",
+    "descricao_leiga": "Bateria LiPo 4S que alimenta tudo no drone. Tem o mesmo conector (XT60) da placa de energia do X500.",
+    "massa_g": 361,
+    "preco_referencia_usd": {
+      "min": 26.99,
+      "max": 32.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da CNHL",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da CNHL: página do produto",
+          "tipo": "loja",
+          "url": "https://chinahobbyline.com/products/cnhl-3300mah-14-8v-4s-30c-lipo-battery-with-xt60-plug",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Faixa entre os armazéns (US/AU: 26,99; EU/Global: 32,99) em 04/10/2026."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "CNHL 3300mAh 4S 30C XT60"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "bateria lipo 4s 3300mah xt60"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "CNHL: 3300mAh 14.8V 4S 30C Lipo Battery with XT60 Plug (especificação oficial)",
+        "tipo": "pagina_fabricante",
+        "url": "https://chinahobbyline.com/products/cnhl-3300mah-14-8v-4s-30c-lipo-battery-with-xt60-plug",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "30C contínuo / 60C de pico; carga completa 16,8 V (4,20 V por célula). Corpo de 136 mm; cerca de 361 g (fabricante)."
+    ],
+    "notas_seguranca": [
+      "Carregue só com carregador balanceador, sobre superfície que não pega fogo, sem sair de perto.",
+      "Bateria estufada, amassada ou furada não deve ser usada nem carregada.",
+      "Guarde e transporte dentro da bolsa anti-chamas."
+    ],
+    "specs": {
+      "celulas": 4,
+      "capacidade_mah": 3300,
+      "c_continuo": 30,
+      "c_pico": 60,
+      "conector": "XT60",
+      "quimica": "LiPo"
+    }
+  }
+]

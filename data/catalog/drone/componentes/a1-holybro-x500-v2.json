@@ -1,0 +1,369 @@
+[
+  {
+    "id": "holybro-x500-v2-arf",
+    "categoria": "kit",
+    "marca": "Holybro",
+    "modelo": "X500 V2 ARF Kit (SKU 30125)",
+    "descricao_leiga": "Kit quase pronto: frame de fibra de carbono com motores, ESCs e placa de energia já instalados, mais 6 hélices. Monta em cerca de 15 minutos, sem solda.",
+    "preco_referencia_usd": {
+      "min": 329,
+      "max": 329,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da Holybro",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da Holybro: página do produto",
+          "tipo": "loja",
+          "url": "https://holybro.com/products/x500-v2-kits",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Preço da variante ARF em 04/10/2026, sem frete e sem tributos."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "Holybro X500 V2 ARF kit"
+      },
+      {
+        "tipo_loja": "fabricante",
+        "termo_busca": "Holybro X500 V2"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "kit holybro x500 v2"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "Holybro: X500 V2 Kits (descrição oficial e especificação mecânica)",
+        "tipo": "pagina_fabricante",
+        "url": "https://holybro.com/products/x500-v2-kits",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "PX4: guia de montagem Holybro X500 V2 + Pixhawk 6C",
+        "tipo": "documentacao_oficial",
+        "url": "https://github.com/PX4/PX4-Autopilot/blob/9fda8a51a4952dd6964fb7e2c86e0a4f748f740b/docs/en/frames_multicopter/holybro_x500v2_pixhawk6c.md",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "inclui": [
+      {
+        "componente_id": "holybro-x500-v2-frame",
+        "quantidade": 1
+      },
+      {
+        "componente_id": "t-motor-air2216ii-kv920",
+        "quantidade": 4
+      },
+      {
+        "componente_id": "holybro-blheli-s-20a",
+        "quantidade": 4
+      },
+      {
+        "componente_id": "t-motor-t1045ii",
+        "quantidade": 6
+      },
+      {
+        "componente_id": "holybro-x500-v2-pdb",
+        "quantidade": 1
+      }
+    ],
+    "notas": ["As hélices vêm com retentor para não se soltarem em voo (descrição oficial)."],
+    "specs": {}
+  },
+  {
+    "id": "holybro-x500-v2-frame",
+    "categoria": "frame",
+    "marca": "Holybro",
+    "modelo": "X500 V2 Frame Kit (SKU 30120)",
+    "descricao_leiga": "A estrutura do drone: placas e braços de fibra de carbono, trem de pouso, suporte de bateria e suporte de GPS.",
+    "massa_g": 610,
+    "dimensoes_mm": {
+      "comprimento": 144,
+      "largura": 144,
+      "altura": 215
+    },
+    "preco_referencia_usd": {
+      "min": 135,
+      "max": 135,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da Holybro",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da Holybro: página do produto",
+          "tipo": "loja",
+          "url": "https://holybro.com/products/x500-v2-kits",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Variante Frame Kit em 04/10/2026."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "Holybro X500 V2 frame kit"
+      },
+      {
+        "tipo_loja": "fabricante",
+        "termo_busca": "Holybro X500 V2 frame"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "Holybro: X500 V2 Kits (descrição oficial e especificação mecânica)",
+        "tipo": "pagina_fabricante",
+        "url": "https://holybro.com/products/x500-v2-kits",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "Holybro: arquivo CAD oficial do X500 V2 (STEP)",
+        "tipo": "pagina_fabricante",
+        "url": "https://2367252986-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FLIgtGDAvVGkCKGOJb1bR%2Fuploads%2F8i7OGwxNrtr6nOP4BgQ0%2Fx500v2-frame.step?alt=media&token=c06776fd-bd31-40e5-aaa3-9fb56c6ccf5a",
+        "acessado_em": "2026-10-04",
+        "observacao": "Medido pelo From Scratch: haste do suporte de GPS (GAN-GPSV5-ZHIJIA) com 108,0 mm; base com 18,7 mm; placa superior 143,7 x 143,7 x 2,0 mm (confere com os 144 x 144 x 2 mm oficiais)."
+      },
+      {
+        "titulo": "PX4: guia de montagem Holybro X500 V2 + Pixhawk 6C",
+        "tipo": "documentacao_oficial",
+        "url": "https://github.com/PX4/PX4-Autopilot/blob/9fda8a51a4952dd6964fb7e2c86e0a4f748f740b/docs/en/frames_multicopter/holybro_x500v2_pixhawk6c.md",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "A Holybro lista 'Weight: 610g' na especificação mecânica sem dizer se inclui motores; tratamos como peso só do frame (hipótese conservadora: o peso total fica maior, não menor).",
+      "Hélice máxima: a Holybro não informa; consideramos a hélice do próprio kit (10\").",
+      "Dimensões: placa central 144 x 144 mm; 215 mm é a altura do trem de pouso; espaço entre as placas: 28 mm.",
+      "Suporte de GPS incluso: haste de 108 mm medida no CAD oficial (a distância real até os fios de potência é maior, porque a PDB fica na placa de baixo)."
+    ],
+    "specs": {
+      "geometria": "X",
+      "distancia_entre_eixos_mm": 500,
+      "helice_max_pol": 10,
+      "furacao_motor": ["16x16 M3", "19x19 M3"],
+      "material": "fibra_de_carbono",
+      "pdb_integrada": false,
+      "fixacao_fc_fita": true,
+      "mastro_gps_mm": 108,
+      "trem_de_pouso": true
+    }
+  },
+  {
+    "id": "t-motor-air2216ii-kv920",
+    "categoria": "motor",
+    "marca": "T-MOTOR",
+    "modelo": "AIR2216 II KV920",
+    "descricao_leiga": "Motor sem escovas que gira a hélice. É o motor que vem no kit X500 V2 e no combo Airgear 450 II.",
+    "massa_g": 64,
+    "preco_referencia_usd": {
+      "min": 19.99,
+      "max": 19.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da Holybro (peça de reposição)",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da Holybro (peça de reposição): página do produto",
+          "tipo": "loja",
+          "url": "https://holybro.com/products/spare-parts-x500-v2-kit",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Motor 2216-920KV avulso (1 un.) em 04/10/2026; estava sem estoque."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "T-Motor AIR2216 II KV920"
+      },
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "Holybro 2216 920KV motor X500"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "T-MOTOR: Airgear 450 II Combo Set (especificações e teste de empuxo)",
+        "tipo": "pagina_fabricante",
+        "url": "https://store.tmotor.com/product/air-gear-450II-combo-set.html",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "Holybro: ficha do motor, ESC e hélice do X500 V2 (AIR2216 II KV920, BLHeli S 20A, T1045 II)",
+        "tipo": "datasheet",
+        "url": "https://cdn.shopify.com/s/files/1/0604/5905/7341/files/X500MotorSpec.png?v=1678791632",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "Tensão nominal do fabricante: 4S (4,2 V por célula), 16 V. Corrente de pico: 17 A por 180 s. Massa com cabo: 64 ± 2 g.",
+      "Furos de fixação: 4 x M3 a 16 mm e 19 mm (desenho oficial)."
+    ],
+    "specs": {
+      "estator": "2216",
+      "kv": 920,
+      "celulas_min": 4,
+      "celulas_max": 4,
+      "furacao": ["16x19 M3"],
+      "fixacao_helice": ["rosca_m6"],
+      "corrente_max_a": 17
+    }
+  },
+  {
+    "id": "holybro-blheli-s-20a",
+    "categoria": "esc",
+    "marca": "Holybro",
+    "modelo": "BLHeli S ESC 20A (X500 V2)",
+    "descricao_leiga": "Controlador de velocidade de um motor: recebe a ordem da controladora e a energia da bateria. São quatro, um por motor.",
+    "massa_g": 21,
+    "dimensoes_mm": {
+      "comprimento": 26,
+      "largura": 14,
+      "altura": 5
+    },
+    "preco_referencia_usd": {
+      "min": 13.99,
+      "max": 13.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da Holybro (peça de reposição)",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da Holybro (peça de reposição): página do produto",
+          "tipo": "loja",
+          "url": "https://holybro.com/products/spare-parts-x500-v2-kit",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "1 unidade em 04/10/2026; estava sem estoque."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "Holybro BLHeli S 20A ESC X500"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "Holybro: ficha do motor, ESC e hélice do X500 V2 (AIR2216 II KV920, BLHeli S 20A, T1045 II)",
+        "tipo": "datasheet",
+        "url": "https://cdn.shopify.com/s/files/1/0604/5905/7341/files/X500MotorSpec.png?v=1678791632",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": ["Sem BEC (não fornece 5 V). Corrente de pico: 30 A por 10 s."],
+    "specs": {
+      "corrente_continua_a": 20,
+      "corrente_pico_a": 30,
+      "celulas_min": 3,
+      "celulas_max": 4,
+      "firmware": "BLHeli_S"
+    }
+  },
+  {
+    "id": "t-motor-t1045ii",
+    "categoria": "helice",
+    "marca": "T-MOTOR",
+    "modelo": "T1045 II (10 x 4,5\")",
+    "descricao_leiga": "Hélice de plástico reforçado de 10 polegadas. Vende em pacote com 2 pares (2 giram para cada lado).",
+    "massa_g": 12.5,
+    "unidades_por_pacote": 4,
+    "preco_referencia_usd": {
+      "min": 11.59,
+      "max": 11.59,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da Holybro (peça de reposição)",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da Holybro (peça de reposição): página do produto",
+          "tipo": "loja",
+          "url": "https://holybro.com/products/spare-parts-x500-v2-kit",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Propeller1045 (2 pares) em 04/10/2026; estava sem estoque."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "Holybro X500 V2 propeller 1045"
+      },
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "T-Motor T1045 II propeller"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "Holybro: ficha do motor, ESC e hélice do X500 V2 (AIR2216 II KV920, BLHeli S 20A, T1045 II)",
+        "tipo": "datasheet",
+        "url": "https://cdn.shopify.com/s/files/1/0604/5905/7341/files/X500MotorSpec.png?v=1678791632",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "T-MOTOR: Airgear 450 II Combo Set (especificações e teste de empuxo)",
+        "tipo": "pagina_fabricante",
+        "url": "https://store.tmotor.com/product/air-gear-450II-combo-set.html",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "Material: náilon com fibra de vidro. Limite de empuxo do fabricante: 1,2 kg. Rotação ideal: 6.000 a 7.000 rpm."
+    ],
+    "notas_seguranca": [
+      "Mesmo de plástico, uma hélice de 10\" girando corta. Configure e teste sempre sem hélices."
+    ],
+    "specs": {
+      "diametro_pol": 10,
+      "passo_pol": 4.5,
+      "pas": 2,
+      "material": "nylon_fibra_de_vidro",
+      "fixacao": "rosca_m6"
+    }
+  },
+  {
+    "id": "holybro-x500-v2-pdb",
+    "categoria": "modulo_energia",
+    "marca": "Holybro",
+    "modelo": "PDB do X500 V2 (XT60 + XT30)",
+    "descricao_leiga": "Placa que distribui a energia da bateria para os quatro ESCs. Não mede tensão nem corrente.",
+    "massa_estimada_g": {
+      "valor": 25,
+      "motivo": "A Holybro não publica a massa da PDB. Estimamos 25 g comparando com o módulo de energia PM02 V3 da própria Holybro (20 g, também com XT60 e fios)."
+    },
+    "preco_referencia_usd": {
+      "min": 8.59,
+      "max": 8.59,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da Holybro (peça de reposição)",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da Holybro (peça de reposição): página do produto",
+          "tipo": "loja",
+          "url": "https://holybro.com/products/spare-parts-x500-v2-kit",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "PDB Board (With XT30 Pre-soldered) em 04/10/2026; estava sem estoque."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "Holybro X500 V2 PDB board"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "Holybro: X500 V2 Kits (descrição oficial e especificação mecânica)",
+        "tipo": "pagina_fabricante",
+        "url": "https://holybro.com/products/x500-v2-kits",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "specs": {
+      "pdb": true,
+      "conector": "XT60",
+      "mede_tensao": false,
+      "mede_corrente": false
+    }
+  }
+]

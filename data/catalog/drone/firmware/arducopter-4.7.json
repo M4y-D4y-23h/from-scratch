@@ -1,0 +1,724 @@
+{
+  "id": "arducopter-4.7",
+  "firmware": "ArduPilot",
+  "veiculo": "ArduCopter",
+  "versao_min": "4.7.0",
+  "verificado_em": "2026-10-04",
+  "parametros": [
+    {
+      "nome": "FRAME_CLASS",
+      "explicacao": "Quadricóptero (4 motores).",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): parâmetros do Copter (FS_*, FRAME_*)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/ArduCopter/Parameters.cpp",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "valor": 1
+    },
+    {
+      "nome": "FRAME_TYPE",
+      "explicacao": "Motores em X.",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): parâmetros do Copter (FS_*, FRAME_*)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/ArduCopter/Parameters.cpp",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "valor": 1
+    },
+    {
+      "nome": "SERIAL1_PROTOCOL",
+      "explicacao": "TELEM1 recebe o rádio ELRS pelo protocolo CRSF (RCIN). A velocidade da porta é ajustada sozinha.",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): SERIALx_PROTOCOL e SERIALx_BAUD",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/libraries/AP_SerialManager/AP_SerialManager.cpp",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "ArduPilot (Copter): Crossfire and ELRS RC Systems",
+          "tipo": "documentacao_oficial",
+          "url": "https://ardupilot.org/copter/docs/common-tbs-rc.html",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "ArduPilot (Copter): Pixhawk 6C / 6C Mini (UARTs)",
+          "tipo": "documentacao_oficial",
+          "url": "https://ardupilot.org/copter/docs/common-holybro-pixhawk6C.html",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "valor": 23,
+      "condicao": {
+        "telemetria": ["wifi_no_drone", "nenhuma"]
+      }
+    },
+    {
+      "nome": "RSSI_TYPE",
+      "explicacao": "Intensidade do sinal do rádio lida do próprio protocolo do receptor.",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): RSSI_TYPE",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/libraries/AP_RSSI/AP_RSSI.cpp",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "ArduPilot (Copter): Crossfire and ELRS RC Systems",
+          "tipo": "documentacao_oficial",
+          "url": "https://ardupilot.org/copter/docs/common-tbs-rc.html",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "valor": 3,
+      "condicao": {
+        "telemetria": ["wifi_no_drone", "nenhuma"]
+      }
+    },
+    {
+      "nome": "RC_OPTIONS",
+      "explicacao": "Bit 13 ligado: velocidade de 420 kbaud que o ELRS usa no modo CRSF (soma com o bit 5, que já vem ligado de fábrica: 32 + 8192).",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): RC_OPTIONS, RC_OVERRIDE_TIME e RC_FS_TIMEOUT",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/libraries/RC_Channel/RC_Channels_VarInfo.h",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "ArduPilot (Copter): Crossfire and ELRS RC Systems",
+          "tipo": "documentacao_oficial",
+          "url": "https://ardupilot.org/copter/docs/common-tbs-rc.html",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "valor": 8224,
+      "condicao": {
+        "telemetria": ["wifi_no_drone", "nenhuma"]
+      }
+    },
+    {
+      "nome": "SERIAL1_PROTOCOL",
+      "explicacao": "TELEM1 recebe o receptor ELRS em modo MAVLink: controle e telemetria pela mesma porta (ADR-0017).",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): SERIALx_PROTOCOL e SERIALx_BAUD",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/libraries/AP_SerialManager/AP_SerialManager.cpp",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "ArduPilot (Copter): Crossfire and ELRS RC Systems",
+          "tipo": "documentacao_oficial",
+          "url": "https://ardupilot.org/copter/docs/common-tbs-rc.html",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "ExpressLRS: MAVLink (configuração da controladora: SERIALx_BAUD = 460)",
+          "tipo": "documentacao_oficial",
+          "url": "https://www.expresslrs.org/software/mavlink/",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "valor": 2,
+      "condicao": {
+        "telemetria": ["elrs_mavlink"]
+      }
+    },
+    {
+      "nome": "SERIAL1_BAUD",
+      "explicacao": "460800 baud, a velocidade que o firmware do ELRS usa no modo MAVLink (a wiki do ArduPilot ainda cita 115: está desatualizada).",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): SERIALx_PROTOCOL e SERIALx_BAUD",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/libraries/AP_SerialManager/AP_SerialManager.cpp",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "ExpressLRS: MAVLink (configuração da controladora: SERIALx_BAUD = 460)",
+          "tipo": "documentacao_oficial",
+          "url": "https://www.expresslrs.org/software/mavlink/",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "ExpressLRS (código, commit 35bfdd2): porta serial a 460800 baud no modo MAVLink",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ExpressLRS/ExpressLRS/blob/35bfdd21cfa14e949eedb6aa08d135a8e496b0cf/src/src/rx_main.cpp",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "valor": 460,
+      "condicao": {
+        "telemetria": ["elrs_mavlink"]
+      }
+    },
+    {
+      "nome": "RSSI_TYPE",
+      "explicacao": "Sinal do rádio lido das mensagens de telemetria do ELRS (TelemetryRadioRSSI).",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): RSSI_TYPE",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/libraries/AP_RSSI/AP_RSSI.cpp",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "ArduPilot (Copter): Crossfire and ELRS RC Systems",
+          "tipo": "documentacao_oficial",
+          "url": "https://ardupilot.org/copter/docs/common-tbs-rc.html",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "valor": 5,
+      "condicao": {
+        "telemetria": ["elrs_mavlink"]
+      }
+    },
+    {
+      "nome": "SERIAL2_PROTOCOL",
+      "explicacao": "TELEM2 conversa com o módulo Wi-Fi (DroneBridge) em MAVLink 2.",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): SERIALx_PROTOCOL e SERIALx_BAUD",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/libraries/AP_SerialManager/AP_SerialManager.cpp",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "ArduPilot (Copter): DroneBridge for ESP32",
+          "tipo": "documentacao_oficial",
+          "url": "https://ardupilot.org/copter/docs/common-esp32-telemetry.html",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "valor": 2,
+      "condicao": {
+        "telemetria": ["wifi_no_drone"]
+      }
+    },
+    {
+      "nome": "SERIAL2_BAUD",
+      "explicacao": "115200 baud, o padrão do DroneBridge.",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): SERIALx_PROTOCOL e SERIALx_BAUD",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/libraries/AP_SerialManager/AP_SerialManager.cpp",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "ArduPilot (Copter): DroneBridge for ESP32",
+          "tipo": "documentacao_oficial",
+          "url": "https://ardupilot.org/copter/docs/common-esp32-telemetry.html",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "valor": 115,
+      "condicao": {
+        "telemetria": ["wifi_no_drone"]
+      }
+    },
+    {
+      "nome": "SERIAL4_PROTOCOL",
+      "explicacao": "GPS2 recebe o Micro M10 (conector de 6 pinos).",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): SERIALx_PROTOCOL e SERIALx_BAUD",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/libraries/AP_SerialManager/AP_SerialManager.cpp",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "ArduPilot (Copter): Pixhawk 6C / 6C Mini (UARTs)",
+          "tipo": "documentacao_oficial",
+          "url": "https://ardupilot.org/copter/docs/common-holybro-pixhawk6C.html",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "valor": 5,
+      "condicao": {
+        "tem_componente": ["holybro-micro-m10-gps"]
+      }
+    },
+    {
+      "nome": "BRD_SAFETY_DEFLT",
+      "explicacao": "O Micro M10 não tem botão de segurança: sem desligar esta trava, a Pixhawk não deixa armar.",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): BRD_SAFETY_DEFLT",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/libraries/AP_BoardConfig/AP_BoardConfig.cpp",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "valor": 0,
+      "condicao": {
+        "tem_componente": ["holybro-micro-m10-gps"]
+      }
+    },
+    {
+      "nome": "FS_THR_ENABLE",
+      "explicacao": "Perdeu o sinal do rádio → volta para casa (RTL). Se o GPS não estiver bom, pousa.",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): parâmetros do Copter (FS_*, FRAME_*)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/ArduCopter/Parameters.cpp",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "ArduPilot (Copter): Radio Failsafe",
+          "tipo": "documentacao_oficial",
+          "url": "https://ardupilot.org/copter/docs/radio-failsafe.html",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "valor": 1
+    },
+    {
+      "nome": "FS_GCS_ENABLE",
+      "explicacao": "Perdeu a conexão com o celular (estação de solo) → RTL.",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): parâmetros do Copter (FS_*, FRAME_*)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/ArduCopter/Parameters.cpp",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "ArduPilot (Copter): GCS Failsafe",
+          "tipo": "documentacao_oficial",
+          "url": "https://ardupilot.org/copter/docs/gcs-failsafe.html",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "valor": 1
+    },
+    {
+      "nome": "FS_OPTIONS",
+      "explicacao": "Bit 4 (padrão de fábrica): se você estiver pilotando pelo rádio, a perda do celular não interrompe o voo.",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): parâmetros do Copter (FS_*, FRAME_*)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/ArduCopter/Parameters.cpp",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "ArduPilot (Copter): GCS Failsafe",
+          "tipo": "documentacao_oficial",
+          "url": "https://ardupilot.org/copter/docs/gcs-failsafe.html",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "valor": 16
+    },
+    {
+      "nome": "BATT_MONITOR",
+      "explicacao": "Leitura analógica de tensão e corrente (módulo de energia PM02 V3).",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): parâmetros de bateria (BATT_*)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/libraries/AP_BattMonitor/AP_BattMonitor_Params.cpp",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "valor": 4,
+      "condicao": {
+        "tem_componente": ["holybro-pm02-v3"]
+      }
+    },
+    {
+      "nome": "BATT_VOLT_MULT",
+      "explicacao": "Divisor de tensão do PM02 V3 (fabricante).",
+      "fontes": [
+        {
+          "titulo": "Holybro: PM02 V3 (divisor de tensão 18,182; 36,364 A/V)",
+          "tipo": "pagina_fabricante",
+          "url": "https://holybro.com/products/pm02-v3-12s-power-module",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "valor": 18.182,
+      "condicao": {
+        "tem_componente": ["holybro-pm02-v3"]
+      }
+    },
+    {
+      "nome": "BATT_AMP_PERVLT",
+      "explicacao": "Ampères por volt do sensor de corrente do PM02 V3 (fabricante).",
+      "fontes": [
+        {
+          "titulo": "Holybro: PM02 V3 (divisor de tensão 18,182; 36,364 A/V)",
+          "tipo": "pagina_fabricante",
+          "url": "https://holybro.com/products/pm02-v3-12s-power-module",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "valor": 36.364,
+      "condicao": {
+        "tem_componente": ["holybro-pm02-v3"]
+      }
+    },
+    {
+      "nome": "BATT_CAPACITY",
+      "explicacao": "Capacidade da bateria, para o app contar quanto já foi gasto.",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): parâmetros de bateria (BATT_*)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/libraries/AP_BattMonitor/AP_BattMonitor_Params.cpp",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "calculo": {
+        "variavel": "capacidade_mah",
+        "fator": 1,
+        "casas": 0
+      },
+      "unidade": "mAh"
+    },
+    {
+      "nome": "BATT_LOW_MAH",
+      "explicacao": "Bateria baixa quando sobrarem 20% da capacidade (sugestão do ArduPilot).",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): parâmetros de bateria (BATT_*)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/libraries/AP_BattMonitor/AP_BattMonitor_Params.cpp",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "ArduPilot (Copter): Battery Failsafe",
+          "tipo": "documentacao_oficial",
+          "url": "https://ardupilot.org/copter/docs/failsafe-battery.html",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "calculo": {
+        "variavel": "capacidade_mah",
+        "fator": 0.2,
+        "casas": 0
+      },
+      "unidade": "mAh"
+    },
+    {
+      "nome": "BATT_LOW_VOLT",
+      "explicacao": "Bateria baixa abaixo de 3,5 V por célula por 10 s (escolha do From Scratch, com folga acima do mínimo de 3,3 V/célula).",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): parâmetros de bateria (BATT_*)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/libraries/AP_BattMonitor/AP_BattMonitor_Params.cpp",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "ArduPilot (Copter): Battery Failsafe",
+          "tipo": "documentacao_oficial",
+          "url": "https://ardupilot.org/copter/docs/failsafe-battery.html",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "ArduPilot (Copter): Setting up for Tuning (MOT_BAT_VOLT_*, INS_GYRO_FILTER)",
+          "tipo": "documentacao_oficial",
+          "url": "https://ardupilot.org/copter/docs/setting-up-for-tuning.html",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "calculo": {
+        "variavel": "celulas",
+        "fator": 3.5
+      },
+      "unidade": "V"
+    },
+    {
+      "nome": "BATT_FS_LOW_ACT",
+      "explicacao": "Bateria baixa → RTL (recomendado pelo ArduPilot). Nunca use 5 (Terminate): desliga os motores no ar.",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): parâmetros de bateria (BATT_*)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/libraries/AP_BattMonitor/AP_BattMonitor_Params.cpp",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "ArduPilot (Copter): Battery Failsafe",
+          "tipo": "documentacao_oficial",
+          "url": "https://ardupilot.org/copter/docs/failsafe-battery.html",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "valor": 2
+    },
+    {
+      "nome": "BATT_CRT_MAH",
+      "explicacao": "Bateria crítica quando sobrarem 10% (escolha do From Scratch).",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): parâmetros de bateria (BATT_*)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/libraries/AP_BattMonitor/AP_BattMonitor_Params.cpp",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "ArduPilot (Copter): Battery Failsafe",
+          "tipo": "documentacao_oficial",
+          "url": "https://ardupilot.org/copter/docs/failsafe-battery.html",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "calculo": {
+        "variavel": "capacidade_mah",
+        "fator": 0.1,
+        "casas": 0
+      },
+      "unidade": "mAh"
+    },
+    {
+      "nome": "BATT_CRT_VOLT",
+      "explicacao": "Bateria crítica abaixo de 3,3 V por célula (o mínimo que o ArduPilot usa para LiPo).",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): parâmetros de bateria (BATT_*)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/libraries/AP_BattMonitor/AP_BattMonitor_Params.cpp",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "ArduPilot (Copter): Setting up for Tuning (MOT_BAT_VOLT_*, INS_GYRO_FILTER)",
+          "tipo": "documentacao_oficial",
+          "url": "https://ardupilot.org/copter/docs/setting-up-for-tuning.html",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "calculo": {
+        "variavel": "celulas",
+        "fator": 3.3
+      },
+      "unidade": "V"
+    },
+    {
+      "nome": "BATT_FS_CRT_ACT",
+      "explicacao": "Bateria crítica → pousa onde está (não há energia para voltar).",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): parâmetros de bateria (BATT_*)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/libraries/AP_BattMonitor/AP_BattMonitor_Params.cpp",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "ArduPilot (Copter): Battery Failsafe",
+          "tipo": "documentacao_oficial",
+          "url": "https://ardupilot.org/copter/docs/failsafe-battery.html",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "valor": 1
+    },
+    {
+      "nome": "MOT_BAT_VOLT_MAX",
+      "explicacao": "Tensão da bateria cheia (4,2 V por célula), para o controle compensar a queda de tensão.",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (Copter): Setting up for Tuning (MOT_BAT_VOLT_*, INS_GYRO_FILTER)",
+          "tipo": "documentacao_oficial",
+          "url": "https://ardupilot.org/copter/docs/setting-up-for-tuning.html",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "calculo": {
+        "variavel": "celulas",
+        "fator": 4.2
+      },
+      "unidade": "V"
+    },
+    {
+      "nome": "MOT_BAT_VOLT_MIN",
+      "explicacao": "Tensão mínima da bateria (3,3 V por célula).",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (Copter): Setting up for Tuning (MOT_BAT_VOLT_*, INS_GYRO_FILTER)",
+          "tipo": "documentacao_oficial",
+          "url": "https://ardupilot.org/copter/docs/setting-up-for-tuning.html",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "calculo": {
+        "variavel": "celulas",
+        "fator": 3.3
+      },
+      "unidade": "V"
+    },
+    {
+      "nome": "INS_GYRO_FILTER",
+      "explicacao": "Filtro do giroscópio para hélices de 10\" (ArduPilot: 40 Hz).",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (Copter): Setting up for Tuning (MOT_BAT_VOLT_*, INS_GYRO_FILTER)",
+          "tipo": "documentacao_oficial",
+          "url": "https://ardupilot.org/copter/docs/setting-up-for-tuning.html",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "valor": 40,
+      "unidade": "Hz"
+    },
+    {
+      "nome": "FENCE_ENABLE",
+      "explicacao": "Cerca virtual ligada: se passar do limite, o drone volta sozinho. Com a cerca ligada, só arma com GPS travado.",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): parâmetros da cerca (FENCE_*)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/libraries/AC_Fence/AC_Fence.cpp",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "ArduPilot (Copter): Cylindrical Fence",
+          "tipo": "documentacao_oficial",
+          "url": "https://ardupilot.org/copter/docs/common-ac2_simple_geofence.html",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "valor": 1
+    },
+    {
+      "nome": "FENCE_TYPE",
+      "explicacao": "Altura máxima (bit 0) + círculo em volta do ponto de decolagem (bit 1).",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): parâmetros da cerca (FENCE_*)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/libraries/AC_Fence/AC_Fence.cpp",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "ArduPilot (Copter): Cylindrical Fence",
+          "tipo": "documentacao_oficial",
+          "url": "https://ardupilot.org/copter/docs/common-ac2_simple_geofence.html",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "valor": 3
+    },
+    {
+      "nome": "FENCE_ALT_MAX",
+      "explicacao": "Altura máxima de 50 m acima do ponto de decolagem: abaixo dos 60 m do voo recreativo (DECEA), com folga.",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): parâmetros da cerca (FENCE_*)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/libraries/AC_Fence/AC_Fence.cpp",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "DECEA: ICA 100-40/2026 (voo recreativo: até 60 m de altura e 300 m de distância)",
+          "tipo": "norma",
+          "url": "https://publicacoes.decea.mil.br/publicacao/ica-100-40",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "valor": 50,
+      "unidade": "m"
+    },
+    {
+      "nome": "FENCE_RADIUS",
+      "explicacao": "Raio de 250 m: abaixo dos 300 m do voo recreativo (DECEA), com folga para o drone frear.",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): parâmetros da cerca (FENCE_*)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/libraries/AC_Fence/AC_Fence.cpp",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "DECEA: ICA 100-40/2026 (voo recreativo: até 60 m de altura e 300 m de distância)",
+          "tipo": "norma",
+          "url": "https://publicacoes.decea.mil.br/publicacao/ica-100-40",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "valor": 250,
+      "unidade": "m"
+    },
+    {
+      "nome": "FENCE_ACTION",
+      "explicacao": "Ao passar da cerca: RTL (ou pouso, se não der).",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): parâmetros da cerca (FENCE_*)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/libraries/AC_Fence/AC_Fence.cpp",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "ArduPilot (Copter): Cylindrical Fence",
+          "tipo": "documentacao_oficial",
+          "url": "https://ardupilot.org/copter/docs/common-ac2_simple_geofence.html",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "valor": 1
+    },
+    {
+      "nome": "RTL_ALT_M",
+      "explicacao": "Altura de retorno: 30 m. Ajuste para ficar ACIMA das árvores, fios e prédios do seu local (o RTL volta em linha reta e não desvia de obstáculos) e abaixo de FENCE_ALT_MAX. No ArduCopter 4.7 este parâmetro é em metros (antes era RTL_ALT, em centímetros).",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): RTL_ALT_M (metros, padrão 15 m)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/ArduCopter/mode_rtl.cpp",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "ArduPilot (Copter): RTL Mode",
+          "tipo": "documentacao_oficial",
+          "url": "https://ardupilot.org/copter/docs/rtl-mode.html",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "valor": 30,
+      "unidade": "m"
+    },
+    {
+      "nome": "ARMING_SKIPCHK",
+      "explicacao": "Nenhuma checagem de segurança é pulada antes de armar (no 4.7 substitui o ARMING_CHECK).",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): ARMING_SKIPCHK e ARMING_NEED_LOC",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/libraries/AP_Arming/AP_Arming.cpp",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "valor": 0
+    },
+    {
+      "nome": "ARMING_NEED_LOC",
+      "explicacao": "Só arma com posição de GPS: garante que o ponto de retorno (home) foi gravado.",
+      "fontes": [
+        {
+          "titulo": "ArduPilot (código, commit e204ca7): ARMING_SKIPCHK e ARMING_NEED_LOC",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/libraries/AP_Arming/AP_Arming.cpp",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "valor": 1
+    }
+  ],
+  "notas": [
+    "Nomes de parâmetros do ArduCopter 4.7 (conferidos no código-fonte). Em versões antigas alguns nomes mudam (ex.: RTL_ALT em centímetros).",
+    "No modo MAVLink do ELRS, confira que RC_OVERRIDE_TIME não é 0 e que o bit 1 de RC_OPTIONS (ignorar overrides do MAVLink) está desligado: com qualquer um dos dois o drone não recebe o rádio.",
+    "Teste de bancada obrigatório, sem hélices: desligue o rádio e confira no QGroundControl o failsafe de rádio e a troca para RTL."
+  ]
+}

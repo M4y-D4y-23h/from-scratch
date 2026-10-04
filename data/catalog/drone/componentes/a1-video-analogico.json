@@ -1,0 +1,274 @@
+[
+  {
+    "id": "caddx-ratel-19mm",
+    "categoria": "camera_fpv",
+    "marca": "Caddx",
+    "modelo": "Ratel 19 mm Micro Starlight 1200TVL",
+    "descricao_leiga": "Câmera de vídeo ao vivo (analógica) que enxerga bem com pouca luz. A imagem vai para o transmissor de vídeo.",
+    "massa_g": 8,
+    "dimensoes_mm": {
+      "comprimento": 19,
+      "largura": 19,
+      "altura": 19
+    },
+    "preco_referencia_usd": {
+      "min": 21.99,
+      "max": 21.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da BETAFPV (revenda Caddx)",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da BETAFPV (revenda Caddx): página do produto",
+          "tipo": "loja",
+          "url": "https://betafpv.com/products/caddx-ratel-camera",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Em 04/10/2026; estava sem estoque."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "Caddx Ratel 19mm 1200TVL"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "camera fpv caddx ratel"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: Caddx Ratel 19mm Micro Starlight (especificação)",
+        "tipo": "loja",
+        "url": "https://betafpv.com/products/caddx-ratel-camera",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "Entrada de 5 a 40 V. O fabricante não publica a corrente: o app usa um consumo presumido."
+    ],
+    "specs": {
+      "sistema": "analogico_5g8",
+      "tensao_v_min": 5,
+      "tensao_v_max": 40,
+      "formato": "micro_19mm"
+    }
+  },
+  {
+    "id": "caddx-ratel-pro",
+    "categoria": "camera_fpv",
+    "marca": "Caddx",
+    "modelo": "Ratel Pro 1500TVL",
+    "descricao_leiga": "Câmera de vídeo ao vivo (analógica) com imagem mais nítida (1500 linhas) e caixa de metal.",
+    "massa_g": 9.5,
+    "dimensoes_mm": {
+      "comprimento": 19,
+      "largura": 19,
+      "altura": 27
+    },
+    "preco_referencia_usd": {
+      "min": 49,
+      "max": 49,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da Caddx",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da Caddx: página do produto",
+          "tipo": "loja",
+          "url": "https://caddxfpv.com/products/caddxfpv-ratel-pro-analog-camera",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Em 04/10/2026."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "Caddx Ratel Pro analog camera"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "caddx ratel pro"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "Caddx: Ratel Pro Analog Camera (especificação oficial)",
+        "tipo": "pagina_fabricante",
+        "url": "https://caddxfpv.com/products/caddxfpv-ratel-pro-analog-camera",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "Entrada de 4,5 a 27 V; campo de visão de 125°. O fabricante não publica a corrente: o app usa um consumo presumido."
+    ],
+    "specs": {
+      "sistema": "analogico_5g8",
+      "tensao_v_min": 4.5,
+      "tensao_v_max": 27,
+      "formato": "micro_19mm"
+    }
+  },
+  {
+    "id": "betafpv-a03-vtx",
+    "categoria": "vtx",
+    "marca": "BETAFPV",
+    "modelo": "A03 400 mW 5,8 GHz",
+    "descricao_leiga": "Transmissor de vídeo: manda a imagem da câmera para o receptor no celular. Potência ajustável (25, 100 ou 400 mW).",
+    "massa_g": 4.9,
+    "dimensoes_mm": {
+      "comprimento": 30.34,
+      "largura": 30.34,
+      "altura": 4.6
+    },
+    "preco_referencia_usd": {
+      "min": 24.99,
+      "max": 24.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da BETAFPV",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da BETAFPV: página do produto",
+          "tipo": "loja",
+          "url": "https://betafpv.com/products/a03-400mw-5-8g-vtx",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Em 04/10/2026; estava sem estoque."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "BETAFPV A03 400mW VTX"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "vtx betafpv a03"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: A03 400mW 5.8G VTX (especificação oficial)",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/a03-400mw-5-8g-vtx",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "Anatel: Ato nº 14.448/2017 (equipamentos de radiação restrita)",
+        "tipo": "norma",
+        "url": "https://informacoes.anatel.gov.br/legislacao/atos-de-certificacao-de-produtos/2017/1139-",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "inclui": [
+      {
+        "componente_id": "betafpv-air-antenna-mmcx",
+        "quantidade": 1
+      }
+    ],
+    "notas": [
+      "Entrada de 7 a 35 V: liga direto na bateria 4S.",
+      "Corrente: menos de 300 mA a 8 V em 400 mW (usamos 300 mA; na bateria 4S a corrente real é menor, então a conta fica conservadora).",
+      "Controle por SmartAudio ou Tramp (OpenVTx). Furação 26 x 26 mm.",
+      "Transmissor de vídeo analógico de 5,8 GHz: a potência costuma passar do limite de radiação restrita da Anatel. Veja o alerta regulatório do projeto."
+    ],
+    "notas_seguranca": [
+      "Nunca ligue o transmissor de vídeo sem a antena: ele pode queimar em segundos."
+    ],
+    "specs": {
+      "sistema": "analogico_5g8",
+      "potencias_mw": [25, 100, 400],
+      "tensao_v_min": 7,
+      "tensao_v_max": 35,
+      "corrente_ma_max": 300,
+      "controle": "SmartAudio",
+      "conector_antena": "MMCX"
+    }
+  },
+  {
+    "id": "betafpv-air-antenna-mmcx",
+    "categoria": "antena",
+    "marca": "BETAFPV",
+    "modelo": "Air Antenna 5,8 GHz (MMCX reta)",
+    "descricao_leiga": "Antena do transmissor de vídeo. Vem na caixa do VTX A03.",
+    "vendido_separadamente": false,
+    "massa_estimada_g": {
+      "valor": 1.5,
+      "motivo": "A BETAFPV não publica a massa. Antena de fio curta com conector MMCX: estimamos 1,5 g (o efeito no peso total é desprezível)."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "BETAFPV A03 VTX"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: A03 400mW 5.8G VTX (conteúdo da caixa)",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/a03-400mw-5-8g-vtx",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "specs": {
+      "frequencia_ghz": 5.8,
+      "conector": "MMCX"
+    }
+  },
+  {
+    "id": "skydroid-otg-uvc",
+    "categoria": "receptor_video",
+    "marca": "Skydroid",
+    "modelo": "Receptor OTG UVC 5,8 GHz 150 canais",
+    "descricao_leiga": "Receptor de vídeo que liga no celular Android pela entrada USB (OTG) e mostra a imagem da câmera do drone.",
+    "massa_g": 29,
+    "dimensoes_mm": {
+      "comprimento": 59,
+      "largura": 40,
+      "altura": 11
+    },
+    "preco_referencia_usd": {
+      "min": 39.5,
+      "max": 39.5,
+      "data": "2026-10-04",
+      "loja": "rcdrone.top (revenda)",
+      "fontes": [
+        {
+          "titulo": "rcdrone.top (revenda): página do produto",
+          "tipo": "loja",
+          "url": "https://rcdrone.top/products/skydroid-receiver-otg",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Em 04/10/2026. Não achamos loja oficial da Skydroid com preço."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "Skydroid OTG UVC 5.8G receiver"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "receptor fpv otg android 5.8"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "rcdrone.top: Skydroid Receiver OTG UVC (especificação do anúncio)",
+        "tipo": "loja",
+        "url": "https://rcdrone.top/products/skydroid-receiver-otg",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "Funciona com Android pela USB (UVC); não funciona com iPhone/iPad. USB 5 V, 190 mA.",
+      "Se o QGroundControl não mostrar a imagem, use o app do próprio receptor em tela dividida (o QGroundControl só lista câmeras USB que o Android expõe)."
+    ],
+    "specs": {
+      "sistema": "analogico_5g8",
+      "interface": "usb_uvc",
+      "android": true,
+      "ios": false
+    }
+  }
+]

@@ -328,6 +328,15 @@ describe("GPS, bússola e failsafe", () => {
     expectFailure(run(removeSlot(baseBuild(), "mastro")), "bussola_longe_da_potencia");
   });
 
+  it("suporte de GPS que vem com o frame conta como mastro", () => {
+    const comSuporte = tweakSlot(removeSlot(baseBuild(), "mastro"), "frame", {
+      mastro_gps_mm: 108,
+    });
+    expect(rule(run(comSuporte), "bussola_longe_da_potencia").status).toBe("passou");
+    const baixo = tweakSlot(removeSlot(baseBuild(), "mastro"), "frame", { mastro_gps_mm: 60 });
+    expect(rule(run(baixo), "bussola_longe_da_potencia").status).toBe("falhou");
+  });
+
   it("mastro curto demais", () => {
     const report = run(tweakSlot(baseBuild(), "mastro", { altura_mm: 60 }));
     expectFailure(report, "bussola_longe_da_potencia");

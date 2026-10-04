@@ -47,6 +47,19 @@ describe("peso de decolagem (AUW)", () => {
     expect(auw.selo).toBe("nao_verificado");
   });
 
+  it("massa estimada (sem dado do fabricante) entra no peso e fica listada", () => {
+    const build = tweakSlot(
+      baseBuild(),
+      "motores",
+      {},
+      { massa_g: undefined, massa_estimada_g: { valor: 56, motivo: "comparação" } },
+    );
+    const auw = computeAuw(build, CONFIG);
+    expect(auw.massa_total_g).toBeCloseTo(1045.44, 6);
+    expect(auw.estimadas).toEqual(["motor-teste"]);
+    expect(auw.faltando).toEqual([]);
+  });
+
   it("peso é estimativa: com tudo verificado o selo vira ⚠️, nunca ✅", () => {
     expect(computeAuw(withStatus(baseBuild(), "verificado"), CONFIG).selo).toBe("estimativa");
   });

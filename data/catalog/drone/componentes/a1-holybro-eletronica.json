@@ -1,0 +1,491 @@
+[
+  {
+    "id": "holybro-pixhawk-6c-mini",
+    "categoria": "fc",
+    "marca": "Holybro",
+    "modelo": "Pixhawk 6C Mini (Model B)",
+    "descricao_leiga": "O cérebro do drone, padrão Pixhawk compacto. Roda o ArduPilot completo (GPS, retorno automático, cerca virtual).",
+    "massa_g": 46.8,
+    "dimensoes_mm": {
+      "comprimento": 58.3,
+      "largura": 39,
+      "altura": 18.2
+    },
+    "preco_referencia_usd": {
+      "min": 130.99,
+      "max": 130.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da Holybro",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da Holybro: página do produto",
+          "tipo": "loja",
+          "url": "https://holybro.com/products/pixhawk-6c-mini",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Model B sem módulo de energia, em 04/10/2026."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "Holybro Pixhawk 6C Mini"
+      },
+      {
+        "tipo_loja": "fabricante",
+        "termo_busca": "Holybro Pixhawk 6C Mini"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "Holybro: Pixhawk 6C Mini (especificação oficial)",
+        "tipo": "pagina_fabricante",
+        "url": "https://holybro.com/products/pixhawk-6c-mini",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ArduPilot: Holybro Pixhawk 6C / 6C Mini (UARTs, entrada do rádio, saídas)",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/common-holybro-pixhawk6C.html",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "Alimentada pelo módulo de energia (máx. 6 V na entrada): não liga direto na bateria.",
+      "Sem OSD analógico: bateria, altura e mapa aparecem no celular (QGroundControl), não na imagem da câmera.",
+      "O rádio ELRS precisa de uma UART completa (TELEM ou GPS2); a entrada RCIN não serve para CRSF/ELRS (ArduPilot).",
+      "No 6C Mini não há TELEM3 nem as saídas PWM 7 e 8 da FMU (ArduPilot)."
+    ],
+    "specs": {
+      "mcu": "STM32H743",
+      "flash_mb": 2,
+      "firmwares": [
+        {
+          "nome": "ArduPilot",
+          "alvo": "Pixhawk6C",
+          "lista_oficial": true
+        }
+      ],
+      "uarts": [
+        {
+          "nome": "SERIAL1 (TELEM1)"
+        },
+        {
+          "nome": "SERIAL2 (TELEM2)"
+        },
+        {
+          "nome": "SERIAL3 (GPS1)"
+        },
+        {
+          "nome": "SERIAL4 (GPS2)"
+        }
+      ],
+      "saidas_motor": 6,
+      "becs": [
+        {
+          "tensao_v": 5,
+          "corrente_a": 1.5,
+          "observacao": "Portas TELEM1 e GPS2 (limite somado)"
+        },
+        {
+          "tensao_v": 5,
+          "corrente_a": 1.5,
+          "observacao": "Demais portas (limite somado)"
+        }
+      ],
+      "barometro": true,
+      "osd_analogico": false,
+      "sensor_corrente": false,
+      "sensor_tensao": false,
+      "fixacao_fita": true
+    }
+  },
+  {
+    "id": "holybro-pixhawk-6c-plastico",
+    "categoria": "fc",
+    "marca": "Holybro",
+    "modelo": "Pixhawk 6C (caixa plástica)",
+    "descricao_leiga": "O cérebro do drone, padrão Pixhawk completo, com mais portas que o 6C Mini.",
+    "massa_g": 34.6,
+    "dimensoes_mm": {
+      "comprimento": 84.8,
+      "largura": 44,
+      "altura": 12.4
+    },
+    "preco_referencia_usd": {
+      "min": 199,
+      "max": 199,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da Holybro",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da Holybro: página do produto",
+          "tipo": "loja",
+          "url": "https://holybro.com/products/pixhawk-6c",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Caixa plástica sem módulo de energia, em 04/10/2026."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "Holybro Pixhawk 6C"
+      },
+      {
+        "tipo_loja": "fabricante",
+        "termo_busca": "Holybro Pixhawk 6C"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "Holybro: Pixhawk 6C (especificação oficial)",
+        "tipo": "pagina_fabricante",
+        "url": "https://holybro.com/products/pixhawk-6c",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ArduPilot: Holybro Pixhawk 6C / 6C Mini (UARTs, entrada do rádio, saídas)",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/common-holybro-pixhawk6C.html",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "Alimentada pelo módulo de energia (máx. 6 V na entrada): não liga direto na bateria.",
+      "Sem OSD analógico: bateria, altura e mapa aparecem no celular (QGroundControl), não na imagem da câmera.",
+      "O rádio ELRS precisa de uma UART completa (TELEM ou GPS2); a entrada RCIN não serve para CRSF/ELRS (ArduPilot)."
+    ],
+    "specs": {
+      "mcu": "STM32H743",
+      "flash_mb": 2,
+      "firmwares": [
+        {
+          "nome": "ArduPilot",
+          "alvo": "Pixhawk6C",
+          "lista_oficial": true
+        }
+      ],
+      "uarts": [
+        {
+          "nome": "SERIAL1 (TELEM1)"
+        },
+        {
+          "nome": "SERIAL2 (TELEM2)"
+        },
+        {
+          "nome": "SERIAL3 (GPS1)"
+        },
+        {
+          "nome": "SERIAL4 (GPS2)"
+        },
+        {
+          "nome": "SERIAL5 (TELEM3)"
+        },
+        {
+          "nome": "SERIAL6 (USER/Debug)"
+        }
+      ],
+      "saidas_motor": 8,
+      "becs": [
+        {
+          "tensao_v": 5,
+          "corrente_a": 1.5,
+          "observacao": "Portas TELEM1 e GPS2 (limite somado)"
+        },
+        {
+          "tensao_v": 5,
+          "corrente_a": 1.5,
+          "observacao": "Demais portas (limite somado)"
+        }
+      ],
+      "barometro": true,
+      "osd_analogico": false,
+      "sensor_corrente": false,
+      "sensor_tensao": false,
+      "fixacao_fita": true
+    }
+  },
+  {
+    "id": "holybro-pixhawk-6c-aluminio",
+    "categoria": "fc",
+    "marca": "Holybro",
+    "modelo": "Pixhawk 6C (caixa de alumínio)",
+    "descricao_leiga": "A mesma Pixhawk 6C, com caixa de alumínio (mais robusta e melhor para dissipar calor).",
+    "massa_g": 59.3,
+    "dimensoes_mm": {
+      "comprimento": 84.8,
+      "largura": 44,
+      "altura": 12.4
+    },
+    "preco_referencia_usd": {
+      "min": 209,
+      "max": 209,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da Holybro",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da Holybro: página do produto",
+          "tipo": "loja",
+          "url": "https://holybro.com/products/pixhawk-6c",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Caixa de alumínio sem módulo de energia, em 04/10/2026."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "Holybro Pixhawk 6C aluminum"
+      },
+      {
+        "tipo_loja": "fabricante",
+        "termo_busca": "Holybro Pixhawk 6C"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "Holybro: Pixhawk 6C (especificação oficial)",
+        "tipo": "pagina_fabricante",
+        "url": "https://holybro.com/products/pixhawk-6c",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ArduPilot: Holybro Pixhawk 6C / 6C Mini (UARTs, entrada do rádio, saídas)",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/common-holybro-pixhawk6C.html",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "Alimentada pelo módulo de energia (máx. 6 V na entrada): não liga direto na bateria.",
+      "Sem OSD analógico: bateria, altura e mapa aparecem no celular (QGroundControl), não na imagem da câmera.",
+      "O rádio ELRS precisa de uma UART completa (TELEM ou GPS2); a entrada RCIN não serve para CRSF/ELRS (ArduPilot)."
+    ],
+    "specs": {
+      "mcu": "STM32H743",
+      "flash_mb": 2,
+      "firmwares": [
+        {
+          "nome": "ArduPilot",
+          "alvo": "Pixhawk6C",
+          "lista_oficial": true
+        }
+      ],
+      "uarts": [
+        {
+          "nome": "SERIAL1 (TELEM1)"
+        },
+        {
+          "nome": "SERIAL2 (TELEM2)"
+        },
+        {
+          "nome": "SERIAL3 (GPS1)"
+        },
+        {
+          "nome": "SERIAL4 (GPS2)"
+        },
+        {
+          "nome": "SERIAL5 (TELEM3)"
+        },
+        {
+          "nome": "SERIAL6 (USER/Debug)"
+        }
+      ],
+      "saidas_motor": 8,
+      "becs": [
+        {
+          "tensao_v": 5,
+          "corrente_a": 1.5,
+          "observacao": "Portas TELEM1 e GPS2 (limite somado)"
+        },
+        {
+          "tensao_v": 5,
+          "corrente_a": 1.5,
+          "observacao": "Demais portas (limite somado)"
+        }
+      ],
+      "barometro": true,
+      "osd_analogico": false,
+      "sensor_corrente": false,
+      "sensor_tensao": false,
+      "fixacao_fita": true
+    }
+  },
+  {
+    "id": "holybro-pm02-v3",
+    "categoria": "modulo_energia",
+    "marca": "Holybro",
+    "modelo": "PM02 V3 (2S–12S)",
+    "descricao_leiga": "Fica entre a bateria e o drone: mede tensão e corrente da bateria (para o retorno por bateria baixa) e alimenta a controladora com 5,2 V.",
+    "massa_g": 20,
+    "preco_referencia_usd": {
+      "min": 18.99,
+      "max": 18.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da Holybro",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da Holybro: página do produto",
+          "tipo": "loja",
+          "url": "https://holybro.com/products/pm02-v3-12s-power-module",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Em 04/10/2026."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "Holybro PM02 V3 power module"
+      },
+      {
+        "tipo_loja": "fabricante",
+        "termo_busca": "Holybro PM02 V3"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "Holybro: PM02 V3 Power Module (especificação oficial)",
+        "tipo": "pagina_fabricante",
+        "url": "https://holybro.com/products/pm02-v3-12s-power-module",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "Placa: 60 A contínuos e 100 A por menos de 60 s; mede até 120 A.",
+      "O conector XT60 e o fio 12 AWG que vêm soldados aguentam 30 A contínuos e 60 A por menos de 60 s (aviso do fabricante): é esse o limite que usamos.",
+      "Analógico: compatível com Pixhawk 6C/6C Mini (não com 6X/5X)."
+    ],
+    "specs": {
+      "mede_corrente": true,
+      "mede_tensao": true,
+      "celulas_max": 12,
+      "corrente_continua_a": 30,
+      "conector": "XT60",
+      "pdb": false,
+      "becs": [
+        {
+          "tensao_v": 5.2,
+          "corrente_a": 3,
+          "observacao": "Alimenta a controladora"
+        }
+      ]
+    }
+  },
+  {
+    "id": "holybro-m10-gps",
+    "categoria": "gps",
+    "marca": "Holybro",
+    "modelo": "M10 GPS (IST8310, conector de 10 pinos)",
+    "descricao_leiga": "GPS com bússola, LED, buzzer e botão de segurança. Diz ao drone onde ele está e para onde está virado.",
+    "massa_g": 32,
+    "dimensoes_mm": {
+      "comprimento": 50,
+      "largura": 50,
+      "altura": 14.4
+    },
+    "preco_referencia_usd": {
+      "min": 43.99,
+      "max": 43.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da Holybro",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da Holybro: página do produto",
+          "tipo": "loja",
+          "url": "https://holybro.com/products/m10-gps",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Variante IST8310 / Standard (10-pin) em 04/10/2026."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "Holybro M10 GPS IST8310"
+      },
+      {
+        "tipo_loja": "fabricante",
+        "termo_busca": "Holybro M10 GPS"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "Holybro: M10 GPS (especificação oficial)",
+        "tipo": "pagina_fabricante",
+        "url": "https://holybro.com/products/m10-gps",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "Consumo: menos de 200 mA a 5 V (usamos 200 mA como limite).",
+      "Liga na porta GPS1 da Pixhawk (10 pinos). Vem a 115200 baud, 5 Hz.",
+      "Requer ArduPilot 4.3 ou mais novo (Holybro)."
+    ],
+    "specs": {
+      "gnss": "u-blox M10",
+      "bussola": "IST8310",
+      "protocolo": "UBX",
+      "tensao_v": 5,
+      "corrente_ma": 200
+    }
+  },
+  {
+    "id": "holybro-micro-m10-gps",
+    "categoria": "gps",
+    "marca": "Holybro",
+    "modelo": "Micro M10 GPS (com case, IST8310)",
+    "descricao_leiga": "GPS com bússola, menor e mais barato. Não tem buzzer nem botão de segurança.",
+    "massa_g": 16,
+    "dimensoes_mm": {
+      "comprimento": 34,
+      "largura": 28,
+      "altura": 11
+    },
+    "preco_referencia_usd": {
+      "min": 27.99,
+      "max": 27.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da Holybro",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da Holybro: página do produto",
+          "tipo": "loja",
+          "url": "https://holybro.com/products/micro-m10-gps",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Com case / IST8310 em 04/10/2026."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "Holybro Micro M10 GPS"
+      },
+      {
+        "tipo_loja": "fabricante",
+        "termo_busca": "Holybro Micro M10 GPS"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "Holybro: Micro M10 GPS (especificação oficial)",
+        "tipo": "pagina_fabricante",
+        "url": "https://holybro.com/products/micro-m10-gps",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "Consumo: menos de 200 mA a 5 V.",
+      "Conector JST-GH de 6 pinos: liga na porta GPS2 da Pixhawk (SERIAL4)."
+    ],
+    "specs": {
+      "gnss": "u-blox M10",
+      "bussola": "IST8310",
+      "protocolo": "UBX",
+      "tensao_v": 5,
+      "corrente_ma": 200
+    }
+  }
+]

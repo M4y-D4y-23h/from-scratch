@@ -148,6 +148,8 @@ export const frameSpecsSchema = z.object({
   conector_bateria: batteryConnectorSchema.optional(),
   /** Placa plana onde a FC é presa com espuma/fita anti-vibração (padrão das Pixhawk). */
   fixacao_fc_fita: z.boolean().optional(),
+  /** Suporte de GPS que já vem com o frame: altura (mm) acima da placa onde ele é fixado. */
+  mastro_gps_mm: z.number().positive().optional(),
   /** Dutos/protetores ao redor das hélices (whoops). */
   protecao_helices: z.boolean().optional(),
   trem_de_pouso: z.boolean().optional(),
@@ -374,7 +376,13 @@ const componentBase = {
   modelo: z.string().min(1),
   /** Para que serve, em uma frase para leigos. */
   descricao_leiga: z.string().min(1),
+  /** Massa publicada pelo fabricante (g). */
   massa_g: z.number().positive().optional(),
+  /** Quando o fabricante não publica a massa: estimativa explícita do From Scratch, com o motivo.
+   *  Entra no peso total, mas o relatório lista que foi estimada. */
+  massa_estimada_g: z
+    .object({ valor: z.number().positive(), motivo: z.string().min(1) })
+    .optional(),
   dimensoes_mm: z
     .object({ comprimento: z.number(), largura: z.number(), altura: z.number() })
     .optional(),
@@ -516,6 +524,8 @@ export const stepConditionSchema = z.object({
   sem_categoria: z.array(z.string()).optional(),
   /** Opção de telemetria escolhida. */
   telemetria: z.array(z.string()).optional(),
+  /** O build precisa ter alguma destas peças (ids do catálogo). */
+  tem_componente: z.array(z.string()).optional(),
 });
 
 export const buildStepTemplateSchema = z.object({
@@ -549,15 +559,29 @@ export type BuildStepTemplate = z.infer<typeof buildStepTemplateSchema>;
 // Parâmetros de firmware (dados versionados, nunca texto solto do LLM)
 // ---------------------------------------------------------------------------
 
-export const firmwareParamSchema = z.object({
-  nome: z.string().min(1),
-  valor: z.union([z.number(), z.string()]),
-  unidade: z.string().optional(),
-  explicacao: z.string().min(1),
-  /** Em que condição o parâmetro se aplica (ex.: só com telemetria ELRS MAVLink). */
-  condicao: stepConditionSchema.optional(),
-  fontes: z.array(sourceSchema).min(1),
-});
+export const firmwareParamSchema = z
+  .object({
+    nome: z.string().min(1),
+    /** Valor fixo. */
+    valor: z.union([z.number(), z.string()]).optional(),
+    /** Valor que depende do build: variável × fator (ex.: BATT_LOW_MAH = 20% da capacidade). */
+    calculo: z
+      .object({
+        variavel: z.enum(["celulas", "capacidade_mah"]),
+        fator: z.number(),
+        /** Casas decimais do resultado (padrão 1). */
+        casas: z.int().min(0).max(3).optional(),
+      })
+      .optional(),
+    unidade: z.string().optional(),
+    explicacao: z.string().min(1),
+    /** Em que condição o parâmetro se aplica (ex.: só com telemetria ELRS MAVLink). */
+    condicao: stepConditionSchema.optional(),
+    fontes: z.array(sourceSchema).min(1),
+  })
+  .refine((p) => (p.valor === undefined) !== (p.calculo === undefined), {
+    message: "informe valor OU calculo",
+  });
 export type FirmwareParam = z.infer<typeof firmwareParamSchema>;
 
 export const firmwareProfileSchema = z.object({

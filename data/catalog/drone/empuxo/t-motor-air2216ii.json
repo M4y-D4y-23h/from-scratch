@@ -1,0 +1,119 @@
+[
+  {
+    "id": "air2216ii-kv920-t1045ii-4s",
+    "motor_id": "t-motor-air2216ii-kv920",
+    "helice_id": "t-motor-t1045ii",
+    "celulas": 4,
+    "tensao_teste_v": 16,
+    "pontos": [
+      {
+        "throttle_pct": 30,
+        "empuxo_g": 210,
+        "corrente_a": 1.44,
+        "potencia_w": 23
+      },
+      {
+        "throttle_pct": 35,
+        "empuxo_g": 259,
+        "corrente_a": 1.87,
+        "potencia_w": 30
+      },
+      {
+        "throttle_pct": 40,
+        "empuxo_g": 309,
+        "corrente_a": 2.29,
+        "potencia_w": 37
+      },
+      {
+        "throttle_pct": 45,
+        "empuxo_g": 373,
+        "corrente_a": 2.86,
+        "potencia_w": 46
+      },
+      {
+        "throttle_pct": 50,
+        "empuxo_g": 447,
+        "corrente_a": 3.6,
+        "potencia_w": 58
+      },
+      {
+        "throttle_pct": 55,
+        "empuxo_g": 536,
+        "corrente_a": 4.53,
+        "potencia_w": 72
+      },
+      {
+        "throttle_pct": 60,
+        "empuxo_g": 628,
+        "corrente_a": 5.61,
+        "potencia_w": 90
+      },
+      {
+        "throttle_pct": 65,
+        "empuxo_g": 729,
+        "corrente_a": 6.78,
+        "potencia_w": 108
+      },
+      {
+        "throttle_pct": 70,
+        "empuxo_g": 814,
+        "corrente_a": 7.92,
+        "potencia_w": 126
+      },
+      {
+        "throttle_pct": 75,
+        "empuxo_g": 906,
+        "corrente_a": 9.2,
+        "potencia_w": 147
+      },
+      {
+        "throttle_pct": 80,
+        "empuxo_g": 993,
+        "corrente_a": 10.59,
+        "potencia_w": 169
+      },
+      {
+        "throttle_pct": 85,
+        "empuxo_g": 1087,
+        "corrente_a": 12.11,
+        "potencia_w": 193
+      },
+      {
+        "throttle_pct": 90,
+        "empuxo_g": 1191,
+        "corrente_a": 13.81,
+        "potencia_w": 219
+      },
+      {
+        "throttle_pct": 95,
+        "empuxo_g": 1289,
+        "corrente_a": 15.68,
+        "potencia_w": 249
+      },
+      {
+        "throttle_pct": 100,
+        "empuxo_g": 1332,
+        "corrente_a": 16.37,
+        "potencia_w": 260
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "T-MOTOR: Airgear 450 II Combo Set (especificações e teste de empuxo)",
+        "tipo": "pagina_fabricante",
+        "url": "https://store.tmotor.com/product/air-gear-450II-combo-set.html",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "Holybro: ficha do motor, ESC e hélice do X500 V2 (AIR2216 II KV920, BLHeli S 20A, T1045 II)",
+        "tipo": "datasheet",
+        "url": "https://cdn.shopify.com/s/files/1/0604/5905/7341/files/X500MotorSpec.png?v=1678791632",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "Teste de bancada do fabricante a 16 V (bateria 4S). A mesma tabela aparece na página da T-MOTOR e na ficha da Holybro.",
+      "Temperatura do motor: 80 °C na superfície após 10 min a 100%."
+    ]
+  }
+]
