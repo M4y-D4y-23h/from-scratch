@@ -150,7 +150,7 @@ export function compareSizeClasses(
   const fora = resumo.filter((r) => !r.atende);
   const explicacao = escolha
     ? [
-        `Escolha para ${alvo.nome}: ${escolha.rotulo} (nota ${escolha.nota.toFixed(2)} de 1).`,
+        `Escolha para ${alvo.nome}: ${escolha.rotulo} (nota ${escolha.nota.toLocaleString("pt-BR", { maximumFractionDigits: 2 })} de 1).`,
         ...fora.map(
           (r) => `${r.rotulo} não atende aos requisitos do arquétipo: ${r.faltando.join("; ")}.`,
         ),

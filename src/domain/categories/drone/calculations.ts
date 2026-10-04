@@ -446,6 +446,9 @@ export type FlightTimeResult = {
  * Tempo de voo ≈ (capacidade_Ah × fração utilizável) / corrente média × 60 (SPEC B.7).
  * Sempre ⚠️: depende de vento, temperatura, estado da bateria e do jeito de pilotar.
  */
+/** Número com vírgula decimal (texto da interface em PT-BR). */
+const dec = (n: number) => n.toLocaleString("pt-BR", { maximumFractionDigits: 2 });
+
 const ESTILO_TEXTO: Record<FlightStyle, string> = {
   estavel: "vento e manobras aumentam o consumo",
   freestyle: "do voo de cruzeiro às acrobacias com acelerações fortes",
@@ -476,7 +479,7 @@ export function computeFlightTime(
   const correnteAgitada = hover * fatorMax + eletronicos;
   const premissas = [
     `usa de ${Math.round(fracMin * 100)}% a ${Math.round(fracMax * 100)}% da capacidade (o resto protege a bateria)`,
-    `corrente de voo de ${fatorMin}× a ${fatorMax}× a de pairar (${ESTILO_TEXTO[estilo]})`,
+    `corrente de voo de ${dec(fatorMin)}× a ${dec(fatorMax)}× a de pairar (${ESTILO_TEXTO[estilo]})`,
   ];
   if (propulsion.hover?.precisao === "abaixo_da_tabela") {
     premissas.push(

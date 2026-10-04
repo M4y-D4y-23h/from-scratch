@@ -41,6 +41,8 @@ export type DifficultyReport = {
 };
 
 const horas = (minutos: number) => Math.round((minutos / 60) * 10) / 10;
+/** Número com vírgula decimal (texto da interface em PT-BR). */
+const dec = (n: number) => n.toLocaleString("pt-BR", { maximumFractionDigits: 2 });
 
 export function computeDifficulty(
   build: Build,
@@ -96,6 +98,6 @@ export function computeDifficulty(
       dominios.reduce((s, d) => s + d.horas_aprendizado[0], passosMin),
       dominios.reduce((s, d) => s + d.horas_aprendizado[1], passosMax),
     ],
-    formula: `${cfg.peso_maximo} × nível máximo (${maximo}) + ${cfg.peso_media} × média ponderada pelas horas (${media.toFixed(2)}) = ${nota.toFixed(2)}`,
+    formula: `${dec(cfg.peso_maximo)} × nível máximo (${maximo}) + ${dec(cfg.peso_media)} × média ponderada pelas horas (${dec(media)}) = ${dec(nota)}`,
   };
 }

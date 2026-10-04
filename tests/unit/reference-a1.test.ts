@@ -151,7 +151,7 @@ describe("Arquétipo 1: projeto completo (painéis)", () => {
   });
 
   it("dificuldade derivada dos passos, com a fórmula da SPEC", () => {
-    expect(projeto.dificuldade.formula).toContain("0.6 × nível máximo");
+    expect(projeto.dificuldade.formula).toContain("0,6 × nível máximo");
     expect(projeto.dificuldade.dominios.length).toBeGreaterThanOrEqual(6);
     expect(projeto.dificuldade.horas_totais[0]).toBeGreaterThan(0);
   });

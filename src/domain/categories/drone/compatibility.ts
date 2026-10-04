@@ -414,7 +414,7 @@ const escCurrent: RuleFn = ({ build, config }, m) => {
   }
   const needed = max * config.esc.margem_corrente;
   return result(base, rating >= needed ? "passou" : "falhou", {
-    tecnica: `Motor puxa até ${fmt(max)} A; com margem de ${config.esc.margem_corrente}× precisa de ${fmt(needed)} A. ESC: ${fmt(rating)} A contínuos.`,
+    tecnica: `Motor puxa até ${fmt(max)} A; com margem de ${fmt(config.esc.margem_corrente, 2)}× precisa de ${fmt(needed)} A. ESC: ${fmt(rating)} A contínuos.`,
     sugestao: `Use ESC de pelo menos ${Math.ceil(needed)} A contínuos por motor.`,
     valores: { corrente_motor_a: max, necessario_a: needed, esc_a: rating },
     selo: deriveStatus([m.propulsion.selo, esc.componente.status_verificacao], "estimativa"),
@@ -445,7 +445,7 @@ const batteryDischarge: RuleFn = ({ build, config }, m) => {
   const capacity = (mah / 1000) * c;
   const needed = total_com_eletronicos * config.bateria.margem_c;
   return result(base, capacity >= needed ? "passou" : "falhou", {
-    tecnica: `Bateria: ${fmt(mah / 1000, 2)} Ah × ${fmt(c, 0)}C = ${fmt(capacity)} A. Pico do drone ≈ ${fmt(total_com_eletronicos)} A; com margem ${config.bateria.margem_c}× precisa de ${fmt(needed)} A.`,
+    tecnica: `Bateria: ${fmt(mah / 1000, 2)} Ah × ${fmt(c, 0)}C = ${fmt(capacity)} A. Pico do drone ≈ ${fmt(total_com_eletronicos)} A; com margem de ${fmt(config.bateria.margem_c, 2)}× precisa de ${fmt(needed)} A.`,
     sugestao: "Use uma bateria com mais capacidade ou C maior.",
     valores: { capacidade_a: capacity, necessario_a: needed },
     selo: deriveStatus([m.propulsion.selo, battery.status_verificacao], "estimativa"),

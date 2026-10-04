@@ -23,7 +23,8 @@
     "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test",
     "db:generate": "drizzle-kit generate",
     "db:sync": "tsx scripts/db-sync.ts",
-    "catalog:check": "tsx scripts/catalog-check.ts"
+    "catalog:check": "tsx scripts/catalog-check.ts",
+    "report": "tsx scripts/report.ts"
   },
   "dependencies": {
     "better-sqlite3": "^13.0.3",
