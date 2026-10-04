@@ -193,5 +193,126 @@ Datas no formato AAAA-MM-DD. "Verificado em" indica quando a informação extern
 - **Decisão:** workflow `.github/workflows/ci.yml` que roda, a cada push e pull request, em
   `windows-latest` e `ubuntu-latest`: `pnpm install --frozen-lockfile`, formatação, lint, tipos,
   testes de unidade, `build` e os testes de navegador (Playwright).
-- **Consequências:** usa minutos do GitHub Actions (em repositório privado, cada minuto de Windows
-  conta em dobro na cota gratuita). Se a cota apertar, dá para limitar a execução a pull requests.
+- **Consequências:** usa minutos do GitHub Actions. Em repositório privado, minutos de Windows
+  costumam consumir a cota gratuita mais rápido que os de Linux (confira a política de preços
+  atual do GitHub). Se a cota apertar, dá para limitar a execução a pull requests.
+
+## ADR-0013: arquitetura do Arquétipo 1 (drone com GPS, RTL, vídeo e celular)
+
+- **Data:** 2026-10-04 · **Status:** **proposta, aguardando revisão** (base para a Fase 1)
+- **Contexto:** a SPEC (B.2.1) pede para confirmar a viabilidade técnica atual na documentação
+  oficial do ArduPilot e do QGroundControl. Como `ardupilot.org` e `docs.qgroundcontrol.com`
+  estavam bloqueados na sessão de nuvem, li o **código-fonte oficial dessas documentações** no
+  GitHub (o mesmo texto que é publicado nos sites), em commits fixos:
+  - Wiki do ArduPilot: [`ArduPilot/ardupilot_wiki@489284d`](https://github.com/ArduPilot/ardupilot_wiki/tree/489284d8a6be83519b55e6fbc11d2b7770fd75bb) (2026-10-03);
+  - Notas de versão do ArduCopter: [`ArduPilot/ardupilot@e204ca7`, `ArduCopter/ReleaseNotes.txt`](https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/ArduCopter/ReleaseNotes.txt);
+  - Documentação do QGroundControl: [`mavlink/qgroundcontrol@56fe54d`](https://github.com/mavlink/qgroundcontrol/tree/56fe54d1276c9f468272ce44a30deb591ac12834/docs/en) (2026-10-03, versão "daily");
+  - Documentação do ExpressLRS: [`ExpressLRS/Docs@1cd98e7`](https://github.com/ExpressLRS/Docs/blob/1cd98e75640ff10706b36273953eec2110552e83/docs/software/mavlink.md) (2026-09-12).
+
+### O que foi confirmado (com a página de origem)
+
+1. **Firmware: ArduCopter 4.7.x.** A 4.7.0 saiu em 21/jul/2026 e a 4.7.1 em 31/ago/2026. Na 4.7
+   vários parâmetros mudaram de nome e de unidade: **`RTL_ALT` (centímetros) virou `RTL_ALT_M`
+   (metros, padrão 15 m)** e `ARMING_CHECK` virou `ARMING_SKIPCHK` (ReleaseNotes, seção 4.7.0).
+   A SPEC cita `RTL_ALT`; o guia deve usar os nomes da versão instalada.
+2. **Controladora (FC):** precisa estar na lista oficial (`common-autopilots.rst`). A própria
+   página avisa que "a maioria das placas F4" (1 MB de memória) usa firmware reduzido, e a página
+   `common-limited-firmware.rst` diz que falta de RAM pode impedir **calibração da bússola**, logs e
+   MAVFTP. GPS e RTL existem nas placas de 1 MB, mas para um iniciante isso é risco desnecessário.
+3. **Rádio ExpressLRS (ELRS):** funciona com ArduPilot pelo protocolo CRSF numa UART completa (com
+   DMA nas F4/F7): `SERIALx_PROTOCOL = 23`, `RSSI_TYPE = 3` e o bit 13 de `RC_OPTIONS` (baud do
+   ELRS) (`common-tbs-rc.rst`).
+4. **Failsafe de rádio → RTL:** `FS_THR_ENABLE = 1` ("Enabled Always RTL"; se o GPS não estiver
+   bom, ele pousa). Dispara após `RC_FS_TIMEOUT` (padrão 1 s). O receptor deve usar o modo "sem
+   sinal". Quando o sinal volta, o drone **continua em RTL** até o piloto trocar o modo. Os testes
+   podem ser feitos sem a bateria LiPo; se ligar a bateria, **tire as hélices antes**
+   (`radio-failsafe.rst`).
+5. **Failsafe de bateria:** precisa de módulo de energia (sensor de tensão/corrente).
+   `BATT_LOW_VOLT` (abaixo por 10 s), `BATT_LOW_MAH` (sugestão: 20% da capacidade),
+   `BATT_FS_LOW_ACT = 2` (RTL, marcado como recomendado). A opção 5 ("Terminate") desliga os
+   motores no ar e é perigosa (`failsafe-battery.rst`).
+6. **Failsafe da estação de solo (celular):** `FS_GCS_ENABLE` (1 = RTL), `FS_GCS_TIMEOUT` (padrão
+   5 s); só fica ativo depois que um app de solo se conecta. O bit 4 de `FS_OPTIONS` faz ignorar
+   essa perda quando o piloto está no controle (`gcs-failsafe.rst`).
+7. **RTL não desvia de obstáculos:** sobe até `RTL_ALT_M` e volta **em linha reta** para onde o
+   drone foi armado (o "home"). Só planeja caminho em volta de cercas com `OA_TYPE`, e de obstáculos
+   reais apenas com sensores de proximidade. Depende de GPS e bússola bons e usa o barômetro para
+   altura (`rtl-mode.rst`). → alertas de árvores e fios, `RTL_ALT_M` acima dos obstáculos do local e
+   conferir o home antes de decolar.
+8. **Geofence:** `FENCE_ENABLE`, `FENCE_TYPE` (bit 1 = cilindro em volta do home), `FENCE_RADIUS`
+   (mínimo recomendado 30 m; "normalmente pelo menos 50 m"), `FENCE_ALT_MAX` (m), `FENCE_ACTION`;
+   com cerca ligada, só arma com GPS travado (`common-ac2_simple_geofence.rst`,
+   `common-geofencing-landing-page.rst`).
+9. **Bússola e GPS:** módulo GPS+bússola por fora, alto, com céu livre, longe de motores e ESCs, a
+   **pelo menos 10 cm de fios de potência e da bateria**; "o uso de mastro é altamente
+   recomendado"; parafusos de nylon; torcer os fios de potência
+   (`common-installing-3dr-ublox-gps-compass-module.rst`).
+   ESC 4 em 1 tende a interferir menos; interferência medida pelo CompassMot: < 30% ok, 31–60%
+   zona cinzenta, > 60% mover a bússola (`common-magnetic-interference.rst`,
+   `common-compass-setup-advanced.rst`).
+10. **Telemetria para o celular: duas opções documentadas.**
+    - **A. Módulo Wi-Fi no drone** (ESP32 com DroneBridge ou ESP8266 com MAVESP8266): o celular
+      entra na rede Wi-Fi do drone e o QGroundControl conecta sozinho por UDP 14550. Alcance em
+      Wi-Fi comum: "150 m+" (o modo de 1 km exige outro ESP32 no solo). Usa **uma UART a mais**
+      (`common-esp32-telemetry.rst`, `common-esp8266-telemetry.rst`).
+    - **B. ELRS em modo MAVLink:** controle e telemetria pelo mesmo link de rádio e **uma única
+      UART**; o celular conecta no Wi-Fi do módulo transmissor (TX Backpack), que fica com o piloto.
+      Alcance da telemetria = alcance do rádio. Exige hardware ELRS baseado em ESP, firmware
+      ELRS ≥ 3.5.0 e TX Backpack ≥ 1.5.0; trava a taxa de telemetria em 1:2 (docs do ELRS e
+      `common-tbs-rc.rst`). **Divergência a verificar:** a wiki do ArduPilot manda
+      `SERIALx_BAUD = 115`, a do ELRS manda `460`. O comportamento de failsafe nesse modo não está
+      descrito explicitamente; exigiria teste de bancada (sem hélices) obrigatório.
+11. **QGroundControl no celular:** Android 9 ou mais novo (32/64 bits). **Não há versão oficial para
+    iPhone** (o guia de desenvolvimento diz que a versão iOS "não é mais suportada como build
+    padrão"). O joystick virtual existe (Configurações → Geral → "Virtual joystick"), e a própria
+    documentação avisa que ele "não é tão responsivo quanto um rádio RC" porque vai por MAVLink. O
+    ArduPilot permite operar só pela estação de solo, mas diz que é "geralmente recomendado" usar o
+    rádio RC como controle principal, e que o failsafe de GCS é "altamente recomendado" nesse caso
+    (`common-gcs-only-operation.rst`).
+12. **Vídeo no celular:** a documentação do QGC lista como fontes RTSP, UDP h.264/h.265,
+    TCP-MPEG2, MPEG-TS e "Integrated Camera". No código, câmeras USB (UVC) aparecem na lista **se o
+    sistema do aparelho as expuser como câmera**; no Android isso depende do fabricante. Ou seja:
+    com o receptor USB de vídeo analógico, o vídeo pode precisar do **app do próprio receptor** (em
+    tela dividida com o QGroundControl). O app deve dizer isso e pedir teste no celular do usuário.
+13. **Segurança prática** (`safety-multicopter.rst`): ter sobra de potência, "idealmente pairar
+    com ~50% do acelerador"; **iniciantes devem usar hélices de plástico** (as de fibra de carbono
+    "cortam"); em estado desconhecido, cobrir as hélices com uma toalha e desligar a bateria;
+    "a toalha grande é o equipamento de segurança mais importante, seguida de extintor e kit de
+    primeiros socorros".
+14. **Honestidade sobre custo** (`choosing-a-frame.rst`): com drones prontos baratos no mercado,
+    "provavelmente há pouca vantagem de custo em montar o seu", principalmente nos pequenos.
+
+### Decisão proposta
+
+- **ArduCopter 4.7.x** estável; nomes de parâmetro da 4.7 no guia (com aviso para versões antigas).
+- **FC da lista oficial com 2 MB de memória ou mais (classe H7)** como padrão do Arquétipo 1;
+  placas F4 (1 MB) só como alternativa mais barata, com alerta explícito, ou excluídas.
+- **Rádio ELRS 2,4 GHz em modo CRSF**, receptor em "sem sinal", `FS_THR_ENABLE = 1` (RTL).
+- **Telemetria: opção A (Wi-Fi no drone) como padrão**, porque cada peça e cada failsafe estão
+  documentados pelo ArduPilot e o controle continua independente do celular; **opção B (ELRS
+  MAVLink) como alternativa "integrada"**, com teste de bancada obrigatório. O validador conta as
+  UARTs conforme a opção: A = RC + GPS + telemetria (3); B = RC/telemetria + GPS (2).
+- **Failsafes padrão:** rádio → RTL; bateria baixa → RTL (`BATT_FS_LOW_ACT = 2`); bateria crítica
+  → pousar; GCS → RTL com `FS_OPTIONS` bit 4 (não disparar enquanto o piloto controla pelo rádio);
+  geofence cilíndrica ligada.
+- **Controle 100% pelo celular:** opção "experimental", com os alertas da SPEC e os ajustes de
+  arme da página "GCS only"; nunca o padrão.
+- **Vídeo:** padrão analógico 5,8 GHz + receptor USB (UVC) no Android, avisando que o vídeo pode
+  ficar no app do receptor; alternativas na comparação: óculos digitais HD (melhor imagem e
+  latência, mas não no celular), câmera de ação (gravação de qualidade, sem ao vivo de longo
+  alcance) e vídeo digital por IP direto no QGC (avançado).
+- **iPhone:** explicar que não há QGroundControl oficial nem suporte garantido a receptor USB de
+  vídeo; sugerir um celular/tablet Android barato como tela de solo ou um notebook.
+- **Regra do validador:** bússola a ≥ 100 mm de fios de potência/bateria (configurável, fonte
+  acima) e mastro de GPS recomendado.
+- **Equipamento de segurança:** propor incluir toalha grande, extintor e kit de primeiros socorros
+  na lista de EPI (além da lista da SPEC B.6).
+
+### Consequências
+
+- O catálogo da Fase 1 precisa guardar, por FC: nome da placa no ArduPilot, memória flash,
+  UARTs livres (e quais têm DMA), saídas de motor e BECs (tensão/corrente); por rádio: se o módulo
+  é ESP (Wi-Fi/backpack) e a versão de ELRS suportada.
+- Parâmetros de firmware entram no domínio como dados versionados (por versão do ArduCopter), não
+  como texto solto do LLM.
+- Pontos que dependem de você estão no plano da Fase 1 (`docs/PROGRESS.md`).

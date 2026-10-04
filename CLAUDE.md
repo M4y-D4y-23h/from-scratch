@@ -15,8 +15,12 @@ decisões importantes de forma breve.
 
 ## Estado atual
 
-- **Fase 0 (fundação): concluída.** Próxima: **Fase 1 (domínio)**, que só começa depois da
-  revisão do plano em `docs/PROGRESS.md`.
+- **Fase 0 (fundação): concluída** (CI verde no Windows e no Linux). Próxima: **Fase 1
+  (domínio)**, que só começa depois da revisão do plano em `docs/PROGRESS.md` e das perguntas
+  listadas lá.
+- A arquitetura do Arquétipo 1 (o drone real do dono) está **proposta** no ADR-0013, com as
+  fontes oficiais lidas (ArduPilot, QGroundControl, ExpressLRS). Atenção: no ArduCopter 4.7 o
+  `RTL_ALT` (cm) virou `RTL_ALT_M` (m).
 - Trabalhe **uma fase por vez**: plano curto no início; no fim, resumo + como testar + o que ficou
   de fora; depois **pare e espere a revisão** (SPEC B.18).
 
@@ -98,5 +102,9 @@ tests/unit/           Vitest · tests/e2e/ Playwright · tests/evals/ (Fase 4)
   `ardupilot.org`, `docs.qgroundcontrol.com` e `gov.br`; o registro do npm, `git clone` de
   repositórios públicos do GitHub e `raw.githubusercontent.com` funcionavam. Para componentes do
   shadcn, copie de `shadcn-ui/ui` → `apps/v4/registry/new-york-v4/ui/`.
+- Documentação oficial pelo código-fonte no GitHub (clone esparso, sem baixar o repositório todo):
+  `ArduPilot/ardupilot_wiki` (`common/source/docs/`, `copter/source/docs/`),
+  `mavlink/qgroundcontrol` (`docs/en/`), `ExpressLRS/Docs` (`docs/`) e as notas de versão em
+  `ArduPilot/ardupilot` (`ArduCopter/ReleaseNotes.txt`). Cite o commit usado.
 - O Playwright do contêiner não baixa navegador: rode os E2E com
   `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/opt/pw-browsers/chromium`.
