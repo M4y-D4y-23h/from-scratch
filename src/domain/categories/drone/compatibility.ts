@@ -23,7 +23,7 @@ import {
   type Archetype,
   type Component,
   type FirmwareProfile,
-  normalizeMountPattern,
+  mountFits,
   type ThrustData,
 } from "./schema";
 import { SRC } from "./sources";
@@ -154,16 +154,16 @@ const motorMountsOnFrame: RuleFn = ({ build }) => {
       "A base do motor tem furos numa distância certa (a 'furação'). Se não bater com os furos do braço, o motor não fixa com segurança.",
     componentes: [frame, motor],
   };
-  const a = frame.specs.furacao_motor?.map(normalizeMountPattern);
-  const b = motor.specs.furacao?.map(normalizeMountPattern);
+  const a = frame.specs.furacao_motor;
+  const b = motor.specs.furacao;
   if (!a?.length || !b?.length) {
     return result(base, "sem_dado", {
       tecnica: "Falta a furação do motor ou do braço no catálogo.",
       sugestao: "Confira as medidas dos furos (ex.: 16x19 M3) nos datasheets.",
     });
   }
-  const common = a.filter((p) => b.includes(p));
-  return result(base, common.length > 0 ? "passou" : "falhou", {
+  const ok = b.some((pattern) => mountFits(pattern, a));
+  return result(base, ok ? "passou" : "falhou", {
     tecnica: `Motor: ${b.join(", ")}. Braço: ${a.join(", ")}.`,
     sugestao: "Escolha um motor com a mesma furação do braço (ou um frame compatível).",
     valores: { motor: b.join(", "), frame: a.join(", ") },
@@ -182,15 +182,21 @@ const stackMountsOnFrame: RuleFn = ({ build }) => {
       "A placa da controladora também tem um padrão de furos (20x20, 30,5x30,5...). O frame precisa ter o mesmo padrão.",
     componentes: [frame, fc.componente],
   };
-  const a = frame.specs.furacao_stack?.map(normalizeMountPattern);
-  const b = fc.specs.furacao?.map(normalizeMountPattern);
+  // FC do padrão Pixhawk: vai presa com espuma/fita anti-vibração numa placa plana, sem furação.
+  if (fc.specs.fixacao_fita && frame.specs.fixacao_fc_fita) {
+    return result(base, "passou", {
+      tecnica: "FC presa com espuma/fita anti-vibração na placa superior do frame.",
+    });
+  }
+  const a = frame.specs.furacao_stack;
+  const b = fc.specs.furacao;
   if (!a?.length || !b?.length) {
     return result(base, "sem_dado", {
       tecnica: "Falta a furação da FC/stack ou do frame no catálogo.",
       sugestao: "Confira a furação (ex.: 30.5x30.5 M3) nos datasheets.",
     });
   }
-  const ok = a.some((p) => b.includes(p));
+  const ok = b.some((pattern) => mountFits(pattern, a));
   return result(base, ok ? "passou" : "falhou", {
     tecnica: `FC/stack: ${b.join(", ")}. Frame: ${a.join(", ")}.`,
     sugestao: "Escolha uma FC com a furação do frame ou use um adaptador de furação.",
@@ -306,6 +312,9 @@ function powerInputConnector(build: Build): { tipo?: string; componente?: Compon
   if (esc && "conector_bateria" in esc.specs && esc.specs.conector_bateria) {
     return { tipo: esc.specs.conector_bateria, componente: esc.componente };
   }
+  const frame = firstOf(build, "frame")?.componente;
+  if (frame?.specs.conector_bateria)
+    return { tipo: frame.specs.conector_bateria, componente: frame };
   const conn = firstOf(build, "conector")?.componente;
   if (conn?.specs.tipo) return { tipo: conn.specs.tipo, componente: conn };
   return {};
@@ -785,9 +794,50 @@ const becBudget: RuleFn = ({ build, config }, m) => {
         `BEC ${becs[i]?.tensao_v ?? "?"} V: ${fmt(c, 2)} A de ${fmt(becs[i]?.corrente_a ?? 0, 1)} A`,
     )
     .join("; ");
+  const presumidos = m.power.atribuicoes.filter((a) => a.corrente_presumida);
+  const hipotese =
+    presumidos.length > 0
+      ? ` Consumo não publicado pelo fabricante (usamos hipótese conservadora): ${presumidos
+          .map((a) => `${a.categoria} ${fmt((a.corrente_a ?? 0) * 1000, 0)} mA`)
+          .join(", ")}.`
+      : "";
   return result(base, over.length === 0 ? "passou" : "falhou", {
-    tecnica: `${resumo}. Uso máximo recomendado: ${config.bec.uso_maximo * 100}% de cada BEC.`,
+    tecnica: `${resumo}. Uso máximo recomendado: ${config.bec.uso_maximo * 100}% de cada BEC.${hipotese}`,
     sugestao: "Reduza a potência do VTX, alimente o VTX direto da bateria ou use um BEC externo.",
+    // Com hipótese de consumo, o resultado é no máximo uma estimativa.
+    selo: sealOf(base.componentes ?? [], presumidos.length > 0 ? "estimativa" : "comparacao"),
+  });
+};
+
+/** O módulo de energia (e os fios/conector dele) aguenta a corrente do drone? */
+const powerModuleCurrent: RuleFn = ({ build }, m) => {
+  const pm = itemsOf(build, "modulo_energia")
+    .map((i) => i.componente)
+    .find((c) => c.specs.corrente_continua_a !== undefined);
+  if (!pm) return null;
+  const continua = pm.specs.corrente_continua_a;
+  const max = m.propulsion.corrente_max_total_a;
+  const hover = m.propulsion.corrente_hover_motores_a;
+  const base: RuleBase = {
+    regra_id: "modulo_energia_corrente",
+    titulo: "O módulo de energia aguenta a corrente do voo",
+    severidade: "alerta",
+    explicacao_leiga:
+      "Toda a energia passa pelo módulo de energia. Se a corrente passar do limite dele por muito tempo, ele e os fios esquentam.",
+    componentes: [pm],
+  };
+  if (continua === undefined || max === undefined || hover === undefined) {
+    return result(base, "sem_dado", {
+      tecnica: "Falta a corrente do módulo de energia ou a corrente dos motores.",
+    });
+  }
+  const pico = max + (m.power.corrente_eletronicos_bateria_a ?? 0);
+  return result(base, pico <= continua ? "passou" : "falhou", {
+    tecnica: `Limite contínuo do módulo: ${fmt(continua, 0)} A. Pairando: ≈ ${fmt(hover, 1)} A. Tudo no máximo: ≈ ${fmt(pico, 0)} A.`,
+    sugestao:
+      "Normal em voo calmo (pairar fica bem abaixo do limite), mas evite acelerar ao máximo por vários segundos seguidos.",
+    valores: { limite_continuo_a: continua, pico_a: pico, pairar_a: hover },
+    selo: deriveStatus([m.propulsion.selo, pm.status_verificacao], "estimativa"),
   });
 };
 
@@ -804,14 +854,19 @@ const voltageMonitor: RuleFn = (ctx) => {
     componentes: present([fc?.componente, pm]),
     fontes: [SRC.ardupilotBatteryFailsafe],
   };
-  const tensao = pm?.specs.mede_tensao ?? fc?.specs.sensor_tensao;
+  // Basta uma fonte medir: o módulo de energia OU a própria FC.
+  const anyTrue = (values: Array<boolean | undefined>) =>
+    values.includes(true) ? true : values.includes(undefined) ? undefined : false;
+  const modulos = itemsOf(ctx.build, "modulo_energia").map((i) => i.componente);
+  const tensao = anyTrue([...modulos.map((m) => m.specs.mede_tensao), fc?.specs.sensor_tensao]);
   if (tensao === undefined) {
     return result(base, "sem_dado", {
       tecnica: "O catálogo não informa se a FC ou o módulo de energia medem a tensão.",
       sugestao: "Use um módulo de energia (power module) ou uma FC com sensor de tensão.",
     });
   }
-  const corrente = pm?.specs.mede_corrente ?? fc?.specs.sensor_corrente ?? false;
+  const corrente =
+    anyTrue([...modulos.map((m) => m.specs.mede_corrente), fc?.specs.sensor_corrente]) ?? false;
   return result(base, tensao ? "passou" : "falhou", {
     tecnica: `Mede tensão: ${tensao ? "sim" : "não"}; mede corrente: ${corrente ? "sim" : "não"}.`,
     sugestao: "Inclua um módulo de energia (power module).",
@@ -1079,6 +1134,7 @@ export const DRONE_RULES: readonly RuleFn[] = [
   elrsMavlinkRequirements,
   receiverOutput,
   becBudget,
+  powerModuleCurrent,
   voltageMonitor,
   videoSystem,
   vtxAntenna,

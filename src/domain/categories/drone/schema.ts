@@ -42,6 +42,37 @@ export function normalizeMountPattern(pattern: string): string {
   return `${nums.join("x")}${thread ? ` ${thread}` : ""}`;
 }
 
+type ParsedMount = { a: number; b: number; rosca?: string };
+
+function parseMountPattern(pattern: string): ParsedMount | undefined {
+  const m = /^(\d+(?:\.\d+)?)x(\d+(?:\.\d+)?)(?: (M\d(?:\.\d)?))?$/.exec(pattern.trim());
+  if (!m) return undefined;
+  return { a: Number(m[1]), b: Number(m[2]), rosca: m[3] };
+}
+
+/**
+ * A peça (motor, FC) com furação "AxB" tem furos opostos a A mm num eixo e a B mm no eixo
+ * perpendicular. Ela encaixa se a base oferecer A num eixo e B no outro (a peça pode girar 90°).
+ * A base pode listar vários padrões nos mesmos eixos: o braço do X500 V2 tem "16x16" e "19x19",
+ * então aceita um motor "16x19" (é assim que a Holybro vende o kit). A rosca (M2, M3) precisa ser a
+ * mesma quando as duas estão informadas. Tolerância de 0,3 mm para arredondamentos de datasheet.
+ */
+export function mountFits(part: string, base: readonly string[]): boolean {
+  const p = parseMountPattern(part);
+  if (!p) return false;
+  const eixo1: number[] = [];
+  const eixo2: number[] = [];
+  for (const pattern of base) {
+    const q = parseMountPattern(pattern);
+    if (!q) continue;
+    if (p.rosca && q.rosca && p.rosca !== q.rosca) continue;
+    eixo1.push(q.a);
+    eixo2.push(q.b);
+  }
+  const has = (eixo: number[], v: number) => eixo.some((x) => Math.abs(x - v) <= 0.3);
+  return (has(eixo1, p.a) && has(eixo2, p.b)) || (has(eixo2, p.a) && has(eixo1, p.b));
+}
+
 export const BATTERY_CONNECTORS = [
   "XT60",
   "XT30",
@@ -73,6 +104,7 @@ export const PROP_MOUNTS = [
   "t_mount", // 3 parafusos (micros e alguns 3")
   "pressao_1mm", // encaixe por pressão em eixo de 1 mm (whoop)
   "pressao_1_5mm", // encaixe por pressão em eixo de 1,5 mm (whoop/micro)
+  "rosca_m6", // eixo com rosca M6: a hélice (ou o adaptador dela) rosqueia no eixo (ex.: T-Motor AIR2216 II)
 ] as const;
 export const propMountSchema = z.enum(PROP_MOUNTS);
 
@@ -112,6 +144,10 @@ export const frameSpecsSchema = z.object({
   material: z.enum(["fibra_de_carbono", "fibra_de_vidro_nylon", "plastico", "pcb"]).optional(),
   /** Placa de distribuição de energia embutida no frame (comum em frames 450). */
   pdb_integrada: z.boolean().optional(),
+  /** Conector de bateria da PDB do frame, quando vem pronto (ex.: XT60 no X500 V2). */
+  conector_bateria: batteryConnectorSchema.optional(),
+  /** Placa plana onde a FC é presa com espuma/fita anti-vibração (padrão das Pixhawk). */
+  fixacao_fc_fita: z.boolean().optional(),
   /** Dutos/protetores ao redor das hélices (whoops). */
   protecao_helices: z.boolean().optional(),
   trem_de_pouso: z.boolean().optional(),
@@ -203,6 +239,8 @@ export const fcSpecsSchema = z.object({
   sensor_corrente: z.boolean().optional(),
   sensor_tensao: z.boolean().optional(),
   cartao_sd: z.boolean().optional(),
+  /** Projetada para ser presa com espuma/fita anti-vibração (padrão das Pixhawk), sem furação. */
+  fixacao_fita: z.boolean().optional(),
 });
 
 export const receiverSpecsSchema = z.object({
@@ -353,6 +391,10 @@ const componentBase = {
   notas_seguranca: z.array(z.string()).default([]),
   notas: z.array(z.string()).default([]),
   licenca_modelo_3d: z.string().optional(),
+  /** O que vem na caixa junto (ex.: kit ARF com motores; VTX com antena). Ids do catálogo. */
+  inclui: z.array(z.object({ componente_id: z.string(), quantidade: z.int().min(1) })).default([]),
+  /** false = só vem dentro de outro produto (não tem preço próprio). */
+  vendido_separadamente: z.boolean().default(true),
 };
 
 const component = <C extends string, S extends z.ZodType>(categoria: C, specs: S) =>
@@ -395,6 +437,13 @@ export const componentSchema = z.discriminatedUnion("categoria", [
   component("parafuso", genericSpecsSchema),
   component("strap", genericSpecsSchema),
   component("consumivel", genericSpecsSchema),
+  /** Conjunto vendido numa caixa só (ex.: kit ARF); o conteúdo vem em "inclui". */
+  component("kit", genericSpecsSchema),
+  /** Baterias do rádio (ficam no chão). */
+  component(
+    "bateria_radio",
+    z.object({ tipo: z.string().optional(), unidades: z.int().min(1).optional() }),
+  ),
 ]);
 export type Component = z.infer<typeof componentSchema>;
 export type ComponentCategory = Component["categoria"];

@@ -39,7 +39,24 @@ export const DEFAULT_DRONE_CONFIG = {
     fracao_utilizavel: [0.7, 0.8] as const,
     /** Tensão nominal por célula (V). LiPo 3,7 V; LiHV 3,8 V; Li-ion 3,6 V. */
     tensao_nominal_celula_v: { LiPo: 3.7, LiHV: 3.8, "Li-ion": 3.6 } as const,
+    /** Faixa de tensão por célula em uso: [mínima sob carga, cheia]. Quem é ligado direto na
+     *  bateria precisa funcionar na faixa toda (cheia: LiPo 4,2 V; LiHV 4,35 V; Li-ion 4,2 V).
+     *  A mínima (3,3 V; Li-ion 3,0 V) é um piso conservador, abaixo do failsafe de bateria. */
+    tensao_celula_faixa_v: {
+      LiPo: [3.3, 4.2],
+      LiHV: [3.3, 4.35],
+      "Li-ion": [3.0, 4.2],
+    } as const,
   },
+  /** Consumo PRESUMIDO (mA) quando o fabricante não publica a corrente. Não é spec da peça: é
+   *  uma hipótese conservadora (acima do típico) só para conferir a folga dos BECs. Quando usada,
+   *  a regra mostra a hipótese e o selo fica no máximo ⚠️. */
+  consumo_presumido_ma: {
+    receptor: 250,
+    gps: 250,
+    telemetria: 400,
+    camera_fpv: 300,
+  } as Partial<Record<string, number>>,
   autonomia: {
     /** Corrente média de voo real em relação à de pairar: voo calmo ≈ 1,0; com manobras e vento
      *  sobe. A faixa vira a faixa de autonomia mostrada como ⚠️. */

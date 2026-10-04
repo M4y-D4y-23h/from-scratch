@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest";
 
-import { parts, TEST_ARCHETYPE, TEST_FIRMWARE, THRUST_TABLE, tweak } from "./__fixtures__/builds";
+import {
+  makeComponent,
+  parts,
+  TEST_ARCHETYPE,
+  TEST_FIRMWARE,
+  THRUST_TABLE,
+  tweak,
+} from "./__fixtures__/builds";
 import { checkCatalog, COMPONENT_CATEGORIES, type DroneCatalog } from "./catalog";
 import { toolSchema } from "./schema";
 
@@ -119,6 +126,32 @@ describe("checkCatalog", () => {
     );
     expect(checkCatalog(catalog({ componentes: [parts.motor(), comLink] })).join(" ")).toContain(
       "parece um link",
+    );
+  });
+
+  it("o que vem na caixa precisa existir; peça só de kit não precisa de preço", () => {
+    const motorDoKit = tweak(
+      parts.motor(),
+      {},
+      { vendido_separadamente: false, preco_estimado_brl: undefined },
+    );
+    const kit = makeComponent({
+      categoria: "kit",
+      id: "kit-teste",
+      specs: {},
+      inclui: [
+        { componente_id: "motor-teste", quantidade: 4 },
+        { componente_id: "fantasma", quantidade: 1 },
+      ],
+    });
+    const problemas = checkCatalog(catalog({ componentes: [motorDoKit, parts.prop(), kit] }));
+    expect(problemas).toEqual(['componente kit-teste: inclui "fantasma", que não existe']);
+  });
+
+  it("peça que não é vendida separadamente precisa vir na caixa de algum produto", () => {
+    const sozinha = tweak(parts.motor(), {}, { vendido_separadamente: false });
+    expect(checkCatalog(catalog({ componentes: [sozinha, parts.prop()] })).join(" ")).toContain(
+      "nenhum produto o inclui",
     );
   });
 

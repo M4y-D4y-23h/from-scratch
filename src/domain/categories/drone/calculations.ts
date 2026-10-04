@@ -232,6 +232,17 @@ export function nominalBatteryVoltage(
   return celulas * config.bateria.tensao_nominal_celula_v[quimica];
 }
 
+/** Tensão da bateria em uso: [mínima sob carga, cheia]. */
+export function batteryVoltageRange(
+  battery: Extract<Component, { categoria: "bateria" }>,
+  config: DroneConfig,
+): readonly [number, number] | undefined {
+  const { celulas, quimica = "LiPo" } = battery.specs;
+  if (celulas === undefined) return undefined;
+  const [min, max] = config.bateria.tensao_celula_faixa_v[quimica];
+  return [celulas * min, celulas * max];
+}
+
 /** Um consumidor de energia de 5 V/9 V/12 V (receptor, GPS, VTX...). */
 export type PowerLoad = {
   componente_id: string;
@@ -242,6 +253,8 @@ export type PowerLoad = {
 };
 
 export type PowerAssignment = PowerLoad & {
+  /** true se a corrente veio do consumo presumido (o fabricante não publica). */
+  corrente_presumida?: boolean;
   /** De onde vem a energia: um BEC da FC (índice) ou direto da bateria. */
   fonte:
     | { tipo: "bec"; indice: number; tensao_v: number }
@@ -256,6 +269,8 @@ export type PowerPlan = {
   /** Corrente que os eletrônicos puxam da bateria (A), estimada pela potência. */
   corrente_eletronicos_bateria_a?: number;
   sem_dado: string[];
+  /** Peças cuja corrente foi presumida (config.consumo_presumido_ma). */
+  presumidos: string[];
 };
 
 /** Lista os consumidores que precisam de alimentação regulada. */
@@ -331,13 +346,23 @@ export function planPowerSupply(build: Build, config: DroneConfig): PowerPlan {
   const becs = fc?.specs.becs ?? [];
   const battery = firstOf(build, "bateria")?.componente;
   const vBatt = battery ? nominalBatteryVoltage(battery, config) : undefined;
+  const faixaBatt = battery ? batteryVoltageRange(battery, config) : undefined;
   const order = becs
     .map((bec, indice) => ({ ...bec, indice }))
     .sort((a, b) => a.tensao_v - b.tensao_v);
 
   const carga = becs.map(() => 0);
   const semDado: string[] = [];
-  const atribuicoes: PowerAssignment[] = powerLoadsOf(build).map((load) => {
+  const presumidos: string[] = [];
+  const atribuicoes: PowerAssignment[] = powerLoadsOf(build).map((original) => {
+    let load: PowerLoad & { corrente_presumida?: boolean } = original;
+    if (load.corrente_a === undefined) {
+      const presumido = config.consumo_presumido_ma[load.categoria];
+      if (presumido !== undefined) {
+        load = { ...load, corrente_a: presumido / 1000, corrente_presumida: true };
+        presumidos.push(load.componente_id);
+      }
+    }
     if (load.tensao_min_v === undefined || load.tensao_max_v === undefined) {
       semDado.push(load.componente_id);
       return { ...load, fonte: null };
@@ -351,7 +376,13 @@ export function planPowerSupply(build: Build, config: DroneConfig): PowerPlan {
         fonte: { tipo: "bec" as const, indice: bec.indice, tensao_v: bec.tensao_v },
       };
     }
-    if (vBatt !== undefined && fits(load, vBatt)) {
+    // Direto na bateria só se a peça aguentar a bateria cheia e funcionar com ela quase vazia.
+    if (
+      vBatt !== undefined &&
+      faixaBatt &&
+      load.tensao_min_v <= faixaBatt[0] + 1e-9 &&
+      load.tensao_max_v >= faixaBatt[1] - 1e-9
+    ) {
       if (load.corrente_a === undefined) semDado.push(load.componente_id);
       return { ...load, fonte: { tipo: "bateria" as const, tensao_v: vBatt } };
     }
@@ -372,6 +403,7 @@ export function planPowerSupply(build: Build, config: DroneConfig): PowerPlan {
     carga_por_bec_a: carga,
     corrente_eletronicos_bateria_a: correnteBateria,
     sem_dado: semDado,
+    presumidos,
   };
 }
 

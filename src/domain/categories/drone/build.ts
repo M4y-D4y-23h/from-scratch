@@ -41,6 +41,8 @@ export type BuildItem = {
   quantidade_no_drone: number;
   /** Quantas unidades comprar (inclui reservas). Ex.: 8 hélices, 2 baterias. */
   quantidade_compra: number;
+  /** Id do produto em cuja caixa esta peça já vem (ex.: motor do kit ARF): não entra no custo. */
+  fornecido_por?: string;
 };
 
 export type Build = {
@@ -56,6 +58,8 @@ export const GROUND_CATEGORIES: ReadonlySet<ComponentCategory> = new Set<Compone
   "fonte",
   "receptor_video",
   "oculos_fpv",
+  "bateria_radio",
+  "kit",
 ]);
 
 export function itemsOf<C extends ComponentCategory>(

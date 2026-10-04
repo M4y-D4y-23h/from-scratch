@@ -4,6 +4,7 @@ import { makeComponent } from "./__fixtures__/builds";
 import {
   archetypeSchema,
   componentSchema,
+  mountFits,
   mountPatternSchema,
   normalizeMountPattern,
   thrustDataSchema,
@@ -20,6 +21,15 @@ describe("furação", () => {
     for (const bad of ["16-19", "M3 16x19", "16x19M3", "16 x 19"]) {
       expect(mountPatternSchema.safeParse(bad).success, bad).toBe(false);
     }
+  });
+
+  it("compara por eixo: a peça pode girar 90°", () => {
+    expect(mountFits("19x16 M3", ["16x19 M3"])).toBe(true);
+    expect(mountFits("16x19 M3", ["16x16 M3", "19x19 M3"])).toBe(true);
+    expect(mountFits("16x16 M3", ["16x19 M3"])).toBe(false);
+    expect(mountFits("30.5x30.5 M3", ["30.5x30.5 M3", "20x20 M2"])).toBe(true);
+    expect(mountFits("20x20 M3", ["20x20 M2"])).toBe(false);
+    expect(mountFits("25.5x25.5", ["25.5x25.5 M2"])).toBe(true);
   });
 
   it("normaliza a ordem das medidas para comparar", () => {

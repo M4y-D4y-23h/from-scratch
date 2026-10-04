@@ -140,12 +140,31 @@ export function checkCatalog(catalog: DroneCatalog, options: CheckOptions = {}):
     }
     const brl = c.preco_estimado_brl;
     const usd = c.preco_referencia_usd;
-    if (!brl && !usd) problemas.push(`${onde}: sem preço (em R$ ou em US$)`);
+    if (!brl && !usd && c.vendido_separadamente) {
+      problemas.push(`${onde}: sem preço (em R$ ou em US$)`);
+    }
+    for (const inc of c.inclui) {
+      if (!byId.has(inc.componente_id)) {
+        problemas.push(`${onde}: inclui "${inc.componente_id}", que não existe`);
+      }
+    }
     if (brl?.status === "verificado" && !hasCheckableSource(brl.fontes)) {
       problemas.push(`${onde}: preço verificado sem fonte com link e data`);
     }
     checkSources(onde, [...c.fontes, ...(brl?.fontes ?? []), ...(usd?.fontes ?? [])], problemas);
     checkWhereToBuy(onde, c.onde_comprar, problemas);
+  }
+
+  // Peça que só vem dentro de outro produto precisa estar na caixa de algum.
+  const incluidos = new Set(
+    catalog.componentes.flatMap((c) => c.inclui.map((i) => i.componente_id)),
+  );
+  for (const c of catalog.componentes) {
+    if (!c.vendido_separadamente && !incluidos.has(c.id)) {
+      problemas.push(
+        `componente ${c.id}: não é vendido separadamente, mas nenhum produto o inclui`,
+      );
+    }
   }
 
   if (!catalog.importacao && catalog.componentes.some((c) => c.preco_referencia_usd)) {

@@ -166,10 +166,27 @@ describe("alimentação dos eletrônicos", () => {
   });
 
   it("VTX que não cabe em nenhum BEC, mas aceita a bateria, vai direto na bateria", () => {
-    const build = tweakSlot(baseBuild(), "vtx", { tensao_v_min: 10 });
+    // 3S vai de 9,9 V (quase vazia, sob carga) a 12,6 V (cheia): 9,5–26 V cobre a faixa toda.
+    const build = tweakSlot(baseBuild(), "vtx", { tensao_v_min: 9.5 });
     const vtx = planPowerSupply(build, CONFIG).atribuicoes.find((a) => a.categoria === "vtx");
     expect(vtx?.fonte).toMatchObject({ tipo: "bateria" });
     expect(vtx?.fonte?.tensao_v).toBeCloseTo(11.1, 6);
+  });
+
+  it("peça que desligaria com a bateria quase vazia não pode ir direto na bateria", () => {
+    // VTX a partir de 10 V: com a 3S a 9,9 V ele apagaria no fim do voo.
+    const build = tweakSlot(baseBuild(), "vtx", { tensao_v_min: 10 });
+    const vtx = planPowerSupply(build, CONFIG).atribuicoes.find((a) => a.categoria === "vtx");
+    expect(vtx?.fonte).toBeNull();
+  });
+
+  it("corrente não publicada: usa o consumo presumido e avisa", () => {
+    const build = tweakSlot(baseBuild(), "gps", { corrente_ma: undefined });
+    const plan = planPowerSupply(build, CONFIG);
+    expect(plan.presumidos).toEqual(["gps-teste"]);
+    const gps = plan.atribuicoes.find((a) => a.categoria === "gps");
+    expect(gps?.corrente_presumida).toBe(true);
+    expect(gps?.corrente_a).toBeCloseTo(0.25, 6);
   });
 
   it("eletrônico sem tensão informada fica sem fonte e é listado como sem dado", () => {

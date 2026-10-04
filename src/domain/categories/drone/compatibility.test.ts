@@ -5,6 +5,8 @@ import type { RuleResult, ValidationReport } from "@/domain/core/validation";
 import {
   baseBuild,
   ctxFor,
+  item,
+  makeComponent,
   removeSlot,
   TEST_ARCHETYPE,
   TEST_FIRMWARE,
@@ -193,6 +195,63 @@ describe("encaixe e energia", () => {
   });
 });
 
+describe("furação por eixo e fixação da FC", () => {
+  it("braço com 16x16 e 19x19 aceita motor 16x19 (como o kit X500 V2)", () => {
+    const build = tweakSlot(baseBuild(), "frame", { furacao_motor: ["16x16 M3", "19x19 M3"] });
+    expect(rule(run(build), "furacao_motor_frame").status).toBe("passou");
+  });
+
+  it("braço só 16x19 não aceita motor 16x16 (só 2 furos coincidem)", () => {
+    const build = tweakSlot(baseBuild(), "motores", { furacao: ["16x16 M3"] });
+    expect(rule(run(build), "furacao_motor_frame").status).toBe("falhou");
+  });
+
+  it("rosca diferente não encaixa, mesmo com a mesma medida", () => {
+    const build = tweakSlot(baseBuild(), "motores", { furacao: ["16x19 M2"] });
+    expect(rule(run(build), "furacao_motor_frame").status).toBe("falhou");
+  });
+
+  it("FC padrão Pixhawk vai presa com espuma na placa do frame, sem furação", () => {
+    const build = tweakSlot(
+      tweakSlot(baseBuild(), "frame", { furacao_stack: [], fixacao_fc_fita: true }),
+      "fc",
+      { furacao: [], fixacao_fita: true },
+    );
+    expect(rule(run(build), "furacao_stack_frame").status).toBe("passou");
+  });
+});
+
+describe("energia: conector da PDB, monitor de bateria e módulo de energia", () => {
+  it("o conector da PDB do frame conta como entrada de energia", () => {
+    const build = tweakSlot(removeSlot(baseBuild(), "conector"), "frame", {
+      conector_bateria: "XT60",
+    });
+    expect(rule(run(build), "conector_bateria").status).toBe("passou");
+  });
+
+  it("PDB sem sensor não anula o sensor de tensão da FC", () => {
+    const pdb = makeComponent({
+      categoria: "modulo_energia",
+      massa_g: 10,
+      specs: { mede_tensao: false, mede_corrente: false, pdb: true },
+    });
+    const build = { ...baseBuild(), itens: [...baseBuild().itens, item("pdb", pdb)] };
+    expect(rule(run(build), "monitor_bateria").status).toBe("passou");
+  });
+
+  it("módulo de energia abaixo do pico de corrente gera alerta (não bloqueia)", () => {
+    const pm = makeComponent({
+      categoria: "modulo_energia",
+      massa_g: 20,
+      specs: { mede_tensao: true, mede_corrente: true, corrente_continua_a: 30, conector: "XT60" },
+    });
+    const build = { ...baseBuild(), itens: [...baseBuild().itens, item("pm", pm)] };
+    // Pico dos motores: 4 × 11 A = 44 A > 30 A contínuos.
+    const r = expectFailure(run(build), "modulo_energia_corrente");
+    expect(r.severidade).toBe("alerta");
+  });
+});
+
 describe("controladora, rádio e vídeo", () => {
   it("FC fora da lista oficial do ArduPilot", () => {
     const report = run(
@@ -371,10 +430,20 @@ describe("sem dado nunca vira 'passou'", () => {
     expect(report.incompleto).toBe(true);
   });
 
-  it("consumo de um eletrônico não informado: alimentação sem dado", () => {
-    const report = run(tweakSlot(baseBuild(), "gps", { corrente_ma: undefined }));
+  it("consumo não informado e sem hipótese possível (VTX): alimentação sem dado", () => {
+    const report = run(tweakSlot(baseBuild(), "vtx", { corrente_ma_max: undefined }));
     expect(rule(report, "bec_alimentacao").status).toBe("sem_dado");
     expect(report.incompleto).toBe(true);
+  });
+
+  it("consumo presumido aparece na explicação e limita o selo a ⚠️", () => {
+    const build = tweakSlot(withStatus(baseBuild(), "verificado"), "gps", {
+      corrente_ma: undefined,
+    });
+    const r = rule(run(build), "bec_alimentacao");
+    expect(r.status).toBe("passou");
+    expect(r.explicacao_tecnica).toContain("hipótese");
+    expect(r.selo).toBe("estimativa");
   });
 
   it("VTX sem antena na lista: sem dado (pode vir na caixa, mas é preciso conferir)", () => {
