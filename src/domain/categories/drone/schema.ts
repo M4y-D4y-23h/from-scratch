@@ -403,6 +403,8 @@ const componentBase = {
   inclui: z.array(z.object({ componente_id: z.string(), quantidade: z.int().min(1) })).default([]),
   /** false = só vem dentro de outro produto (não tem preço próprio). */
   vendido_separadamente: z.boolean().default(true),
+  /** Faixas de preço em que o curador recomenda a peça; vazio = todas. */
+  faixas: z.array(z.enum(["economica", "equilibrada", "premium"])).default([]),
 };
 
 const component = <C extends string, S extends z.ZodType>(categoria: C, specs: S) =>
@@ -552,6 +554,8 @@ export const buildStepTemplateSchema = z.object({
   /** Variáveis preenchidas pelo projeto, ex.: "{RTL_ALT_M}". */
   variaveis: z.array(z.string()).default([]),
   condicao: stepConditionSchema.optional(),
+  /** Passo opcional (ex.: AutoTune): aparece no guia, mas não entra na nota de dificuldade. */
+  opcional: z.boolean().default(false),
   fontes: z.array(sourceSchema).default([]),
 });
 export type BuildStepTemplate = z.infer<typeof buildStepTemplateSchema>;
@@ -612,6 +616,16 @@ export const archetypeSlotSchema = z.object({
   obrigatorio: z.boolean(),
   /** Se outro slot já trouxer esta função (ex.: stack inclui o ESC), este fica vazio. */
   coberto_por: z.array(z.string()).default([]),
+  /** Só aceita peças com estas specs (ex.: {"pdb": true} para a placa de distribuição). */
+  filtro_specs: z.record(z.string(), z.union([z.string(), z.number(), z.boolean()])).optional(),
+  /** Quantas comprar por faixa (ex.: baterias reservas); padrão = quantidade. */
+  compra_por_faixa: z
+    .object({
+      economica: z.int().min(1),
+      equilibrada: z.int().min(1),
+      premium: z.int().min(1),
+    })
+    .optional(),
 });
 
 export const archetypeSchema = z.object({

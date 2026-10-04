@@ -52,7 +52,8 @@
       "tensao_v_min": 5,
       "tensao_v_max": 40,
       "formato": "micro_19mm"
-    }
+    },
+    "faixas": ["economica"]
   },
   {
     "id": "caddx-ratel-pro",
@@ -107,7 +108,8 @@
       "tensao_v_min": 4.5,
       "tensao_v_max": 27,
       "formato": "micro_19mm"
-    }
+    },
+    "faixas": ["equilibrada", "premium"]
   },
   {
     "id": "betafpv-a03-vtx",

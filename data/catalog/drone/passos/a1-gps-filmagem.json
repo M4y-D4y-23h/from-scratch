@@ -686,7 +686,7 @@
     "ferramentas": [],
     "tempo_min": [15, 30],
     "dominios": {
-      "firmware_config": 3
+      "firmware_config": 2
     },
     "riscos": [],
     "como_saber_que_deu_certo": [
@@ -1090,7 +1090,7 @@
     "tempo_min": [20, 40],
     "dominios": {
       "firmware_config": 2,
-      "seguranca_regulamentacao": 3
+      "seguranca_regulamentacao": 2
     },
     "riscos": [],
     "como_saber_que_deu_certo": [
@@ -1382,7 +1382,8 @@
         "url": "https://ardupilot.org/copter/docs/autotune.html",
         "acessado_em": "2026-10-04"
       }
-    ]
+    ],
+    "opcional": true
   },
   {
     "id": "guardar-e-revisar",

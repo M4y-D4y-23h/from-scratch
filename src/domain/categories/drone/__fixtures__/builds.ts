@@ -48,7 +48,8 @@ export function makeComponent(input: ComponentInput): Component {
 export function tweak(
   component: Component,
   specs: Record<string, unknown> = {},
-  fields: Partial<Omit<Component, "categoria" | "specs">> = {},
+  /** Campos brutos (passam de novo pelo schema, que preenche os padrões). */
+  fields: Record<string, unknown> = {},
 ): Component {
   return componentSchema.parse({
     ...component,
@@ -327,7 +328,8 @@ export function tweakSlot(
   build: Build,
   slot: string,
   specs: Record<string, unknown> = {},
-  fields: Partial<Omit<Component, "categoria" | "specs">> = {},
+  /** Campos brutos (passam de novo pelo schema, que preenche os padrões). */
+  fields: Record<string, unknown> = {},
 ): Build {
   return {
     ...build,

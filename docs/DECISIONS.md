@@ -470,3 +470,33 @@ Datas no formato AAAA-MM-DD. "Verificado em" indica quando a informação extern
 - **Consequências:** quando a regra mudar, basta editar o JSON (com nova data e fonte) e todos
   os custos são recalculados. O preço brasileiro de cada peça pode ser preenchido depois por
   você na página `/catalogo` (Fase 3), e passa a ter prioridade sobre a conversão.
+
+## ADR-0019: solver por faixas marcadas pelo curador, kits e dificuldade
+
+- **Data:** 2026-10-04 · **Status:** aceita
+- **Contexto:** a SPEC pede um solver determinístico que gere as opções econômica, equilibrada e
+  premium e explique cada escolha, e uma nota de dificuldade derivada dos passos (B.7, B.8).
+- **Decisão (solver, `src/domain/categories/drone/solver.ts`):**
+  - Cada peça pode ter `faixas` (marcadas pelo curador no catálogo); sem marca, vale para todas.
+    É assim que um especialista monta as faixas: a Pixhawk 6C Mini na econômica, a 6C na
+    equilibrada, a 6C de alumínio na premium. O solver não "inventa" a diferença entre faixas.
+  - Para cada faixa, todas as combinações das candidatas são validadas; falha bloqueante
+    descarta. Vence o relatório completo, depois o menor custo de peças, depois o pairar mais
+    perto de 50%.
+  - **Kits:** se um kit traz duas ou mais peças escolhidas e atende às quantidades, o projeto
+    compra o kit (ex.: X500 V2 ARF: motores e ESCs já instalados, sem solda, ~15 min de
+    montagem). Para um leigo, montar menos e receber tudo na mesma caixa vale a pequena
+    diferença de preço (no X500, o ARF custa ~9% a mais que as peças avulsas, que estavam sem
+    estoque em 04/10/2026). Peça que vem na caixa de outra (antena do VTX) não é comprada à parte.
+  - **Telemetria:** a do ADR-0017, a não ser que o usuário escolha outra.
+  - Quantidade de baterias por faixa no slot do arquétipo (econômica 2, equilibrada 3, premium 4
+    no Arquétipo 1).
+- **Decisão (dificuldade, `difficulty.ts`):** nível do domínio = maior nível exigido pelos passos
+  que valem para o build (passos opcionais, como o AutoTune, ficam fora da nota);
+  `nota = 0,6 × nível máximo + 0,4 × média ponderada pelas horas dos passos` (SPEC B.8);
+  rótulos: abaixo de 1,5 Iniciante, de 2,5 Intermediário, de 3,5 Avançado, acima Especialista.
+  As horas de aprendizado por nível (1–3 h no nível 1 … 60–200 h no nível 5) são **heurística do
+  From Scratch**, em `config.ts`, para ajustar com o uso.
+- **Consequências:** com o catálogo atual, o Arquétipo 1 sai "Avançado" (nota 2,7): configurar
+  ArduPilot exige diagnosticar avisos de pré-arme e logs (nível 3). A comparação 450 mm × 5" e
+  os arquétipos 2 e 3 usam o mesmo solver.

@@ -78,6 +78,23 @@ export const DEFAULT_DRONE_CONFIG = {
      *  falta de RAM (Firmware Limitations). Para o drone com GPS de um iniciante exigimos 2 MB. */
     flash_min_mb: 2,
   },
+  dificuldade: {
+    /** Horas de estudo e prática que um leigo leva para chegar a cada nível num domínio
+     *  (faixa). Heurística do From Scratch, não é dado medido: ajuste conforme o retorno de uso. */
+    horas_aprendizado_por_nivel: {
+      0: [0, 0],
+      1: [1, 3],
+      2: [3, 8],
+      3: [8, 20],
+      4: [20, 60],
+      5: [60, 200],
+    } as Record<number, readonly [number, number]>,
+    /** Nota geral = peso_maximo × nível máximo + peso_media × média ponderada pelas horas (SPEC B.8). */
+    peso_maximo: 0.6,
+    peso_media: 0.4,
+    /** Nota abaixo de cada limite → Iniciante, Intermediário, Avançado; acima → Especialista. */
+    limites_rotulo: [1.5, 2.5, 3.5] as const,
+  },
   regras_voo_recreativo: {
     /** DECEA ICA 100-40/2026, art. 32: operação recreativa até 200 ft (60 m) AGL e 300 m. */
     altura_max_m: 60,

@@ -1,5 +1,8 @@
 import { REGULATORY_DISCLAIMER, type SafetyAlert } from "@/domain/core/safety";
 
+import { type Build, hasCategory } from "./build";
+import type { BuildMetrics } from "./compatibility";
+import type { Archetype } from "./schema";
 import { SRC } from "./sources";
 
 /*
@@ -99,3 +102,53 @@ export const GLOBAL_ALERTS: readonly SafetyAlert[] = [
 ];
 
 export const GLOBAL_ALERT_IDS: readonly string[] = GLOBAL_ALERTS.map((a) => a.id);
+
+/** Alertas que só aparecem quando a opção do projeto pede (os demais do arquétipo valem sempre). */
+const CONDICIONAIS: Record<string, (build: Build, m: BuildMetrics) => boolean> = {
+  "celular-experimental": (b) => b.opcoes.controle === "celular_experimental",
+  iphone: (b) => b.opcoes.celular !== "android",
+  "acima-250g": (_, m) => m.auw.massa_total_g === undefined || m.auw.massa_total_g > 250,
+};
+
+/** Alertas calculados a partir das escolhas do projeto. */
+function dynamicAlerts(build: Build): SafetyAlert[] {
+  const alertas: SafetyAlert[] = [];
+  if (hasCategory(build, "receptor_video") || hasCategory(build, "oculos_fpv")) {
+    alertas.push({
+      id: "video-e-visada",
+      nivel: "regulatorio",
+      titulo: "Ver o vídeo não substitui ver o drone",
+      texto: `No voo recreativo você precisa ver o drone com os próprios olhos o tempo todo. Se for olhar a tela do celular ou usar óculos FPV, tenha um observador ao seu lado vendo o drone. ${REGULATORY_DISCLAIMER}`,
+      acoes: [
+        "Olhe para o drone, não para a tela, principalmente na decolagem e no pouso.",
+        "Com óculos FPV, voe sempre com um observador.",
+      ],
+      fontes: [SRC.deceaIca10040],
+      verificado_em: VERIFICADO_EM,
+    });
+  }
+  if (build.opcoes.uso === "nao_recreativo") {
+    alertas.push({
+      id: "uso-nao-recreativo",
+      nivel: "regulatorio",
+      titulo: "Uso não recreativo segue o RBAC nº 100",
+      texto: `Filmagem paga ou qualquer uso que não seja lazer segue o RBAC nº 100 da ANAC (cadastro, seguro e outras exigências) e as regras do DECEA para operações não recreativas. ${REGULATORY_DISCLAIMER}`,
+      acoes: ["Leia o RBAC nº 100 antes de usar o drone para trabalho."],
+      fontes: [SRC.anacRes805Rbac100, SRC.deceaIca10040],
+      verificado_em: VERIFICADO_EM,
+    });
+  }
+  return alertas;
+}
+
+/** Todos os alertas do projeto: globais, do arquétipo (filtrados) e calculados. */
+export function projectAlerts(
+  build: Build,
+  archetype: Archetype,
+  metrics: BuildMetrics,
+): SafetyAlert[] {
+  const doArquetipo = archetype.alertas.filter((a) => CONDICIONAIS[a.id]?.(build, metrics) ?? true);
+  const todos = [...GLOBAL_ALERTS, ...doArquetipo, ...dynamicAlerts(build)];
+  const vistos = new Set<string>();
+  return todos.filter((a) => (vistos.has(a.id) ? false : (vistos.add(a.id), true)));
+}

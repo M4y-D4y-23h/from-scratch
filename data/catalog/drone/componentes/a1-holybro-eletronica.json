@@ -98,7 +98,8 @@
       "sensor_corrente": false,
       "sensor_tensao": false,
       "fixacao_fita": true
-    }
+    },
+    "faixas": ["economica"]
   },
   {
     "id": "holybro-pixhawk-6c-plastico",
@@ -204,7 +205,8 @@
       "sensor_corrente": false,
       "sensor_tensao": false,
       "fixacao_fita": true
-    }
+    },
+    "faixas": ["equilibrada"]
   },
   {
     "id": "holybro-pixhawk-6c-aluminio",
@@ -310,7 +312,8 @@
       "sensor_corrente": false,
       "sensor_tensao": false,
       "fixacao_fita": true
-    }
+    },
+    "faixas": ["premium"]
   },
   {
     "id": "holybro-pm02-v3",
@@ -429,7 +432,8 @@
       "protocolo": "UBX",
       "tensao_v": 5,
       "corrente_ma": 200
-    }
+    },
+    "faixas": ["equilibrada", "premium"]
   },
   {
     "id": "holybro-micro-m10-gps",
@@ -486,6 +490,7 @@
       "protocolo": "UBX",
       "tensao_v": 5,
       "corrente_ma": 200
-    }
+    },
+    "faixas": ["economica"]
   }
 ]

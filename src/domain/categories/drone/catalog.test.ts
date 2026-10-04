@@ -37,6 +37,7 @@ const STEP = {
   local: "em_casa" as const,
   alertas: [],
   variaveis: [],
+  opcional: false,
   fontes: [],
 };
 

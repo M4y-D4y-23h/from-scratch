@@ -56,7 +56,8 @@
       "backpack_wifi": true,
       "firmware_radio": "EdgeTX",
       "alimentacao": "2 baterias 18650 (não inclusas)"
-    }
+    },
+    "faixas": ["economica"]
   },
   {
     "id": "radiomaster-boxer-elrs",
@@ -115,7 +116,8 @@
       "backpack_wifi": true,
       "firmware_radio": "EdgeTX",
       "alimentacao": "2 baterias 18650 ou LiPo 2S (não inclusas)"
-    }
+    },
+    "faixas": ["equilibrada", "premium"]
   },
   {
     "id": "radiomaster-rp3-v2",
@@ -178,7 +180,8 @@
       "esp": true,
       "tensao_v_min": 5,
       "tensao_v_max": 5
-    }
+    },
+    "faixas": ["economica", "equilibrada"]
   },
   {
     "id": "radiomaster-rp4td",
@@ -244,7 +247,8 @@
       "esp": true,
       "tensao_v_min": 4.5,
       "tensao_v_max": 12
-    }
+    },
+    "faixas": ["premium"]
   },
   {
     "id": "radiomaster-18650-3200-par",

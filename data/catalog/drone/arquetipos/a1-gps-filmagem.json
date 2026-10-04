@@ -40,13 +40,19 @@
       "slot": "distribuicao_energia",
       "categorias": ["modulo_energia"],
       "quantidade": 1,
-      "obrigatorio": true
+      "obrigatorio": true,
+      "filtro_specs": {
+        "pdb": true
+      }
     },
     {
       "slot": "monitor_bateria",
       "categorias": ["modulo_energia"],
       "quantidade": 1,
-      "obrigatorio": true
+      "obrigatorio": true,
+      "filtro_specs": {
+        "mede_tensao": true
+      }
     },
     {
       "slot": "fc",
@@ -82,7 +88,12 @@
       "slot": "bateria",
       "categorias": ["bateria"],
       "quantidade": 1,
-      "obrigatorio": true
+      "obrigatorio": true,
+      "compra_por_faixa": {
+        "economica": 2,
+        "equilibrada": 3,
+        "premium": 4
+      }
     },
     {
       "slot": "camera",
