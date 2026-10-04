@@ -38,6 +38,19 @@ export const COMPONENT_CATEGORIES: ReadonlySet<string> = new Set(
   componentSchema.options.map((o) => o.shape.categoria.value),
 );
 
+/**
+ * Itens genéricos e baratos (conector, cabo, parafuso...) cujo preço varia de loja para loja e
+ * não tem página oficial: podem ficar sem preço. O custo do projeto lista cada um como "sem preço
+ * pesquisado" em vez de inventar um valor (SPEC B.1.2).
+ */
+export const GENERIC_CATEGORIES: ReadonlySet<ComponentCategory> = new Set<ComponentCategory>([
+  "conector",
+  "cabo",
+  "parafuso",
+  "strap",
+  "consumivel",
+]);
+
 function duplicates(ids: readonly string[]): string[] {
   const seen = new Set<string>();
   const dup = new Set<string>();
@@ -140,7 +153,7 @@ export function checkCatalog(catalog: DroneCatalog, options: CheckOptions = {}):
     }
     const brl = c.preco_estimado_brl;
     const usd = c.preco_referencia_usd;
-    if (!brl && !usd && c.vendido_separadamente) {
+    if (!brl && !usd && c.vendido_separadamente && !GENERIC_CATEGORIES.has(c.categoria)) {
       problemas.push(`${onde}: sem preço (em R$ ou em US$)`);
     }
     for (const inc of c.inclui) {
@@ -173,7 +186,11 @@ export function checkCatalog(catalog: DroneCatalog, options: CheckOptions = {}):
 
   for (const t of catalog.empuxo) checkThrustTable(t, byId, problemas);
 
+  const archetypeIds = new Set(catalog.arquetipos.map((a) => a.id));
   for (const t of catalog.ferramentas) {
+    for (const a of t.arquetipos) {
+      if (!archetypeIds.has(a)) problemas.push(`ferramenta ${t.id}: arquétipo "${a}" não existe`);
+    }
     checkSources(`ferramenta ${t.id}`, t.fontes, problemas);
     checkWhereToBuy(`ferramenta ${t.id}`, t.onde_comprar, problemas);
   }

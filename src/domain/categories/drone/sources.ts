@@ -48,6 +48,26 @@ export const SRC = {
     url: "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/ArduCopter/ReleaseNotes.txt",
     acessado_em: ACESSO,
   } satisfies Source,
+  betaflightConfigs: {
+    titulo: "Betaflight: configurações oficiais das placas (repositório betaflight/config)",
+    tipo: "documentacao_oficial",
+    url: "https://github.com/betaflight/config/tree/15d8c3fa076e9f43e2135050c90265f7f3e92166/configs",
+    acessado_em: ACESSO,
+    observacao: "Commit 15d8c3f (02/10/2026). Cada placa tem configs/<FABRICANTE>/<ALVO>/config.h.",
+  } satisfies Source,
+  betaflightFailsafe: {
+    titulo: "Betaflight: Failsafe (guia oficial)",
+    tipo: "documentacao_oficial",
+    url: "https://betaflight.com/docs/wiki/guides/current/Failsafe",
+    acessado_em: ACESSO,
+  } satisfies Source,
+  betaflightSettings: {
+    titulo: "Betaflight 2026.6.2: parâmetros do CLI (src/main/cli/settings.c)",
+    tipo: "documentacao_oficial",
+    url: "https://github.com/betaflight/betaflight/blob/e0b7bb01b17b21351057e9ead2d1ab39dd44fa16/src/main/cli/settings.c",
+    acessado_em: ACESSO,
+    observacao: "Nomes conferidos também na versão 4.5.3 (commit 0e533ba).",
+  } satisfies Source,
   elrsMavlink: {
     titulo: "ExpressLRS: MAVLink",
     tipo: "documentacao_oficial",

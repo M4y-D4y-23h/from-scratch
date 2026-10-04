@@ -248,7 +248,7 @@
         "termo_busca": "carregador balanceador lipo 4s"
       }
     ],
-    "arquetipos": [],
+    "arquetipos": ["a1-gps-filmagem", "a2-fpv-5pol"],
     "preco_estimado_brl": {
       "min": 250,
       "max": 600,
@@ -738,5 +738,27 @@
         "observacao": "\"A toalha grande é o equipamento de segurança mais importante, seguida de extintor e kit de primeiros socorros.\""
       }
     ]
+  },
+  {
+    "id": "chaves-precisao",
+    "nome": "Chaves de precisão Phillips (PH00 e PH000)",
+    "tipo": "ferramenta",
+    "prioridade": "essencial",
+    "para_que_serve": "Apertar os parafusos minúsculos (1,2 a 1,4 mm) dos motores, da placa e do canopy de um whoop.",
+    "por_que_necessaria": "Chave grande demais espana a cabeça desses parafusos na primeira volta.",
+    "alternativa_barata": "Kit de chaves de precisão para celular/óculos (costuma trazer PH00 e PH000).",
+    "cuidados": ["Aperte só até encostar: o plástico do frame espana fácil."],
+    "onde_comprar": [
+      {
+        "tipo_loja": "loja_ferramentas",
+        "termo_busca": "chave de precisão phillips PH00 PH000"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "kit chave precisao phillips ph000"
+      }
+    ],
+    "arquetipos": ["a3-tiny-whoop"],
+    "fontes": []
   }
 ]

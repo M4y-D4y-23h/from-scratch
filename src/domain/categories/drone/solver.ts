@@ -28,9 +28,10 @@ import type { Archetype, Component } from "./schema";
  *    menor custo de peças, depois a que paira mais perto de 50% do acelerador.
  * 4. Kits: se um kit traz várias peças escolhidas (ex.: ARF), compra-se o kit (menos montagem e
  *    peças garantidas na mesma caixa). Peça que vem na caixa de outra (ex.: antena do VTX) não é
- *    comprada à parte.
- * 5. Telemetria (ADR-0017): ELRS MAVLink quando rádio e receptor permitem; senão Wi-Fi no drone,
- *    se houver módulo; senão nenhuma. Uma opção explícita do usuário prevalece.
+ *    comprada à parte; peça que não é vendida separadamente só entra se vier na caixa de outra.
+ * 5. Telemetria (ADR-0017, só arquétipos ArduPilot): ELRS MAVLink quando rádio e receptor
+ *    permitem; senão Wi-Fi no drone, se houver módulo; senão nenhuma. Nos arquétipos Betaflight,
+ *    nenhuma. Uma opção explícita do usuário prevalece.
  */
 
 export const TIERS: readonly Tier[] = ["economica", "equilibrada", "premium"];
@@ -187,13 +188,22 @@ export function solve(input: SolverInput): SolverResult {
         itens,
         opcoes: { ...DEFAULT_BUILD_OPTIONS, celular: "android", ...input.opcoes },
       };
-      const telemetria = input.opcoes?.telemetria ?? defaultTelemetry(rascunho);
+      // A telemetria para o celular (ADR-0017) é parte do Arquétipo 1 (ArduPilot); no Betaflight
+      // o receptor fica em CRSF e não há estação de solo.
+      const telemetria =
+        input.opcoes?.telemetria ??
+        (archetype.firmware === "ArduPilot" ? defaultTelemetry(rascunho) : "nenhuma");
       // Módulo de telemetria Wi-Fi só faz sentido se for a opção escolhida.
       if (telemetria !== "wifi_no_drone" && firstOf(rascunho, "telemetria")) continue;
       const build = applyPurchasePlan(
         { ...rascunho, opcoes: { ...rascunho.opcoes, telemetria } },
         catalog,
       );
+      // Peça que só vem dentro de outro produto (ex.: antena da AIO) precisa vir na caixa de uma
+      // peça escolhida; sozinha ela não pode ser comprada.
+      if (build.itens.some((i) => !i.componente.vendido_separadamente && !i.fornecido_por)) {
+        continue;
+      }
       const { report, metrics } = validateBuild({
         build,
         archetype,

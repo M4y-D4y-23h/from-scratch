@@ -1,0 +1,513 @@
+[
+  {
+    "id": "iflight-nazgul-evoque-f5-v3",
+    "categoria": "frame",
+    "marca": "iFlight",
+    "modelo": "Nazgul Evoque F5 V3 (frame de 5\")",
+    "descricao_leiga": "Estrutura de fibra de carbono de um drone FPV de 5 polegadas. Braços de 6 mm, que aguentam quedas de freestyle.",
+    "massa_g": 256,
+    "dimensoes_mm": {
+      "comprimento": 230,
+      "largura": 207,
+      "altura": 54
+    },
+    "preco_referencia_usd": {
+      "min": 83.99,
+      "max": 83.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da iFlight",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da iFlight: página do produto",
+          "tipo": "loja",
+          "url": "https://shop.iflight.com/Nazgul-Evoque-F5-V3-Frame-Kit-Pro2407",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Em 04/10/2026."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "iFlight Nazgul Evoque F5 V3 frame kit"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "frame 5 polegadas fpv nazgul evoque"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "iFlight: Nazgul Evoque F5 V3 Frame Kit (especificação oficial)",
+        "tipo": "pagina_fabricante",
+        "url": "https://shop.iflight.com/Nazgul-Evoque-F5-V3-Frame-Kit-Pro2407",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "iFlight: Nazgul Evoque F5 V3 O4 6S HD (drone pronto no mesmo frame, com hélices Nazgul F5 de 5,1\")",
+        "tipo": "pagina_fabricante",
+        "url": "https://shop.iflight.com/Nazgul-Evoque-F5-V3-O4-6S-HD-Pro2397",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "iFlight: hélice Nazgul F5 (5,1 polegadas)",
+        "tipo": "loja",
+        "url": "https://shop.iflight.com/nazgul-5140-tri-blades-cw-ccw-propellers-3sets-6-pairs-pro964",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "Entre-eixos de 236 mm (DeadCat, padrão) ou 239 mm (True X, trocável). Placas de 3 mm.",
+      "Stack (FC + ESC) só no padrão 20 x 20 mm (furo de 3 mm), até 25 mm de altura. VTX em 25,5 x 25,5 mm.",
+      "A iFlight não publica a hélice máxima; registramos 5,1\" porque o drone pronto da própria iFlight neste frame usa hélices Nazgul F5 de 5,1\".",
+      "Vem com 2 straps de bateria, borrachas antiderrapantes e 2 cabos IPEX para RP-SMA."
+    ],
+    "specs": {
+      "geometria": "deadcat",
+      "distancia_entre_eixos_mm": 236,
+      "helice_max_pol": 5.1,
+      "furacao_motor": ["16x16 M3"],
+      "furacao_stack": ["20x20 M3"],
+      "espessura_braco_mm": 6,
+      "material": "fibra_de_carbono"
+    }
+  },
+  {
+    "id": "iflight-xing2-2207-1855kv",
+    "categoria": "motor",
+    "marca": "iFlight",
+    "modelo": "XING2 2207 1855KV (6S)",
+    "descricao_leiga": "Motor sem escova para 5\" em bateria 6S. Eixo de titânio de 5 mm, que aguenta queda.",
+    "massa_g": 31.6,
+    "dimensoes_mm": {
+      "comprimento": 29.08,
+      "largura": 29.08,
+      "altura": 32.6
+    },
+    "preco_referencia_usd": {
+      "min": 20.99,
+      "max": 20.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da iFlight",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da iFlight: página do produto",
+          "tipo": "loja",
+          "url": "https://shop.iflight.com/xing2-2207-4s-6s-fpv-motor-unibell-pro1464",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Em 04/10/2026, por motor."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "iFlight XING2 2207 1855KV"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "motor xing2 2207 1855kv"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "iFlight: XING2 2207 4S 6S FPV Motor (especificação oficial)",
+        "tipo": "pagina_fabricante",
+        "url": "https://shop.iflight.com/xing2-2207-4s-6s-fpv-motor-unibell-pro1464",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "iFlight: relatório de teste XING2 2207 1855KV (tabela de empuxo)",
+        "tipo": "pagina_fabricante",
+        "url": "https://shop.iflight.com/image/catalog/TEST%20REPORT/XING2-2207-1855KV.png",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "Tensão de teste do fabricante: 24 V (6S). Pico de 35,08 A e 841,9 W com hélice Gemfan 51466.",
+      "Fios de 160 mm, 20 AWG; 12N14P; rolamentos NSK 9x4x4. Vem com 4 parafusos M3x8 e porca de hélice M5."
+    ],
+    "notas_seguranca": [
+      "Confira se o parafuso não encosta no enrolamento do motor (parafuso longo demais queima o motor)."
+    ],
+    "specs": {
+      "estator": "2207",
+      "kv": 1855,
+      "celulas_min": 6,
+      "celulas_max": 6,
+      "furacao": ["16x16 M3"],
+      "eixo_mm": 5,
+      "fixacao_helice": ["eixo_5mm_porca"],
+      "corrente_max_a": 35.08
+    }
+  },
+  {
+    "id": "gemfan-51466-hurricane",
+    "categoria": "helice",
+    "marca": "Gemfan",
+    "modelo": "Hurricane MCK 51466 tripá (5,1\")",
+    "descricao_leiga": "Hélice de 5,1 polegadas com 3 pás, de policarbonato. Pacote com 4 (2 de cada sentido).",
+    "massa_g": 4.11,
+    "unidades_por_pacote": 4,
+    "preco_referencia_usd": {
+      "min": 3.29,
+      "max": 3.29,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da Diatone (revenda Gemfan)",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da Diatone (revenda Gemfan): página do produto",
+          "tipo": "loja",
+          "url": "https://www.diatone.us/products/gemfan-hurricane-mck-51466-3-2cw-2ccw",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Em 04/10/2026, conjunto com 2 CW + 2 CCW."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "Gemfan Hurricane 51466 3 blade"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "helice gemfan 51466"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "Diatone: GEMFAN Hurricane MCK 51466-3 (especificação)",
+        "tipo": "loja",
+        "url": "https://www.diatone.us/products/gemfan-hurricane-mck-51466-3-2cw-2ccw",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "Diâmetro de 129,5 mm, passo de 4,7\", furo de 5 mm, 4,11 g cada. Indicada para motores 2205 a 2306."
+    ],
+    "notas_seguranca": [
+      "Policarbonato também corta: uma hélice de 5\" gira a mais de 20 mil rotações por minuto."
+    ],
+    "specs": {
+      "diametro_pol": 5.1,
+      "passo_pol": 4.66,
+      "pas": 3,
+      "material": "plastico",
+      "fixacao": "eixo_5mm_porca"
+    }
+  },
+  {
+    "id": "iflight-blitz-mini-atf435-e55s",
+    "categoria": "stack",
+    "marca": "iFlight",
+    "modelo": "BLITZ Mini ATF435 + E55S Mini (stack 20 x 20)",
+    "descricao_leiga": "Controladora de voo (o cérebro, com Betaflight) e placa de ESC 4 em 1 (que gira os 4 motores), empilhadas.",
+    "massa_g": 16.3,
+    "preco_referencia_usd": {
+      "min": 93.99,
+      "max": 93.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da iFlight",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da iFlight: página do produto",
+          "tipo": "loja",
+          "url": "https://shop.iflight.com/BLITZ-Mini-ATF435-Stack-E55S-Mini-4-IN-1-ESC-Pro2063",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Em 04/10/2026."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "iFlight BLITZ Mini ATF435 stack E55S"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "stack blitz mini f435 e55s"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "iFlight: BLITZ Mini ATF435 Stack (E55S Mini 4-IN-1 ESC) (especificação oficial)",
+        "tipo": "pagina_fabricante",
+        "url": "https://shop.iflight.com/BLITZ-Mini-ATF435-Stack-E55S-Mini-4-IN-1-ESC-Pro2063",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "Betaflight: configuração oficial IFLIGHT_BLITZ_F435 (AT32F435)",
+        "tipo": "documentacao_oficial",
+        "url": "https://github.com/betaflight/config/blob/15d8c3fa076e9f43e2135050c90265f7f3e92166/configs/IFRC/IFLIGHT_BLITZ_F435/config.h",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "FC: AT32F435, giroscópio BMI270, barômetro DPS310, OSD AT7456E, 16 MB de blackbox, 6 UARTs, BEC de 5 V 2,5 A, 5 g.",
+      "A página da iFlight chama o alvo de IFLIGHT_BLITZ_ATF435; na lista oficial do Betaflight a configuração da placa AT32F435 da iFlight é IFLIGHT_BLITZ_F435. Na hora de gravar, deixe o Betaflight Configurator detectar a placa.",
+      "Sugestão da iFlight: UART1 para o VTX, UART2 para o receptor, UART3/4/5 para GPS, UART6 para telemetria do ESC.",
+      "ESC: 55 A contínuos e 65 A de pico por motor, 2 a 6S, BLHeli_S (aceita Bluejay), sensor de corrente, sem BEC, 11,3 g.",
+      "Vem com cabos de energia e de sinal; o rabicho XT60 e o capacitor não aparecem na lista da caixa."
+    ],
+    "specs": {
+      "fc": {
+        "mcu": "AT32F435",
+        "firmwares": [
+          {
+            "nome": "Betaflight",
+            "alvo": "IFLIGHT_BLITZ_F435",
+            "lista_oficial": true
+          }
+        ],
+        "uarts": [
+          {
+            "nome": "UART1"
+          },
+          {
+            "nome": "UART2"
+          },
+          {
+            "nome": "UART3"
+          },
+          {
+            "nome": "UART4"
+          },
+          {
+            "nome": "UART5"
+          }
+        ],
+        "saidas_motor": 4,
+        "becs": [
+          {
+            "tensao_v": 5,
+            "corrente_a": 2.5
+          }
+        ],
+        "furacao": ["20x20 M3"],
+        "barometro": true,
+        "osd_analogico": true,
+        "sensor_tensao": true,
+        "sensor_corrente": true
+      },
+      "esc": {
+        "corrente_continua_a": 55,
+        "corrente_pico_a": 65,
+        "celulas_min": 2,
+        "celulas_max": 6,
+        "firmware": "BLHeli_S",
+        "protocolos": ["DShot150", "DShot300", "DShot600", "Multishot", "OneShot125"],
+        "furacao": ["20x20 M3"],
+        "sensor_corrente": true
+      }
+    }
+  },
+  {
+    "id": "conector-xt60-rabicho",
+    "categoria": "conector",
+    "marca": "Genérico",
+    "modelo": "Rabicho XT60 macho com fio de silicone 12 AWG (≈ 10 cm)",
+    "descricao_leiga": "Cabo curto com o conector XT60, soldado na placa de ESC: é onde a bateria encaixa.",
+    "massa_estimada_g": {
+      "valor": 10,
+      "motivo": "Item genérico, sem fabricante único. Um XT60 com ~10 cm de fio 12 AWG pesa perto de 10 g; o efeito no peso total é pequeno."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "loja_hobby_robotica",
+        "termo_busca": "rabicho XT60 macho 12AWG"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "xt60 macho com cabo 12awg"
+      },
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "XT60 male pigtail 12AWG"
+      }
+    ],
+    "notas": [
+      "Item genérico: preço varia muito de loja para loja e não tem página oficial, então o custo aparece como \"sem preço pesquisado\".",
+      "Use fio de 12 AWG (no máximo 14 AWG) de silicone: o 5\" puxa mais de 100 A em aceleração total.",
+      "Se a sua placa de ESC já vier com rabicho XT60, não precisa comprar."
+    ],
+    "specs": {
+      "tipo": "XT60"
+    }
+  },
+  {
+    "id": "cnhl-ministar-1500-6s-120c",
+    "categoria": "bateria",
+    "marca": "CNHL",
+    "modelo": "MiniStar 1500 mAh 22,2 V 6S 120C (XT60)",
+    "descricao_leiga": "Bateria LiPo 6S para 5\": leve e capaz de entregar muita corrente nas acelerações.",
+    "massa_g": 232,
+    "dimensoes_mm": {
+      "comprimento": 81,
+      "largura": 40,
+      "altura": 39
+    },
+    "preco_referencia_usd": {
+      "min": 22.99,
+      "max": 29.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da CNHL",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da CNHL: página do produto",
+          "tipo": "loja",
+          "url": "https://chinahobbyline.com/products/cnhl-ministar-series-1500mah-22-2v-6s-120c-lipo-battery-with-xt60-plug",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Em 04/10/2026: 22,99 (armazém dos EUA) a 29,99 (armazém Global, que envia para o Brasil)."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "CNHL MiniStar 1500mAh 6S 120C"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "bateria lipo 6s 1500mah xt60"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "CNHL: MiniStar 1500mAh 22.2V 6S 120C (especificação oficial)",
+        "tipo": "pagina_fabricante",
+        "url": "https://chinahobbyline.com/products/cnhl-ministar-series-1500mah-22-2v-6s-120c-lipo-battery-with-xt60-plug",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "120C contínuo / 240C de pico; carga máxima 5C; carga completa 25,2 V (4,20 V por célula). Cerca de 232 g (fabricante)."
+    ],
+    "notas_seguranca": [
+      "Carregue só com carregador balanceador, sobre superfície que não pega fogo, sem sair de perto.",
+      "Bateria estufada, amassada ou furada não deve ser usada nem carregada.",
+      "Guarde e transporte dentro da bolsa anti-chamas, com a carga de armazenamento."
+    ],
+    "specs": {
+      "celulas": 6,
+      "capacidade_mah": 1500,
+      "c_continuo": 120,
+      "c_pico": 240,
+      "conector": "XT60",
+      "quimica": "LiPo"
+    }
+  },
+  {
+    "id": "betafpv-vr04",
+    "categoria": "oculos_fpv",
+    "marca": "BETAFPV",
+    "modelo": "VR04 (óculos FPV analógicos)",
+    "descricao_leiga": "Óculos com tela de 4,3\" que recebem o vídeo analógico de 5,8 GHz do drone. Grava o vídeo (DVR) em cartão.",
+    "massa_g": 425,
+    "dimensoes_mm": {
+      "comprimento": 168.8,
+      "largura": 182.1,
+      "altura": 98.5
+    },
+    "preco_referencia_usd": {
+      "min": 74.99,
+      "max": 74.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da BETAFPV",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da BETAFPV: página do produto",
+          "tipo": "loja",
+          "url": "https://betafpv.com/products/vr04-fpv-goggles",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Em 04/10/2026; estava sem estoque."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "BETAFPV VR04 FPV goggles"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "oculos fpv analogico 5.8"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: VR04 FPV Goggles (especificação oficial)",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/vr04-fpv-goggles",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "48 canais de 5,8 GHz, tela 800 x 480, bateria de 2000 mAh (cerca de 2 h), cabe óculos de grau por dentro, antena RP-SMA."
+    ],
+    "notas_seguranca": [
+      "Com óculos FPV você não vê o drone: a regra do DECEA exige um observador ao seu lado (ICA 100-40, art. 24)."
+    ],
+    "faixas": ["economica", "equilibrada"],
+    "specs": {
+      "sistema": "analogico_5g8",
+      "receptor_analogico": true
+    }
+  },
+  {
+    "id": "iflight-analog-goggles",
+    "categoria": "oculos_fpv",
+    "marca": "iFlight",
+    "modelo": "Analog FPV Goggles com DVR",
+    "descricao_leiga": "Óculos FPV analógicos com tela de 4,3\", gravação em cartão e duas antenas circulares inclusas.",
+    "massa_g": 295,
+    "dimensoes_mm": {
+      "comprimento": 155,
+      "largura": 144,
+      "altura": 113
+    },
+    "preco_referencia_usd": {
+      "min": 109.99,
+      "max": 109.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da iFlight",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da iFlight: página do produto",
+          "tipo": "loja",
+          "url": "https://shop.iflight.com/iflight-fpv-goggles-with-dvr-function-pro1364",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Em 04/10/2026."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "iFlight analog FPV goggles DVR"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "oculos fpv analogico dvr"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "iFlight: Analog FPV Goggles (especificação oficial)",
+        "tipo": "pagina_fabricante",
+        "url": "https://shop.iflight.com/iflight-fpv-goggles-with-dvr-function-pro1364",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "40 canais de 5,8 GHz, tela 800 x 480, bateria de 2000 mAh, gravação em cartão de até 32 GB, 2 antenas Albatross RHCP."
+    ],
+    "notas_seguranca": [
+      "Com óculos FPV você não vê o drone: a regra do DECEA exige um observador ao seu lado (ICA 100-40, art. 24)."
+    ],
+    "faixas": ["premium"],
+    "specs": {
+      "sistema": "analogico_5g8",
+      "receptor_analogico": true
+    }
+  }
+]

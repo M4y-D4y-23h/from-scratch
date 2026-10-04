@@ -7,7 +7,7 @@ import {
 } from "@/domain/core/validation";
 import { deriveStatus, type VerificationStatus } from "@/domain/core/verification";
 
-import { type Build, escOf, fcOf, firstOf, itemsOf, receiverOf } from "./build";
+import { type Build, escOf, fcOf, firstOf, itemsOf, receiverOf, vtxOf } from "./build";
 import {
   type AuwResult,
   computeAuw,
@@ -60,7 +60,13 @@ export function computeMetrics(ctx: ValidationContext): BuildMetrics {
   const auw = computeAuw(ctx.build, ctx.config);
   const propulsion = computePropulsion(ctx.build, ctx.thrustTables, auw);
   const power = planPowerSupply(ctx.build, ctx.config);
-  const flight = computeFlightTime(ctx.build, propulsion, power, ctx.config);
+  const flight = computeFlightTime(
+    ctx.build,
+    propulsion,
+    power,
+    ctx.config,
+    ctx.archetype.estilo_voo,
+  );
   return { auw, propulsion, power, flight };
 }
 
@@ -129,6 +135,7 @@ const propFitsFrame: RuleFn = ({ build }) => {
     componentes: [frame, prop],
   };
   const max = frame.specs.helice_max_pol;
+  const min = frame.specs.helice_min_pol;
   const d = prop.specs.diametro_pol;
   if (max === undefined || d === undefined) {
     return result(base, "sem_dado", {
@@ -136,9 +143,17 @@ const propFitsFrame: RuleFn = ({ build }) => {
       sugestao: "Confira no datasheet do frame a hélice máxima suportada.",
     });
   }
+  // Frame com dutos: hélice menor que o duto gira solta, com folga grande na ponta (perde empuxo).
+  if (min !== undefined && d < min) {
+    return result(base, "falhou", {
+      tecnica: `Hélice de ${fmt(d, 2)}" num frame com dutos para ${fmt(min, 2)}" a ${fmt(max, 2)}".`,
+      sugestao: `Use a hélice do tamanho do duto (${fmt(min, 2)}" a ${fmt(max, 2)}").`,
+      valores: { helice_pol: d, helice_min_pol: min, helice_max_pol: max },
+    });
+  }
   return result(base, d <= max ? "passou" : "falhou", {
-    tecnica: `Hélice de ${fmt(d)}" no frame que aceita até ${fmt(max)}".`,
-    sugestao: `Use hélices de até ${fmt(max)}" ou um frame maior.`,
+    tecnica: `Hélice de ${fmt(d, 2)}" no frame que aceita até ${fmt(max, 2)}".`,
+    sugestao: `Use hélices de até ${fmt(max, 2)}" ou um frame maior.`,
     valores: { helice_pol: d, helice_max_pol: max },
   });
 };
@@ -227,6 +242,38 @@ const propMountsOnMotor: RuleFn = ({ build }) => {
   return result(base, mounts.includes(mount) ? "passou" : "falhou", {
     tecnica: `Motor aceita: ${mounts.join(", ")}. Hélice: ${mount}.`,
     sugestao: "Escolha hélices com o mesmo tipo de fixação do motor.",
+  });
+};
+
+/** Bateria entra no encaixe do frame (whoops): compara a seção da bateria com a do encaixe. */
+const batteryFitsFrame: RuleFn = ({ build }) => {
+  const frame = firstOf(build, "frame")?.componente;
+  const battery = firstOf(build, "bateria")?.componente;
+  const slot = frame?.specs.slot_bateria_mm;
+  if (!frame || !battery || !slot) return null;
+  const base: RuleBase = {
+    regra_id: "bateria_cabe_no_frame",
+    titulo: "A bateria entra no encaixe do frame",
+    severidade: "bloqueante",
+    explicacao_leiga:
+      "Frames de whoop têm um encaixe justo para a bateria. Bateria mais larga ou mais grossa não entra, e forçar amassa a bateria (risco de fogo).",
+    componentes: [frame, battery],
+  };
+  const d = battery.dimensoes_mm;
+  if (!d) {
+    return result(base, "sem_dado", {
+      tecnica: "O catálogo não informa as dimensões da bateria.",
+      sugestao: "Confira largura e espessura da bateria no site do fabricante.",
+    });
+  }
+  // As duas menores medidas da bateria (seção) contra as duas do encaixe, com 0,3 mm de folga.
+  const [b1 = 0, b2 = 0] = [d.comprimento, d.largura, d.altura].sort((a, b) => a - b);
+  const [s1, s2] = [slot.largura, slot.altura].sort((a, b) => a - b) as [number, number];
+  const cabe = b1 <= s1 + 0.3 && b2 <= s2 + 0.3;
+  return result(base, cabe ? "passou" : "falhou", {
+    tecnica: `Seção da bateria ${fmt(b2)} × ${fmt(b1)} mm; encaixe ${fmt(s2)} × ${fmt(s1)} mm.`,
+    sugestao: "Use a bateria indicada para este frame (mais fina ou mais estreita).",
+    valores: { bateria_mm: `${b2}x${b1}`, encaixe_mm: `${s2}x${s1}` },
   });
 };
 
@@ -539,7 +586,12 @@ const fcFirmware: RuleFn = ({ build, archetype }) => {
     severidade: "bloqueante",
     explicacao_leiga: `O "cérebro" do drone precisa constar na lista oficial de placas do ${archetype.firmware}; placas fora da lista podem não ter firmware ou ter defeitos sem suporte.`,
     componentes: [fc.componente],
-    fontes: archetype.firmware === "ArduPilot" ? [SRC.ardupilotAutopilots] : [SRC.spec],
+    fontes:
+      archetype.firmware === "ArduPilot"
+        ? [SRC.ardupilotAutopilots]
+        : archetype.firmware === "Betaflight"
+          ? [SRC.betaflightConfigs]
+          : [SRC.spec],
   };
   const fw = fc.specs.firmwares;
   if (!fw?.length) {
@@ -608,7 +660,12 @@ const motorOutputs: RuleFn = ({ build }) => {
   });
 };
 
-/** UARTs necessárias no Arquétipo 1: rádio + GPS + telemetria (ou rádio/telemetria juntos). */
+/**
+ * UARTs necessárias: receptor + GPS + telemetria Wi-Fi + controle do VTX. O controle do VTX
+ * (SmartAudio/Tramp/MSP) só conta quando é usado: VTX digital (o OSD vai pela UART, MSP
+ * DisplayPort) ou VTX analógico numa FC com OSD analógico (Betaflight: canal e potência pelo
+ * menu do rádio). Numa Pixhawk sem OSD o VTX analógico é configurado no botão e não ocupa UART.
+ */
 export function requiredUarts(build: Build): { total: number; usos: string[] } {
   const usos: string[] = [];
   if (receiverOf(build)?.componente.categoria === "receptor") {
@@ -621,6 +678,12 @@ export function requiredUarts(build: Build): { total: number; usos: string[] } {
   if (firstOf(build, "gps")) usos.push("GPS");
   if (build.opcoes.telemetria === "wifi_no_drone" && firstOf(build, "telemetria")) {
     usos.push("telemetria Wi-Fi para o celular");
+  }
+  const vtx = vtxOf(build);
+  const controle = vtx?.specs.controle;
+  if (vtx && !vtx.integrado && controle && controle !== "nenhum") {
+    const digital = vtx.specs.sistema !== undefined && vtx.specs.sistema !== "analogico_5g8";
+    if (digital || fcOf(build)?.specs.osd_analogico) usos.push(`controle do VTX (${controle})`);
   }
   return { total: usos.length, usos };
 }
@@ -843,23 +906,27 @@ const powerModuleCurrent: RuleFn = ({ build }, m) => {
 };
 
 const voltageMonitor: RuleFn = (ctx) => {
-  if (!isArduPilot(ctx)) return null;
   const fc = fcOf(ctx.build);
+  if (!fc) return null;
   const pm = firstOf(ctx.build, "modulo_energia")?.componente;
+  const ardupilot = isArduPilot(ctx);
   const base: RuleBase = {
     regra_id: "monitor_bateria",
-    titulo: "O drone mede a bateria (necessário para o failsafe de bateria)",
+    titulo: ardupilot
+      ? "O drone mede a bateria (necessário para o failsafe de bateria)"
+      : "O drone mede a bateria (aviso de bateria baixa na tela)",
     severidade: "bloqueante",
-    explicacao_leiga:
-      "Para voltar sozinho quando a bateria está acabando, a controladora precisa medir a tensão (e de preferência a corrente) da bateria.",
-    componentes: present([fc?.componente, pm]),
-    fontes: [SRC.ardupilotBatteryFailsafe],
+    explicacao_leiga: ardupilot
+      ? "Para voltar sozinho quando a bateria está acabando, a controladora precisa medir a tensão (e de preferência a corrente) da bateria."
+      : "Sem medir a bateria você não sabe a hora de pousar: a LiPo descarregada demais estraga e pode pegar fogo na próxima carga. A controladora mede a tensão e avisa na tela (OSD).",
+    componentes: present([fc.componente, pm]),
+    fontes: ardupilot ? [SRC.ardupilotBatteryFailsafe] : [SRC.betaflightSettings],
   };
   // Basta uma fonte medir: o módulo de energia OU a própria FC.
   const anyTrue = (values: Array<boolean | undefined>) =>
     values.includes(true) ? true : values.includes(undefined) ? undefined : false;
   const modulos = itemsOf(ctx.build, "modulo_energia").map((i) => i.componente);
-  const tensao = anyTrue([...modulos.map((m) => m.specs.mede_tensao), fc?.specs.sensor_tensao]);
+  const tensao = anyTrue([...modulos.map((m) => m.specs.mede_tensao), fc.specs.sensor_tensao]);
   if (tensao === undefined) {
     return result(base, "sem_dado", {
       tecnica: "O catálogo não informa se a FC ou o módulo de energia medem a tensão.",
@@ -867,7 +934,7 @@ const voltageMonitor: RuleFn = (ctx) => {
     });
   }
   const corrente =
-    anyTrue([...modulos.map((m) => m.specs.mede_corrente), fc?.specs.sensor_corrente]) ?? false;
+    anyTrue([...modulos.map((m) => m.specs.mede_corrente), fc.specs.sensor_corrente]) ?? false;
   return result(base, tensao ? "passou" : "falhou", {
     tecnica: `Mede tensão: ${tensao ? "sim" : "não"}; mede corrente: ${corrente ? "sim" : "não"}.`,
     sugestao: "Inclua um módulo de energia (power module).",
@@ -876,7 +943,8 @@ const voltageMonitor: RuleFn = (ctx) => {
 
 const videoSystem: RuleFn = ({ build }) => {
   const cam = firstOf(build, "camera_fpv")?.componente;
-  const vtx = firstOf(build, "vtx")?.componente;
+  const vtxInfo = vtxOf(build);
+  const vtx = vtxInfo?.componente;
   const rx =
     firstOf(build, "receptor_video")?.componente ?? firstOf(build, "oculos_fpv")?.componente;
   if (!cam && !vtx) return null;
@@ -889,7 +957,14 @@ const videoSystem: RuleFn = ({ build }) => {
       "Vídeo analógico e os sistemas digitais (DJI, Walksnail, HDZero) não conversam entre si: câmera, transmissor (VTX) e tela/óculos precisam ser do mesmo sistema.",
     componentes: parts,
   };
-  const systems = parts.map((p) => ("sistema" in p.specs ? p.specs.sistema : undefined));
+  // O VTX embutido na AIO informa o sistema em specs.vtx.
+  const systems = parts.map((p) =>
+    p === vtx && vtxInfo
+      ? vtxInfo.specs.sistema
+      : "sistema" in p.specs
+        ? p.specs.sistema
+        : undefined,
+  );
   if (systems.some((s) => s === undefined) || parts.length < 3) {
     return result(base, "sem_dado", {
       tecnica: "Falta peça da corrente de vídeo ou o sistema de alguma delas.",
@@ -904,9 +979,11 @@ const videoSystem: RuleFn = ({ build }) => {
 };
 
 const vtxAntenna: RuleFn = ({ build }) => {
-  const vtx = firstOf(build, "vtx")?.componente;
-  const antennas = itemsOf(build, "antena").map((i) => i.componente);
-  if (!vtx) return null;
+  const vtxInfo = vtxOf(build);
+  const vtx = vtxInfo?.componente;
+  const antennaItems = itemsOf(build, "antena");
+  const antennas = antennaItems.map((i) => i.componente);
+  if (!vtx || !vtxInfo) return null;
   const base: RuleBase = {
     regra_id: "antena_vtx",
     titulo: "O transmissor de vídeo tem antena compatível",
@@ -915,7 +992,14 @@ const vtxAntenna: RuleFn = ({ build }) => {
       "Ligar o transmissor de vídeo sem antena (ou com antena errada) pode queimá-lo em segundos. O conector precisa ser o mesmo.",
     componentes: [vtx, ...antennas],
   };
-  const conn = vtx.specs.conector_antena;
+  // Antena que vem na caixa do próprio VTX (ou da AIO): o fabricante já garante o encaixe.
+  const original = antennaItems.find((i) => i.fornecido_por === vtx.id);
+  if (original) {
+    return result(base, "passou", {
+      tecnica: `Antena original que vem com ${vtx.marca} ${vtx.modelo}.`,
+    });
+  }
+  const conn = vtxInfo.specs.conector_antena;
   const match = antennas.find(
     (a) => a.specs.conector === conn && (a.specs.frequencia_ghz ?? 0) > 5,
   );
@@ -1001,26 +1085,57 @@ const compassDistance: RuleFn = (ctx) => {
   });
 };
 
-/** Parâmetros que o failsafe de retorno exige (ArduCopter 4.7). */
-const REQUIRED_FAILSAFE_PARAMS: Array<{
-  nome: string;
-  valores: Array<number | string>;
-  motivo: string;
-}> = [
-  { nome: "FS_THR_ENABLE", valores: [1], motivo: "perda do rádio → RTL" },
-  { nome: "BATT_FS_LOW_ACT", valores: [2], motivo: "bateria baixa → RTL" },
-  { nome: "FENCE_ENABLE", valores: [1], motivo: "cerca virtual ligada" },
-];
+type RequiredParam = { nome: string; valores: Array<number | string>; motivo: string };
 
-const failsafeToRtl: RuleFn = (ctx) => {
-  if (!isArduPilot(ctx)) return null;
-  const base: RuleBase = {
+/** O que o failsafe exige em cada firmware (perfis do catálogo conferidos no código-fonte). */
+const FAILSAFE: Partial<
+  Record<
+    Archetype["firmware"],
+    {
+      regra_id: string;
+      titulo: string;
+      leigo: string;
+      params: RequiredParam[];
+      fontes: Source[];
+    }
+  >
+> = {
+  // ArduCopter 4.7: perda do rádio e bateria baixa → RTL, com cerca virtual.
+  ArduPilot: {
     regra_id: "failsafe_rtl",
     titulo: "Failsafe configurado para voltar para casa (RTL)",
-    severidade: "bloqueante",
-    explicacao_leiga:
+    leigo:
       "Se o rádio perder o sinal ou a bateria ficar baixa, o drone precisa voltar sozinho para o ponto de decolagem em vez de cair ou fugir.",
+    params: [
+      { nome: "FS_THR_ENABLE", valores: [1], motivo: "perda do rádio → RTL" },
+      { nome: "BATT_FS_LOW_ACT", valores: [2], motivo: "bateria baixa → RTL" },
+      { nome: "FENCE_ENABLE", valores: [1], motivo: "cerca virtual ligada" },
+    ],
     fontes: [SRC.ardupilotRadioFailsafe, SRC.ardupilotBatteryFailsafe, SRC.ardupilotFence],
+  },
+  // Betaflight: sem GPS, o procedimento seguro é DROP (desarma e para os motores) depois da guarda.
+  Betaflight: {
+    regra_id: "failsafe_configurado",
+    titulo: "Failsafe configurado (perdeu o rádio → motores param)",
+    leigo:
+      "Se o rádio perder o sinal, o drone precisa parar os motores em vez de continuar voando sem controle. Num FPV ou whoop sem GPS, cair no lugar é o comportamento mais seguro.",
+    params: [
+      { nome: "failsafe_procedure", valores: ["DROP"], motivo: "perda do rádio → desarma" },
+      { nome: "failsafe_delay", valores: [15], motivo: "1,5 s de guarda antes de desarmar" },
+    ],
+    fontes: [SRC.betaflightFailsafe, SRC.betaflightSettings],
+  },
+};
+
+const failsafeConfigured: RuleFn = (ctx) => {
+  const spec = FAILSAFE[ctx.archetype.firmware];
+  if (!spec) return null;
+  const base: RuleBase = {
+    regra_id: spec.regra_id,
+    titulo: spec.titulo,
+    severidade: "bloqueante",
+    explicacao_leiga: spec.leigo,
+    fontes: spec.fontes,
   };
   const params = ctx.firmwareProfile
     ? resolveFirmwareParams(ctx.firmwareProfile, ctx.build).parametros
@@ -1028,17 +1143,17 @@ const failsafeToRtl: RuleFn = (ctx) => {
   if (!params) {
     return result(base, "sem_dado", {
       tecnica: "Não há perfil de parâmetros de firmware para este build.",
-      sugestao: "Use o perfil de parâmetros do Arquétipo 1 (ArduCopter 4.7).",
+      sugestao: `Use o perfil de parâmetros do arquétipo (${ctx.archetype.firmware}).`,
       selo: "nao_verificado",
     });
   }
-  const missing = REQUIRED_FAILSAFE_PARAMS.filter(
+  const missing = spec.params.filter(
     (req) => !params.some((p) => p.nome === req.nome && req.valores.includes(p.valor)),
   );
   return result(base, missing.length === 0 ? "passou" : "falhou", {
     tecnica:
       missing.length === 0
-        ? REQUIRED_FAILSAFE_PARAMS.map((r) => `${r.nome}=${r.valores[0]} (${r.motivo})`).join("; ")
+        ? spec.params.map((r) => `${r.nome}=${r.valores[0]} (${r.motivo})`).join("; ")
         : `Faltando: ${missing.map((r) => `${r.nome}=${r.valores[0]} (${r.motivo})`).join("; ")}.`,
     sugestao: "Inclua os parâmetros de failsafe no perfil de configuração.",
     selo: "estimativa",
@@ -1047,7 +1162,9 @@ const failsafeToRtl: RuleFn = (ctx) => {
 
 const beginnerProps: RuleFn = ({ build, archetype }) => {
   const prop = firstOf(build, "helice")?.componente;
-  if (!prop || archetype.id === "a2-fpv-5pol") return null;
+  // No freestyle (5") toda hélice é de policarbonato e corta mesmo assim: o aviso de "plástico é
+  // mais seguro" passaria a ideia errada. Lá valem os alertas de hélice e de armar.
+  if (!prop || archetype.estilo_voo === "freestyle") return null;
   const base: RuleBase = {
     regra_id: "helice_segura_iniciante",
     titulo: "Hélices de plástico para quem está aprendendo",
@@ -1124,6 +1241,7 @@ export const DRONE_RULES: readonly RuleFn[] = [
   motorMountsOnFrame,
   stackMountsOnFrame,
   propMountsOnMotor,
+  batteryFitsFrame,
   motorCells,
   escCells,
   fcCells,
@@ -1150,7 +1268,7 @@ export const DRONE_RULES: readonly RuleFn[] = [
   vtxAntenna,
   gpsWithCompass,
   compassDistance,
-  failsafeToRtl,
+  failsafeConfigured,
   beginnerProps,
   phoneGroundStation,
   phoneOnlyControl,

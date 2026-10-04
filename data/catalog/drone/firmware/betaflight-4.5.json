@@ -1,0 +1,256 @@
+{
+  "id": "betaflight-4.5",
+  "firmware": "Betaflight",
+  "versao_min": "4.5.3",
+  "verificado_em": "2026-10-04",
+  "parametros": [
+    {
+      "nome": "serialrx_provider",
+      "valor": "CRSF",
+      "explicacao": "O receptor ExpressLRS conversa com a controladora pelo protocolo CRSF. Ative também \"Serial Rx\" na UART do receptor (aba Ports).",
+      "fontes": [
+        {
+          "titulo": "Betaflight 2026.6.2: parâmetros do CLI (settings.c)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/betaflight/betaflight/blob/e0b7bb01b17b21351057e9ead2d1ab39dd44fa16/src/main/cli/settings.c",
+          "acessado_em": "2026-10-04",
+          "observacao": "Nomes conferidos também na 4.5.3 (commit 0e533ba), versão que vem gravada nas placas da BETAFPV."
+        }
+      ]
+    },
+    {
+      "nome": "failsafe_procedure",
+      "valor": "DROP",
+      "explicacao": "Se o rádio perder o sinal, depois da guarda o drone desarma e para os motores (padrão do Betaflight). Sem GPS, cair no lugar é mais seguro do que continuar voando sem controle.",
+      "fontes": [
+        {
+          "titulo": "Betaflight: Failsafe (guia oficial)",
+          "tipo": "documentacao_oficial",
+          "url": "https://betaflight.com/docs/wiki/guides/current/Failsafe",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "Betaflight 2026.6.2: valores padrão do failsafe (failsafe.c)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/betaflight/betaflight/blob/e0b7bb01b17b21351057e9ead2d1ab39dd44fa16/src/main/flight/failsafe.c",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "Betaflight 2026.6.2: parâmetros do CLI (settings.c)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/betaflight/betaflight/blob/e0b7bb01b17b21351057e9ead2d1ab39dd44fa16/src/main/cli/settings.c",
+          "acessado_em": "2026-10-04",
+          "observacao": "Nomes conferidos também na 4.5.3 (commit 0e533ba), versão que vem gravada nas placas da BETAFPV."
+        }
+      ]
+    },
+    {
+      "nome": "failsafe_delay",
+      "valor": 15,
+      "unidade": "décimos de segundo",
+      "explicacao": "Guarda de 1,5 s (padrão): se o sinal voltar nesse tempo, você retoma o controle; se não, o failsafe desarma.",
+      "fontes": [
+        {
+          "titulo": "Betaflight: Failsafe (guia oficial)",
+          "tipo": "documentacao_oficial",
+          "url": "https://betaflight.com/docs/wiki/guides/current/Failsafe",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "Betaflight 2026.6.2: valores padrão do failsafe (failsafe.c)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/betaflight/betaflight/blob/e0b7bb01b17b21351057e9ead2d1ab39dd44fa16/src/main/flight/failsafe.c",
+          "acessado_em": "2026-10-04"
+        }
+      ]
+    },
+    {
+      "nome": "small_angle",
+      "valor": 25,
+      "unidade": "graus",
+      "explicacao": "Não deixa armar com o drone inclinado mais de 25° (padrão): evita que ele salte de lado ao armar.",
+      "fontes": [
+        {
+          "titulo": "Betaflight 2026.6.2: ângulo máximo para armar (imu.c)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/betaflight/betaflight/blob/e0b7bb01b17b21351057e9ead2d1ab39dd44fa16/src/main/flight/imu.c",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "Betaflight 2026.6.2: parâmetros do CLI (settings.c)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/betaflight/betaflight/blob/e0b7bb01b17b21351057e9ead2d1ab39dd44fa16/src/main/cli/settings.c",
+          "acessado_em": "2026-10-04",
+          "observacao": "Nomes conferidos também na 4.5.3 (commit 0e533ba), versão que vem gravada nas placas da BETAFPV."
+        }
+      ]
+    },
+    {
+      "nome": "runaway_takeoff_prevention",
+      "valor": "ON",
+      "explicacao": "Desarma se o drone disparar logo depois de armar (por exemplo, motor ou hélice trocados). Padrão ligado; confira que continua.",
+      "fontes": [
+        {
+          "titulo": "Betaflight 2026.6.2: parâmetros do CLI (settings.c)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/betaflight/betaflight/blob/e0b7bb01b17b21351057e9ead2d1ab39dd44fa16/src/main/cli/settings.c",
+          "acessado_em": "2026-10-04",
+          "observacao": "Nomes conferidos também na 4.5.3 (commit 0e533ba), versão que vem gravada nas placas da BETAFPV."
+        }
+      ]
+    },
+    {
+      "nome": "motor_pwm_protocol",
+      "valor": "DSHOT600",
+      "explicacao": "Protocolo digital entre a controladora e o ESC. As placas escolhidas aceitam DShot600.",
+      "fontes": [
+        {
+          "titulo": "Betaflight 2026.6.2: parâmetros do CLI (settings.c)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/betaflight/betaflight/blob/e0b7bb01b17b21351057e9ead2d1ab39dd44fa16/src/main/cli/settings.c",
+          "acessado_em": "2026-10-04",
+          "observacao": "Nomes conferidos também na 4.5.3 (commit 0e533ba), versão que vem gravada nas placas da BETAFPV."
+        }
+      ]
+    },
+    {
+      "nome": "dshot_bidir",
+      "valor": "ON",
+      "condicao": {
+        "tem_componente": ["betafpv-matrix-1s-5in1-ii"]
+      },
+      "explicacao": "Liga a telemetria de rotação pelo próprio sinal do motor, que alimenta o filtro RPM (voo mais suave). Só funciona com ESC Bluejay, BLHeli_32 ou AM32; com BLHeli_S de fábrica deixe desligado, ou os motores não armam.",
+      "fontes": [
+        {
+          "titulo": "Betaflight 2026.6.2: parâmetros do CLI (settings.c)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/betaflight/betaflight/blob/e0b7bb01b17b21351057e9ead2d1ab39dd44fa16/src/main/cli/settings.c",
+          "acessado_em": "2026-10-04",
+          "observacao": "Nomes conferidos também na 4.5.3 (commit 0e533ba), versão que vem gravada nas placas da BETAFPV."
+        }
+      ]
+    },
+    {
+      "nome": "vbat_warning_cell_voltage",
+      "valor": 350,
+      "unidade": "centésimos de volt por célula",
+      "explicacao": "Aviso de bateria baixa na tela a 3,50 V por célula (padrão): hora de voltar e pousar.",
+      "fontes": [
+        {
+          "titulo": "Betaflight 2026.6.2: contagem de células e alertas de bateria (battery.c)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/betaflight/betaflight/blob/e0b7bb01b17b21351057e9ead2d1ab39dd44fa16/src/main/sensors/battery.c",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "Betaflight 2026.6.2: parâmetros do CLI (settings.c)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/betaflight/betaflight/blob/e0b7bb01b17b21351057e9ead2d1ab39dd44fa16/src/main/cli/settings.c",
+          "acessado_em": "2026-10-04",
+          "observacao": "Nomes conferidos também na 4.5.3 (commit 0e533ba), versão que vem gravada nas placas da BETAFPV."
+        }
+      ]
+    },
+    {
+      "nome": "vbat_min_cell_voltage",
+      "valor": 330,
+      "unidade": "centésimos de volt por célula",
+      "explicacao": "Alerta crítico a 3,30 V por célula (padrão): pouse já, abaixo disso a LiPo se estraga.",
+      "fontes": [
+        {
+          "titulo": "Betaflight 2026.6.2: contagem de células e alertas de bateria (battery.c)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/betaflight/betaflight/blob/e0b7bb01b17b21351057e9ead2d1ab39dd44fa16/src/main/sensors/battery.c",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "Betaflight 2026.6.2: parâmetros do CLI (settings.c)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/betaflight/betaflight/blob/e0b7bb01b17b21351057e9ead2d1ab39dd44fa16/src/main/cli/settings.c",
+          "acessado_em": "2026-10-04",
+          "observacao": "Nomes conferidos também na 4.5.3 (commit 0e533ba), versão que vem gravada nas placas da BETAFPV."
+        }
+      ]
+    },
+    {
+      "nome": "vbat_max_cell_voltage",
+      "valor": 440,
+      "unidade": "centésimos de volt por célula",
+      "condicao": {
+        "tem_componente": ["betafpv-lava-ii-1s-320", "betafpv-lava-ii-1s-480"]
+      },
+      "explicacao": "Bateria LiHV cheia tem 4,35 V. Com o padrão (4,30 V), a placa conta células dividindo a tensão por esse valor e acha que a 1S cheia é uma 2S, disparando o alerta de bateria baixa. Com 4,40 V a contagem fica certa.",
+      "fontes": [
+        {
+          "titulo": "Betaflight 2026.6.2: contagem de células e alertas de bateria (battery.c)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/betaflight/betaflight/blob/e0b7bb01b17b21351057e9ead2d1ab39dd44fa16/src/main/sensors/battery.c",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "Betaflight 2026.6.2: parâmetros do CLI (settings.c)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/betaflight/betaflight/blob/e0b7bb01b17b21351057e9ead2d1ab39dd44fa16/src/main/cli/settings.c",
+          "acessado_em": "2026-10-04",
+          "observacao": "Nomes conferidos também na 4.5.3 (commit 0e533ba), versão que vem gravada nas placas da BETAFPV."
+        }
+      ]
+    },
+    {
+      "nome": "bat_capacity",
+      "calculo": {
+        "variavel": "capacidade_mah",
+        "fator": 1,
+        "casas": 0
+      },
+      "unidade": "mAh",
+      "explicacao": "Capacidade da bateria escolhida: permite mostrar quanto já foi gasto.",
+      "fontes": [
+        {
+          "titulo": "Betaflight 2026.6.2: parâmetros do CLI (settings.c)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/betaflight/betaflight/blob/e0b7bb01b17b21351057e9ead2d1ab39dd44fa16/src/main/cli/settings.c",
+          "acessado_em": "2026-10-04",
+          "observacao": "Nomes conferidos também na 4.5.3 (commit 0e533ba), versão que vem gravada nas placas da BETAFPV."
+        }
+      ]
+    },
+    {
+      "nome": "osd_cap_alarm",
+      "calculo": {
+        "variavel": "capacidade_mah",
+        "fator": 0.8,
+        "casas": 0
+      },
+      "unidade": "mAh",
+      "explicacao": "Aviso na tela quando já gastou 80% da bateria (sobram 20% para pousar).",
+      "fontes": [
+        {
+          "titulo": "Betaflight 2026.6.2: parâmetros do CLI (settings.c)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/betaflight/betaflight/blob/e0b7bb01b17b21351057e9ead2d1ab39dd44fa16/src/main/cli/settings.c",
+          "acessado_em": "2026-10-04",
+          "observacao": "Nomes conferidos também na 4.5.3 (commit 0e533ba), versão que vem gravada nas placas da BETAFPV."
+        }
+      ]
+    },
+    {
+      "nome": "vtx_low_power_disarm",
+      "valor": "ON",
+      "explicacao": "Com o drone desarmado, o transmissor de vídeo fica na menor potência: esquenta menos na bancada e não atrapalha quem está voando por perto.",
+      "fontes": [
+        {
+          "titulo": "Betaflight 2026.6.2: parâmetros do CLI (settings.c)",
+          "tipo": "documentacao_oficial",
+          "url": "https://github.com/betaflight/betaflight/blob/e0b7bb01b17b21351057e9ead2d1ab39dd44fa16/src/main/cli/settings.c",
+          "acessado_em": "2026-10-04",
+          "observacao": "Nomes conferidos também na 4.5.3 (commit 0e533ba), versão que vem gravada nas placas da BETAFPV."
+        }
+      ]
+    }
+  ],
+  "notas": [
+    "Parâmetros de CLI (comando set nome = valor, depois save). Portas, modos (ARM, BEEPER), tabela de VTX e OSD são configurados nas abas do Betaflight Configurator, nos passos do guia.",
+    "Nomes conferidos no código-fonte das versões 4.5.3 e 2026.6.2. Na 2026.6 o failsafe_off_delay passou a se chamar failsafe_landing_time (não usamos)."
+  ]
+}

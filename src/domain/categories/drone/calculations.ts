@@ -2,7 +2,7 @@ import { deriveStatus, type VerificationStatus } from "@/domain/core/verificatio
 
 import { type Build, GROUND_CATEGORIES, firstOf, fcOf, receiverOf } from "./build";
 import type { DroneConfig } from "./config";
-import type { Component, ThrustData, ThrustPoint } from "./schema";
+import type { Component, FlightStyle, ThrustData, ThrustPoint } from "./schema";
 
 /*
  * Motor de cálculo (SPEC B.7). Funções puras: recebem o build, as tabelas de empuxo e a
@@ -107,8 +107,12 @@ export function thrustAt(table: ThrustData, throttlePct: number): number | undef
 export type OperatingPoint = {
   throttle_pct: number;
   corrente_a: number;
-  /** "abaixo_da_tabela": o ponto pedido é menor que o primeiro medido; usamos o primeiro ponto
-   *  como limite superior (estimativa conservadora: throttle e corrente reais são menores). */
+  /**
+   * "abaixo_da_tabela": o empuxo pedido é menor que o do primeiro ponto medido (comum em FPV 5",
+   * que paira bem abaixo de 50% e cujas tabelas começam em 50%). O throttle fica como limite
+   * superior (o do primeiro ponto) e a corrente é estimada com a mesma eficiência em gramas por
+   * ampère do primeiro ponto: corrente = corrente₁ × empuxo / empuxo₁.
+   */
   precisao: "interpolado" | "abaixo_da_tabela";
 };
 
@@ -120,9 +124,16 @@ export function operatingPointFor(table: ThrustData, empuxoG: number): Operating
   if (!first || !last) return undefined;
   if (empuxoG > last.empuxo_g) return undefined;
   if (empuxoG < first.empuxo_g) {
+    // Eficiência constante (g/A): nas tabelas de motores de 5" e maiores a eficiência sobe quando o
+    // acelerador desce (iFlight XING2 2207: 2,0 g/W a 100% e 4,4 g/W a 50%), então esta corrente
+    // tende a ficar acima da real. Conferido com um dado de fabricante (teste de calibração em
+    // calculations.test.ts): a iFlight diz que o Nazgul ECO DC5 (643 g, motor 2207 de 1800KV em
+    // 6S) paira ~11,5 min com 6S 1550 mAh; esta conta, com a tabela do XING2 2207 1855KV, dá
+    // ~11 min. Em motores minúsculos (whoop) a eficiência cai em aceleração muito baixa, mas as
+    // tabelas deles começam em 20%, abaixo do ponto de pairar.
     return {
       throttle_pct: first.throttle_pct,
-      corrente_a: first.corrente_a,
+      corrente_a: first.empuxo_g > 0 ? (first.corrente_a * empuxoG) / first.empuxo_g : 0,
       precisao: "abaixo_da_tabela",
     };
   }
@@ -354,6 +365,8 @@ function fits(load: PowerLoad, tensao: number): boolean {
 export function planPowerSupply(build: Build, config: DroneConfig): PowerPlan {
   const fc = fcOf(build);
   const becs = fc?.specs.becs ?? [];
+  // Sem a lista de BECs da FC no catálogo, "não cabe em nenhum BEC" vira falta de dado, não falha.
+  const becsDesconhecidos = fc !== undefined && fc.specs.becs === undefined;
   const battery = firstOf(build, "bateria")?.componente;
   const vBatt = battery ? nominalBatteryVoltage(battery, config) : undefined;
   const faixaBatt = battery ? batteryVoltageRange(battery, config) : undefined;
@@ -396,6 +409,7 @@ export function planPowerSupply(build: Build, config: DroneConfig): PowerPlan {
       if (load.corrente_a === undefined) semDado.push(load.componente_id);
       return { ...load, fonte: { tipo: "bateria" as const, tensao_v: vBatt } };
     }
+    if (becsDesconhecidos) semDado.push(load.componente_id);
     return { ...load, fonte: null };
   });
 
@@ -432,11 +446,18 @@ export type FlightTimeResult = {
  * Tempo de voo ≈ (capacidade_Ah × fração utilizável) / corrente média × 60 (SPEC B.7).
  * Sempre ⚠️: depende de vento, temperatura, estado da bateria e do jeito de pilotar.
  */
+const ESTILO_TEXTO: Record<FlightStyle, string> = {
+  estavel: "vento e manobras aumentam o consumo",
+  freestyle: "do voo de cruzeiro às acrobacias com acelerações fortes",
+  indoor: "perto de pairar, com subidas curtas",
+};
+
 export function computeFlightTime(
   build: Build,
   propulsion: PropulsionResult,
   power: PowerPlan,
   config: DroneConfig,
+  estilo: FlightStyle = "estavel",
 ): FlightTimeResult {
   const battery = firstOf(build, "bateria")?.componente;
   const capacidade = battery?.specs.capacidade_mah;
@@ -449,17 +470,17 @@ export function computeFlightTime(
   }
   const eletronicos = power.corrente_eletronicos_bateria_a ?? 0;
   const [fracMin, fracMax] = config.bateria.fracao_utilizavel;
-  const [fatorMin, fatorMax] = config.autonomia.fator_corrente_voo;
+  const [fatorMin, fatorMax] = config.autonomia.fator_corrente_voo[estilo];
   const ah = capacidade / 1000;
   const correnteCalma = hover * fatorMin + eletronicos;
   const correnteAgitada = hover * fatorMax + eletronicos;
   const premissas = [
     `usa de ${Math.round(fracMin * 100)}% a ${Math.round(fracMax * 100)}% da capacidade (o resto protege a bateria)`,
-    `corrente de voo de ${fatorMin}× a ${fatorMax}× a de pairar (vento e manobras aumentam o consumo)`,
+    `corrente de voo de ${fatorMin}× a ${fatorMax}× a de pairar (${ESTILO_TEXTO[estilo]})`,
   ];
   if (propulsion.hover?.precisao === "abaixo_da_tabela") {
     premissas.push(
-      "o ponto de pairar ficou abaixo da tabela: usamos o primeiro ponto medido (estimativa conservadora)",
+      "o ponto de pairar ficou abaixo da tabela do fabricante: estimamos a corrente com a mesma eficiência (gramas por ampère) do primeiro ponto medido, o que tende a superestimar o consumo",
     );
   }
   if (power.corrente_eletronicos_bateria_a === undefined || power.sem_dado.length > 0) {

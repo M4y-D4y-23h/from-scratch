@@ -1,0 +1,778 @@
+[
+  {
+    "id": "treinar-simulador",
+    "titulo": "Treinar no simulador",
+    "objetivo": "Ligar o rádio no computador como controle (USB) e treinar num simulador: decolar, pairar, girar e pousar no modo angle, depois arriscar o acro.",
+    "por_que_importa": "O whoop é o drone mais fácil de pilotar, mas os primeiros minutos no simulador evitam batidas bobas em casa.",
+    "pecas": ["radio_tx"],
+    "ferramentas": ["simulador-voo"],
+    "tempo_min": [180, 600],
+    "dominios": {
+      "pilotagem_testes": 2,
+      "fisica_voo": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "Você paira parado por 30 segundos e pousa onde quer, no modo angle."
+    ],
+    "erros_comuns": ["Inverter os canais do rádio no simulador e criar o hábito errado."],
+    "local": "em_casa",
+    "alertas": ["simulador"],
+    "variaveis": [],
+    "fontes": []
+  },
+  {
+    "id": "regras-de-voo",
+    "titulo": "Ler as regras (dentro de casa e ao ar livre)",
+    "objetivo": "Entender o que muda com um drone de até 250 g: sem cadastro na ANAC, menores de 18 voando junto com um adulto, e ao ar livre ainda vale o pedido de acesso ao espaço aéreo (SARPAS) e o observador com óculos FPV. Dentro de casa (área confinada) não é espaço aéreo.",
+    "por_que_importa": "Saber onde e como pode voar evita problemas e acidentes.",
+    "pecas": [],
+    "ferramentas": [],
+    "tempo_min": [30, 60],
+    "dominios": {
+      "seguranca_regulamentacao": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "Você sabe que dentro de casa pode voar sem o SARPAS e que ao ar livre precisa pedir."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["ate-250g", "regulamentacao", "vtx-anatel"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "ANAC: Resolução nº 806/2026 (UA até 250 g e aeromodelos)",
+        "tipo": "norma",
+        "url": "https://www.anac.gov.br/assuntos/legislacao/legislacao-1/resolucoes/2026/resolucao-806",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "DECEA: ICA 100-40/2026",
+        "tipo": "norma",
+        "url": "https://publicacoes.decea.mil.br/publicacao/ica-100-40",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "DECEA: portal Drone/RPAS (SARPAS)",
+        "tipo": "documentacao_oficial",
+        "url": "https://www.decea.mil.br/drone/",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "Anatel: Ato nº 14.448/2017 (radiação restrita)",
+        "tipo": "norma",
+        "url": "https://informacoes.anatel.gov.br/legislacao/atos-de-certificacao-de-produtos/2017/1139-",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "conferir-pecas",
+    "titulo": "Conferir as peças recebidas",
+    "objetivo": "Conferir cada peça com a lista do projeto: frame, 4 motores, placa Matrix com a antena, câmera, canopy, hélices, baterias e carregador. Guardar os parafusos pequenos num pote.",
+    "por_que_importa": "Os parafusos do whoop têm 1,4 mm: perdidos na mesa, somem para sempre.",
+    "pecas": ["frame", "motor", "fc_aio", "bateria"],
+    "ferramentas": ["organizador-parafusos"],
+    "tempo_min": [20, 40],
+    "dominios": {
+      "mecanica": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "Todas as peças da lista estão na mesa.",
+      "As baterias não estão estufadas."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": []
+  },
+  {
+    "id": "bancada-segura",
+    "titulo": "Preparar a bancada",
+    "objetivo": "Mesa clara e firme, boa luz, óculos de proteção e a bolsa anti-chamas para as baterias.",
+    "por_que_importa": "Peças minúsculas somem em mesa bagunçada; bateria pequena também pode pegar fogo.",
+    "pecas": [],
+    "ferramentas": ["oculos-protecao", "bolsa-anti-chamas"],
+    "tempo_min": [15, 30],
+    "dominios": {
+      "seguranca_regulamentacao": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": ["A bancada está livre e iluminada."],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["lipo"],
+    "variaveis": [],
+    "fontes": []
+  },
+  {
+    "id": "fixar-motores",
+    "titulo": "Prender os motores no frame",
+    "objetivo": "Encaixar cada motor no seu braço com os fios para o centro e prender com 3 parafusos M1,4 x 3 (vêm com os motores), sem apertar demais o plástico.",
+    "por_que_importa": "Motor solto vibra e estraga o voo; aperto demais espana o furo de plástico.",
+    "pecas": ["motor", "frame"],
+    "ferramentas": ["chaves-precisao"],
+    "tempo_min": [20, 40],
+    "dominios": {
+      "mecanica": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "Os motores giram livres e não balançam.",
+      "Nenhum parafuso encosta no rotor."
+    ],
+    "erros_comuns": [
+      "Usar parafuso mais comprido (encosta no enrolamento).",
+      "Apertar até espanar o plástico."
+    ],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: 0702 Brushless Motors (2026)",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/0702-brushless-motors-2026",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "ligar-motores",
+    "titulo": "Encaixar os plugues dos motores na placa",
+    "objetivo": "Na versão sem solda da Matrix, encaixar o plugue JST de 3 pinos de cada motor na porta do mesmo canto (M1 a M4, como no desenho da BETAFPV).",
+    "por_que_importa": "Motor no canto errado faz o drone girar descontrolado ao decolar (o Betaflight vai mostrar a ordem depois).",
+    "pecas": ["motor", "fc_aio"],
+    "ferramentas": ["pincas"],
+    "tempo_min": [10, 20],
+    "dominios": {
+      "eletronica_solda": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": ["Cada motor está na porta do seu canto, com o plugue até o fim."],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: Matrix 1S 5IN1 II (ligações, bind e firmware)",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/matrix-1s-5in1-ii-brushless-flight-controller",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "fixar-placa",
+    "titulo": "Prender a placa no frame",
+    "objetivo": "Prender a Matrix nos 4 furos do frame com as borrachinhas anti-vibração e os parafusos autoatarraxantes que vêm na caixa, com a seta para a frente.",
+    "por_que_importa": "Seta para trás faz o drone virar ao armar; as borrachas protegem o giroscópio da vibração.",
+    "pecas": ["fc_aio", "frame"],
+    "ferramentas": ["chaves-precisao"],
+    "tempo_min": [15, 30],
+    "dominios": {
+      "mecanica": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "A seta da placa aponta para a frente.",
+      "A placa não encosta nos motores nem nos dutos."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: Matrix 1S 5IN1 II (ligações, bind e firmware)",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/matrix-1s-5in1-ii-brushless-flight-controller",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "instalar-antena",
+    "titulo": "Instalar a antena de vídeo",
+    "objetivo": "Ligar a antena de 5,8 GHz que vem na caixa da Matrix e prender a ponta para trás, fora do caminho das hélices.",
+    "por_que_importa": "Sem antena, o transmissor de vídeo queima em segundos.",
+    "pecas": ["antena", "fc_aio"],
+    "ferramentas": ["pincas"],
+    "tempo_min": [10, 20],
+    "dominios": {
+      "radio_video": 1
+    },
+    "riscos": ["Ligar a bateria sem antena queima o VTX."],
+    "como_saber_que_deu_certo": ["A antena está ligada e não chega perto das hélices."],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["vtx-sem-antena"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: Matrix 1S 5IN1 II (ligações, bind e firmware)",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/matrix-1s-5in1-ii-brushless-flight-controller",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "montar-camera",
+    "titulo": "Montar a câmera no canopy",
+    "objetivo": "Encaixar a câmera C03 no Air II Canopy com uns 25° de inclinação, ligar o cabo da câmera na placa e prender o canopy no frame.",
+    "por_que_importa": "O canopy segura a câmera e protege a placa nas batidas.",
+    "pecas": ["camera_fpv", "acessorio"],
+    "ferramentas": ["chaves-precisao"],
+    "tempo_min": [15, 30],
+    "dominios": {
+      "mecanica": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": ["A câmera não balança e o cabo não fica esticado."],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: Air II Canopy",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/air-ii-canopy",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "carregar-baterias",
+    "titulo": "Carregar as baterias com segurança",
+    "objetivo": "Ligar o HexaCharger num carregador de celular USB-C, escolher LiHV e carregar as baterias de 320 mAh a 0,5 A (ou as de 480 mAh a 1 A), sem sair de perto.",
+    "por_que_importa": "Corrente alta demais ou carga sem supervisão é como baterias pegam fogo.",
+    "pecas": ["bateria", "carregador"],
+    "ferramentas": ["bolsa-anti-chamas"],
+    "tempo_min": [40, 80],
+    "dominios": {
+      "potencia_lipo": 2
+    },
+    "riscos": ["Bateria estufada ou furada pode pegar fogo."],
+    "como_saber_que_deu_certo": [
+      "O carregador mostra 4,35 V por bateria no fim.",
+      "Nenhuma bateria esquentou ou estufou."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["lipo", "lihv"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: HexaCharger 1S (correntes de carga recomendadas)",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/hexacharger-1s-charger",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "BETAFPV: LAVA II 1S (LiHV, 4,35 V, armazenamento 3,85 V)",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/lava-ii-1s-battery",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "primeiro-power-on",
+    "titulo": "Primeira ligação, sem hélices",
+    "objetivo": "Sem hélices e com a antena instalada, ligar a bateria e observar: LEDs acendem, os motores bipam e nada esquenta.",
+    "por_que_importa": "Se algo estiver errado, você desliga antes de estragar a placa.",
+    "pecas": ["fc_aio", "bateria"],
+    "ferramentas": [],
+    "tempo_min": [5, 15],
+    "dominios": {
+      "potencia_lipo": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "Os LEDs acendem e os motores tocam a melodia.",
+      "Nada esquenta em 1 minuto."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["primeiro-power-on", "helices", "vtx-sem-antena"],
+    "variaveis": [],
+    "fontes": [],
+    "checkpoint": {
+      "bloqueante": true,
+      "itens": [
+        "As hélices NÃO estão instaladas.",
+        "A antena de vídeo está instalada.",
+        "Vou desconectar se sair fumaça ou cheiro de queimado."
+      ]
+    }
+  },
+  {
+    "id": "instalar-configurator",
+    "titulo": "Abrir o Betaflight no computador",
+    "objetivo": "Usar o Betaflight App no navegador (Chrome ou Edge) ou o Configurator instalado e ligar a placa pelo adaptador USB-C que vem na caixa e um cabo USB de dados.",
+    "por_que_importa": "É pelo Betaflight que você configura o drone.",
+    "pecas": ["fc_aio"],
+    "ferramentas": ["cabo-usb-dados"],
+    "tempo_min": [20, 40],
+    "dominios": {
+      "firmware_config": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": ["O Betaflight mostra a aba Setup e o modelo 3D se mexe junto."],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "Betaflight App (configurador oficial no navegador)",
+        "tipo": "documentacao_oficial",
+        "url": "https://app.betaflight.com/",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "Betaflight: Setup Guide (guia oficial de configuração)",
+        "tipo": "documentacao_oficial",
+        "url": "https://betaflight.com/docs/wiki/getting-started/setup-guide",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "backup",
+    "titulo": "Fazer backup e manter o firmware de fábrica",
+    "objetivo": "No CLI, digitar diff all e salvar o texto. Manter o Betaflight que veio gravado: a BETAFPV avisa que algumas placas têm um giroscópio alternativo e o firmware oficial pode não funcionar nelas.",
+    "por_que_importa": "O backup permite voltar às configurações de fábrica se algo der errado.",
+    "pecas": ["fc_aio"],
+    "ferramentas": ["cabo-usb-dados"],
+    "tempo_min": [10, 20],
+    "dominios": {
+      "firmware_config": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": ["O arquivo do backup está salvo no computador."],
+    "erros_comuns": ["Gravar o Betaflight oficial sem saber qual giroscópio a placa tem."],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: Matrix 1S 5IN1 II (ligações, bind e firmware)",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/matrix-1s-5in1-ii-brushless-flight-controller",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "Betaflight: Setup Guide (guia oficial de configuração)",
+        "tipo": "documentacao_oficial",
+        "url": "https://betaflight.com/docs/wiki/getting-started/setup-guide",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "calibrar-acelerometro",
+    "titulo": "Calibrar o acelerômetro",
+    "objetivo": "Com o drone nivelado na mesa, clicar em calibrar o acelerômetro na aba Setup.",
+    "por_que_importa": "Descalibrado, o drone escorrega para um lado no modo angle.",
+    "pecas": ["fc_aio"],
+    "ferramentas": [],
+    "tempo_min": [5, 15],
+    "dominios": {
+      "firmware_config": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": ["Parado na mesa, o horizonte fica reto."],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "Betaflight: Setup Guide (guia oficial de configuração)",
+        "tipo": "documentacao_oficial",
+        "url": "https://betaflight.com/docs/wiki/getting-started/setup-guide",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "bind-radio",
+    "titulo": "Parear o rádio (bind)",
+    "objetivo": "Ligar e desligar a bateria do drone 3 vezes seguidas (o LED pisca duas vezes rápido) e pôr o rádio em modo bind. Se não parear, atualizar rádio e receptor para versões compatíveis do ExpressLRS.",
+    "por_que_importa": "Sem pareamento o drone não responde.",
+    "pecas": ["radio_tx", "fc_aio"],
+    "ferramentas": [],
+    "tempo_min": [15, 45],
+    "dominios": {
+      "radio_video": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "O LED do receptor fica aceso fixo.",
+      "Na aba Receiver, as barras se mexem com os manches."
+    ],
+    "erros_comuns": ["Versões muito diferentes do ExpressLRS no rádio e no receptor."],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: Matrix 1S 5IN1 II (ligações, bind e firmware)",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/matrix-1s-5in1-ii-brushless-flight-controller",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ExpressLRS: Binding",
+        "tipo": "documentacao_oficial",
+        "url": "https://www.expresslrs.org/quick-start/binding/",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "parametros-cli",
+    "titulo": "Aplicar os parâmetros do projeto",
+    "objetivo": "Copiar os comandos set da lista de parâmetros para o CLI, mandar save e conferir que a placa reiniciou.",
+    "por_que_importa": "Ligam o failsafe que desarma, os avisos de bateria certos para LiHV e o filtro RPM.",
+    "pecas": ["fc_aio", "bateria"],
+    "ferramentas": ["cabo-usb-dados"],
+    "tempo_min": [10, 20],
+    "dominios": {
+      "firmware_config": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "get failsafe_procedure mostra DROP.",
+      "Com a bateria cheia, a tela mostra 1S (e não 2S)."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": ["failsafe_procedure", "vbat_max_cell_voltage", "bat_capacity", "dshot_bidir"],
+    "fontes": [
+      {
+        "titulo": "Betaflight: Failsafe (guia oficial)",
+        "tipo": "documentacao_oficial",
+        "url": "https://betaflight.com/docs/wiki/guides/current/Failsafe",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "Betaflight: Setup Guide (guia oficial de configuração)",
+        "tipo": "documentacao_oficial",
+        "url": "https://betaflight.com/docs/wiki/getting-started/setup-guide",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "modos",
+    "titulo": "Configurar os modos (ARM, ANGLE e BEEPER)",
+    "objetivo": "Na aba Modes: ARM numa chave de 2 posições, ANGLE (nivela sozinho) para aprender e BEEPER para achar o drone caído.",
+    "por_que_importa": "Armar numa chave evita armar sem querer; o modo angle deixa o drone estável para quem está começando.",
+    "pecas": ["radio_tx", "fc_aio"],
+    "ferramentas": [],
+    "tempo_min": [15, 30],
+    "dominios": {
+      "firmware_config": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": ["A faixa do modo acende quando você mexe na chave."],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "Betaflight: Setup Guide (guia oficial de configuração)",
+        "tipo": "documentacao_oficial",
+        "url": "https://betaflight.com/docs/wiki/getting-started/setup-guide",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "Betaflight: Arming Sequence & Safety",
+        "tipo": "documentacao_oficial",
+        "url": "https://betaflight.com/docs/wiki/guides/current/Arming-Sequence-And-Safety",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "direcao-motores",
+    "titulo": "Conferir ordem e sentido dos motores (sem hélices)",
+    "objetivo": "Na aba Motors, sem hélices: girar cada motor devagar e conferir número e sentido com o desenho. Se algum estiver errado, troque o plugue de canto ou ajuste no menu Motor direction.",
+    "por_que_importa": "Motor errado faz o drone capotar ou girar ao decolar.",
+    "pecas": ["motor", "fc_aio", "bateria"],
+    "ferramentas": [],
+    "tempo_min": [15, 30],
+    "dominios": {
+      "firmware_config": 1,
+      "mecanica": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": ["Cada motor gira no número e no sentido do desenho."],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["helices"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "Betaflight: Setup Guide (guia oficial de configuração)",
+        "tipo": "documentacao_oficial",
+        "url": "https://betaflight.com/docs/wiki/getting-started/setup-guide",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "checkpoint": {
+      "bloqueante": true,
+      "itens": ["As hélices NÃO estão instaladas."]
+    }
+  },
+  {
+    "id": "vtx-canal",
+    "titulo": "Escolher canal e potência do vídeo",
+    "objetivo": "No OSD ou na aba Video Transmitter, escolher um canal livre e 25 mW (dentro de casa é mais do que suficiente). Sintonizar o mesmo canal nos óculos.",
+    "por_que_importa": "Potência baixa esquenta menos a placa e não atrapalha outros pilotos.",
+    "pecas": ["fc_aio", "oculos_fpv"],
+    "ferramentas": [],
+    "tempo_min": [15, 30],
+    "dominios": {
+      "radio_video": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": ["Os óculos mostram a imagem da câmera."],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["vtx-anatel"],
+    "variaveis": ["vtx_low_power_disarm"],
+    "fontes": [
+      {
+        "titulo": "Betaflight: VTX (guia oficial)",
+        "tipo": "documentacao_oficial",
+        "url": "https://betaflight.com/docs/wiki/guides/current/VTX",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "osd",
+    "titulo": "Montar a tela do OSD",
+    "objetivo": "Mostrar tensão da bateria, avisos e tempo de voo na tela dos óculos.",
+    "por_que_importa": "É pela tela que você sabe a hora de pousar.",
+    "pecas": ["fc_aio"],
+    "ferramentas": [],
+    "tempo_min": [10, 20],
+    "dominios": {
+      "firmware_config": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": ["Nos óculos aparecem a tensão e os avisos."],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "Betaflight: Setup Guide (guia oficial de configuração)",
+        "tipo": "documentacao_oficial",
+        "url": "https://betaflight.com/docs/wiki/getting-started/setup-guide",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "teste-failsafe-bancada",
+    "titulo": "Testar o failsafe (sem hélices)",
+    "objetivo": "Sem hélices, armar, subir um pouco o acelerador e desligar o rádio: em cerca de 1,5 s os motores param.",
+    "por_que_importa": "Garante que, sem sinal, o drone para em vez de sair voando.",
+    "pecas": ["radio_tx", "fc_aio"],
+    "ferramentas": [],
+    "tempo_min": [10, 20],
+    "dominios": {
+      "firmware_config": 1,
+      "seguranca_regulamentacao": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": ["Os motores param sozinhos depois de desligar o rádio."],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["helices"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "Betaflight: Failsafe (guia oficial)",
+        "tipo": "documentacao_oficial",
+        "url": "https://betaflight.com/docs/wiki/guides/current/Failsafe",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ExpressLRS: Before your first flight",
+        "tipo": "documentacao_oficial",
+        "url": "https://www.expresslrs.org/quick-start/pre-1stflight/",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "checkpoint": {
+      "bloqueante": true,
+      "itens": ["As hélices NÃO estão instaladas.", "Os motores pararam quando desliguei o rádio."]
+    }
+  },
+  {
+    "id": "instalar-helices",
+    "titulo": "Instalar as hélices no sentido certo",
+    "objetivo": "Com a bateria desconectada, encaixar cada hélice no motor certo (sentido do desenho do Betaflight), empurrando reto até o fim do eixo.",
+    "por_que_importa": "Hélice trocada faz o drone capotar; hélice frouxa sai voando.",
+    "pecas": ["helice", "motor"],
+    "ferramentas": ["pincas"],
+    "tempo_min": [10, 20],
+    "dominios": {
+      "mecanica": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "As hélices estão no sentido do desenho e não saem quando você puxa de leve."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["helices"],
+    "variaveis": [],
+    "fontes": [],
+    "checkpoint": {
+      "bloqueante": true,
+      "itens": ["A bateria está DESCONECTADA.", "Conferi o sentido de cada hélice."]
+    }
+  },
+  {
+    "id": "preparar-ambiente",
+    "titulo": "Preparar o cômodo para voar",
+    "objetivo": "Escolher um cômodo amplo, tirar objetos frágeis do caminho e deixar pessoas, crianças pequenas e animais fora da área. Óculos de proteção para quem estiver por perto.",
+    "por_que_importa": "Os dutos protegem, mas a hélice ainda machuca olhos e dedos.",
+    "pecas": [],
+    "ferramentas": ["oculos-protecao"],
+    "tempo_min": [10, 20],
+    "dominios": {
+      "seguranca_regulamentacao": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "Ninguém está na área de voo além do piloto (e do observador, se houver)."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["whoop-em-casa"],
+    "variaveis": [],
+    "fontes": []
+  },
+  {
+    "id": "primeiro-voo",
+    "titulo": "Primeiro voo: pairar baixo no modo angle",
+    "objetivo": "Armar no chão, subir devagar até meio metro, pairar, andar um pouco e pousar. Pousar quando a tela avisar bateria baixa.",
+    "por_que_importa": "Voar baixo e devagar no começo mostra se está tudo certo e treina o controle.",
+    "pecas": ["bateria"],
+    "ferramentas": [],
+    "tempo_min": [15, 30],
+    "dominios": {
+      "pilotagem_testes": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "O drone sobe reto e fica parado sem oscilar.",
+      "Você pousou antes do alerta crítico de bateria."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["whoop-em-casa", "video-e-visada"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "Betaflight: Arming Sequence & Safety",
+        "tipo": "documentacao_oficial",
+        "url": "https://betaflight.com/docs/wiki/guides/current/Arming-Sequence-And-Safety",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "checkpoint": {
+      "bloqueante": true,
+      "itens": ["O cômodo está livre de pessoas e animais.", "Testei o failsafe na bancada."]
+    }
+  },
+  {
+    "id": "voar-ao-ar-livre",
+    "titulo": "Voar ao ar livre (opcional)",
+    "objetivo": "Só sem vento, em área aberta e longe de pessoas, com o pedido no SARPAS e um observador se usar os óculos.",
+    "por_que_importa": "O whoop é leve e o vento o leva; ao ar livre valem as regras do espaço aéreo.",
+    "pecas": ["bateria"],
+    "ferramentas": [],
+    "tempo_min": [30, 60],
+    "dominios": {
+      "pilotagem_testes": 2,
+      "seguranca_regulamentacao": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "O pedido no SARPAS está aprovado e o observador está ao seu lado."
+    ],
+    "erros_comuns": [],
+    "local": "espaco_aberto",
+    "alertas": ["ate-250g", "regulamentacao", "video-e-visada"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "DECEA: ICA 100-40/2026",
+        "tipo": "norma",
+        "url": "https://publicacoes.decea.mil.br/publicacao/ica-100-40",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "DECEA: portal Drone/RPAS (SARPAS)",
+        "tipo": "documentacao_oficial",
+        "url": "https://www.decea.mil.br/drone/",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "opcional": true
+  },
+  {
+    "id": "pos-voo",
+    "titulo": "Depois de voar: conferir e guardar",
+    "objetivo": "Tirar cabelos e fiapos dos motores, trocar hélices lascadas e deixar as baterias em 3,85 V (modo de armazenamento do carregador) se não for voar nos próximos dias.",
+    "por_que_importa": "Fiapo enrolado esquenta o motor; bateria guardada cheia estufa.",
+    "pecas": ["helice", "motor", "bateria", "carregador"],
+    "ferramentas": ["pincas"],
+    "tempo_min": [10, 20],
+    "dominios": {
+      "potencia_lipo": 1,
+      "mecanica": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "Os motores giram livres.",
+      "As baterias guardadas estão em armazenamento."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["lipo", "lihv"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: LAVA II 1S (LiHV, 4,35 V, armazenamento 3,85 V)",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/lava-ii-1s-battery",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "BETAFPV: HexaCharger 1S (correntes de carga recomendadas)",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/hexacharger-1s-charger",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  }
+]

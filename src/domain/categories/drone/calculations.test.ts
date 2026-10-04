@@ -82,12 +82,35 @@ describe("curva de empuxo", () => {
     expect(op?.precisao).toBe("interpolado");
   });
 
-  it("abaixo do primeiro ponto usa o primeiro ponto como limite conservador", () => {
-    expect(operatingPointFor(THRUST_TABLE, 100)).toEqual({
-      throttle_pct: 25,
-      corrente_a: 1,
-      precisao: "abaixo_da_tabela",
-    });
+  it("abaixo do primeiro ponto: throttle no máximo o do primeiro ponto, corrente com a mesma eficiência (g/A)", () => {
+    const op = operatingPointFor(THRUST_TABLE, 100);
+    expect(op?.throttle_pct).toBe(25);
+    // Primeiro ponto: 120 g com 1 A → 100 g pede 100/120 A.
+    expect(op?.corrente_a).toBeCloseTo(100 / 120, 9);
+    expect(op?.precisao).toBe("abaixo_da_tabela");
+  });
+
+  it("calibração com dado de fabricante: a corrente abaixo da tabela dá o tempo pairando publicado", () => {
+    // Tabela oficial da iFlight para o XING2 2207 1855KV + Gemfan 51466 a 24 V (data/catalog).
+    const xing2: ThrustData = {
+      ...THRUST_TABLE,
+      id: "xing2-calibracao",
+      celulas: 6,
+      pontos: [
+        { throttle_pct: 50, empuxo_g: 864, corrente_a: 8.23 },
+        { throttle_pct: 60, empuxo_g: 1021, corrente_a: 11.86 },
+        { throttle_pct: 100, empuxo_g: 1685, corrente_a: 35.08 },
+      ],
+    };
+    // iFlight: Nazgul ECO DC5 (643 g, motor 2207 de 1800KV em 6S) paira ~11,5 min com 6S 1550 mAh.
+    const op = operatingPointFor(xing2, 643 / 4);
+    expect(op?.precisao).toBe("abaixo_da_tabela");
+    const correnteTotal = (op?.corrente_a ?? 0) * 4;
+    const [fracMin, fracMax] = CONFIG.bateria.fracao_utilizavel;
+    const minutos = (frac: number) => ((1.55 * frac) / correnteTotal) * 60;
+    // A faixa de uso da bateria (70% a 80%) contém o tempo publicado.
+    expect(minutos(fracMin)).toBeLessThan(11.5);
+    expect(minutos(fracMax)).toBeGreaterThan(11.5);
   });
 
   it("acima do empuxo máximo o motor não alcança", () => {

@@ -1,0 +1,1013 @@
+[
+  {
+    "id": "treinar-simulador",
+    "titulo": "Treinar no simulador (modo acro)",
+    "objetivo": "Ligar o rádio no computador como controle (USB) e treinar num simulador de FPV até decolar, fazer curvas, voar em volta de obstáculos e pousar sem bater.",
+    "por_que_importa": "Um 5\" no modo acro não se nivela sozinho: sem treino, a primeira queda vem em segundos. No simulador o erro não custa nada.",
+    "pecas": ["radio_tx"],
+    "ferramentas": ["simulador-voo"],
+    "tempo_min": [600, 1500],
+    "dominios": {
+      "pilotagem_testes": 3,
+      "fisica_voo": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "Você completa voltas num circuito simples sem bater, nos modos angle e acro.",
+      "Você consegue pousar devagar em um ponto escolhido."
+    ],
+    "erros_comuns": [
+      "Treinar só no modo angle (o drone de verdade vai voar em acro).",
+      "Inverter os canais do rádio no simulador e criar o hábito errado."
+    ],
+    "local": "em_casa",
+    "alertas": ["simulador"],
+    "variaveis": [],
+    "fontes": []
+  },
+  {
+    "id": "regras-de-voo",
+    "titulo": "Ler as regras de voo (DECEA, ANAC e Anatel)",
+    "objetivo": "Entender as regras antes de comprar: cadastro na ANAC acima de 250 g, pedido de acesso ao espaço aéreo no SARPAS, voo recreativo até 60 m de altura e 300 m de distância, observador ao lado quando usar óculos FPV e homologação de transmissores.",
+    "por_que_importa": "Este drone tem mais de 250 g e voa com óculos FPV: as duas coisas mudam as regras. Voar fora delas coloca pessoas em risco e pode gerar multa.",
+    "pecas": [],
+    "ferramentas": [],
+    "tempo_min": [60, 120],
+    "dominios": {
+      "seguranca_regulamentacao": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "Você sabe onde fazer o cadastro na ANAC e o pedido no SARPAS.",
+      "Você combinou com alguém para ser o observador nos voos."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["regulamentacao", "acima-250g", "video-e-visada", "vtx-anatel"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "ANAC: Resolução nº 806/2026 (UA até 250 g e aeromodelos)",
+        "tipo": "norma",
+        "url": "https://www.anac.gov.br/assuntos/legislacao/legislacao-1/resolucoes/2026/resolucao-806",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "DECEA: ICA 100-40/2026",
+        "tipo": "norma",
+        "url": "https://publicacoes.decea.mil.br/publicacao/ica-100-40",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "DECEA: portal Drone/RPAS (SARPAS)",
+        "tipo": "documentacao_oficial",
+        "url": "https://www.decea.mil.br/drone/",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "Anatel: Ato nº 14.448/2017 (radiação restrita)",
+        "tipo": "norma",
+        "url": "https://informacoes.anatel.gov.br/legislacao/atos-de-certificacao-de-produtos/2017/1139-",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "conferir-pecas",
+    "titulo": "Conferir as peças recebidas",
+    "objetivo": "Abrir as caixas, conferir cada peça com a lista do projeto e guardar os parafusos de cada peça separados.",
+    "por_que_importa": "Peça errada (KV do motor, furação da stack, conector da bateria) só aparece na hora de montar.",
+    "pecas": ["frame", "motor", "stack", "bateria"],
+    "ferramentas": ["organizador-parafusos"],
+    "tempo_min": [30, 60],
+    "dominios": {
+      "mecanica": 1,
+      "potencia_lipo": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "Os motores são 1855KV (6S) e a stack é 20 x 20 mm.",
+      "As baterias não estão estufadas nem amassadas."
+    ],
+    "erros_comuns": ["Misturar os parafusos M3 de tamanhos diferentes."],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": []
+  },
+  {
+    "id": "bancada-segura",
+    "titulo": "Preparar a bancada",
+    "objetivo": "Mesa firme com tapete de silicone, ventilação para a fumaça da solda, óculos de proteção e um lugar seguro para a LiPo (bolsa anti-chamas).",
+    "por_que_importa": "Solda a mais de 300 °C, fumaça e bateria de 6S: a bancada organizada evita queimadura e incêndio.",
+    "pecas": [],
+    "ferramentas": ["tapete-silicone", "oculos-protecao", "bolsa-anti-chamas"],
+    "tempo_min": [30, 60],
+    "dominios": {
+      "seguranca_regulamentacao": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "Bancada livre, ventilada e com o ferro apoiado no suporte.",
+      "Extintor ou balde de areia ao alcance."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["solda", "lipo"],
+    "variaveis": [],
+    "fontes": []
+  },
+  {
+    "id": "montar-frame",
+    "titulo": "Montar o frame",
+    "objetivo": "Montar braços e placas do Evoque F5 V3 (configuração DeadCat), sem apertar tudo de vez, e depois apertar em cruz.",
+    "por_que_importa": "Frame torto ou com parafuso frouxo vibra, e a vibração estraga o voo e o vídeo.",
+    "pecas": ["frame"],
+    "ferramentas": ["chaves-hexagonais", "kit-fixacao"],
+    "tempo_min": [40, 90],
+    "dominios": {
+      "mecanica": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "O frame não balança quando você força os braços.",
+      "Todos os parafusos estão apertados."
+    ],
+    "erros_comuns": ["Apertar demais parafuso em fibra de carbono (racha a placa)."],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "iFlight: Nazgul Evoque F5 V3 Frame Kit",
+        "tipo": "pagina_fabricante",
+        "url": "https://shop.iflight.com/Nazgul-Evoque-F5-V3-Frame-Kit-Pro2407",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "fixar-motores",
+    "titulo": "Fixar os motores nos braços",
+    "objetivo": "Prender cada motor com 4 parafusos M3 x 8 (inclusos) e trava-rosca média, com os fios virados para o centro do drone.",
+    "por_que_importa": "Parafuso comprido demais encosta no enrolamento e queima o motor; parafuso sem trava-rosca solta com a vibração.",
+    "pecas": ["motor", "frame"],
+    "ferramentas": ["chaves-hexagonais", "kit-fixacao"],
+    "tempo_min": [30, 60],
+    "dominios": {
+      "mecanica": 2
+    },
+    "riscos": ["Parafuso longo demais encosta no enrolamento e queima o motor."],
+    "como_saber_que_deu_certo": [
+      "O motor gira livre com a mão, sem raspar.",
+      "O parafuso não aparece por dentro do motor."
+    ],
+    "erros_comuns": ["Usar parafuso mais comprido que o do pacote.", "Esquecer a trava-rosca."],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "iFlight: XING2 2207 (parafusos M3x8 e porca M5 inclusos)",
+        "tipo": "pagina_fabricante",
+        "url": "https://shop.iflight.com/xing2-2207-4s-6s-fpv-motor-unibell-pro1464",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "treinar-solda",
+    "titulo": "Treinar solda antes de soldar nas placas",
+    "objetivo": "Soldar alguns fios num pedaço de placa ou fio sobrando: estanhar a ponta, estanhar o pad, juntar e esquentar até o estanho correr.",
+    "por_que_importa": "Os pads da ESC e da controladora são pequenos e esquentam: treinar antes evita estragar a placa.",
+    "pecas": [],
+    "ferramentas": [
+      "ferro-de-solda",
+      "estanho",
+      "fluxo-de-solda",
+      "terceira-mao",
+      "oculos-protecao"
+    ],
+    "tempo_min": [60, 180],
+    "dominios": {
+      "eletronica_solda": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "Sua solda fica brilhante e em forma de vulcão, não de bolinha fosca.",
+      "O fio não sai quando você puxa de leve."
+    ],
+    "erros_comuns": [
+      "Esquentar demais (descola o pad).",
+      "Mexer o fio antes do estanho esfriar (solda fria)."
+    ],
+    "local": "em_casa",
+    "alertas": ["solda"],
+    "variaveis": [],
+    "fontes": []
+  },
+  {
+    "id": "soldar-motores",
+    "titulo": "Soldar os fios dos motores na placa de ESC",
+    "objetivo": "Cortar os fios de cada motor no tamanho certo, estanhar e soldar nos 3 pads de cada canto da ESC. A ordem dos 3 fios não importa: o sentido de giro é acertado no software.",
+    "por_que_importa": "Solda fria nos motores faz o motor falhar em voo e o drone cair.",
+    "pecas": ["motor", "stack"],
+    "ferramentas": [
+      "ferro-de-solda",
+      "estanho",
+      "fluxo-de-solda",
+      "terceira-mao",
+      "alicate-corte-desencapador",
+      "oculos-protecao"
+    ],
+    "tempo_min": [60, 150],
+    "dominios": {
+      "eletronica_solda": 3
+    },
+    "riscos": ["Ponte de estanho entre pads queima a ESC na primeira ligação."],
+    "como_saber_que_deu_certo": [
+      "As 12 soldas estão brilhantes e sem pontes de estanho entre os pads.",
+      "Nenhum fio de motor encosta no frame de carbono."
+    ],
+    "erros_comuns": [
+      "Deixar fio comprido sobrando (encosta na hélice).",
+      "Encostar o ferro em componentes vizinhos."
+    ],
+    "local": "em_casa",
+    "alertas": ["solda"],
+    "variaveis": [],
+    "fontes": []
+  },
+  {
+    "id": "soldar-xt60",
+    "titulo": "Soldar o rabicho XT60 na ESC",
+    "objetivo": "Soldar o fio vermelho do XT60 no pad + (BAT+) e o preto no − da ESC, com bastante estanho, e isolar com termo-retrátil.",
+    "por_que_importa": "Por aqui passa toda a corrente (mais de 100 A em aceleração): solda ruim esquenta, solta e o drone cai. Polaridade invertida queima a ESC na hora.",
+    "pecas": ["conector", "stack"],
+    "ferramentas": [
+      "ferro-de-solda",
+      "estanho",
+      "fluxo-de-solda",
+      "termo-retratil",
+      "alicate-corte-desencapador",
+      "oculos-protecao"
+    ],
+    "tempo_min": [30, 60],
+    "dominios": {
+      "eletronica_solda": 3,
+      "potencia_lipo": 2
+    },
+    "riscos": ["Polaridade invertida queima a ESC e a controladora."],
+    "como_saber_que_deu_certo": [
+      "Vermelho no +, preto no −, conferido duas vezes.",
+      "A solda cobre o pad todo e o fio não mexe."
+    ],
+    "erros_comuns": [
+      "Ferro fraco para pads grandes (a solda fica fria).",
+      "Esquecer o termo-retrátil antes de soldar."
+    ],
+    "local": "em_casa",
+    "alertas": ["solda"],
+    "variaveis": [],
+    "fontes": []
+  },
+  {
+    "id": "teste-curto",
+    "titulo": "Procurar curto com o multímetro",
+    "objetivo": "Com o multímetro em continuidade, encostar as pontas no + e no − do XT60: não pode apitar. Conferir também entre cada fio de motor e o −.",
+    "por_que_importa": "Um curto que passa despercebido vira fumaça (ou fogo) quando a bateria é ligada.",
+    "pecas": ["stack", "conector"],
+    "ferramentas": ["multimetro"],
+    "tempo_min": [10, 20],
+    "dominios": {
+      "eletronica_solda": 1,
+      "potencia_lipo": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "O multímetro não apita entre + e −.",
+      "Nenhum fio de motor tem continuidade com o −."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["primeiro-power-on"],
+    "variaveis": [],
+    "fontes": [],
+    "checkpoint": {
+      "bloqueante": true,
+      "itens": [
+        "Testei a continuidade entre + e − do XT60 e não apitou.",
+        "Conferi a polaridade (vermelho no +)."
+      ]
+    }
+  },
+  {
+    "id": "montar-stack",
+    "titulo": "Montar a stack (ESC + controladora)",
+    "objetivo": "Prender a ESC embaixo e a controladora em cima, nos furos de 20 x 20 mm, com as borrachas anti-vibração, a seta da controladora apontando para a frente, e ligar o cabo de 8 pinos entre as duas.",
+    "por_que_importa": "Borracha amortece a vibração que atrapalha o giroscópio. Seta para trás faz o drone virar ao armar.",
+    "pecas": ["stack", "frame"],
+    "ferramentas": ["chaves-hexagonais", "pincas"],
+    "tempo_min": [20, 40],
+    "dominios": {
+      "mecanica": 2,
+      "eletronica_solda": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "A seta da controladora aponta para a frente do drone.",
+      "As placas não encostam uma na outra nem no frame."
+    ],
+    "erros_comuns": ["Apertar demais e esmagar as borrachas.", "Inverter o cabo de 8 pinos."],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "iFlight: BLITZ Mini ATF435 Stack (ligações sugeridas)",
+        "tipo": "pagina_fabricante",
+        "url": "https://shop.iflight.com/BLITZ-Mini-ATF435-Stack-E55S-Mini-4-IN-1-ESC-Pro2063",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "soldar-receptor",
+    "titulo": "Soldar o receptor ExpressLRS na UART2",
+    "objetivo": "Soldar 4 fios: 5 V, GND, TX do receptor no RX2 da controladora e RX do receptor no TX2 (cruzados). Passar a antena do receptor para trás, longe das hélices.",
+    "por_que_importa": "TX e RX precisam ser cruzados; sem isso a controladora não recebe o rádio.",
+    "pecas": ["receptor", "stack"],
+    "ferramentas": ["ferro-de-solda", "estanho", "fluxo-de-solda", "pincas", "oculos-protecao"],
+    "tempo_min": [40, 90],
+    "dominios": {
+      "eletronica_solda": 3,
+      "radio_video": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "Os 4 fios estão firmes e sem pontes de estanho.",
+      "A antena do receptor fica fora do alcance das hélices."
+    ],
+    "erros_comuns": ["Ligar TX com TX.", "Ligar o receptor no pad de 9 V ou na bateria (queima)."],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "ExpressLRS: Wiring up your receiver",
+        "tipo": "documentacao_oficial",
+        "url": "https://www.expresslrs.org/quick-start/receivers/wiring-up/",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "iFlight: BLITZ Mini ATF435 Stack (ligações sugeridas)",
+        "tipo": "pagina_fabricante",
+        "url": "https://shop.iflight.com/BLITZ-Mini-ATF435-Stack-E55S-Mini-4-IN-1-ESC-Pro2063",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "montar-camera-vtx",
+    "titulo": "Ligar a câmera e o transmissor de vídeo",
+    "objetivo": "Câmera: 5 V, GND e sinal no pad CAM. VTX: alimentação direto da bateria (aceita 7 a 35 V), GND, vídeo no pad VTX e o fio de SmartAudio no TX1. Rosquear a antena antes de qualquer teste.",
+    "por_que_importa": "VTX sem antena queima em segundos; câmera ligada em tensão errada queima.",
+    "pecas": ["camera_fpv", "vtx", "antena", "stack"],
+    "ferramentas": [
+      "ferro-de-solda",
+      "estanho",
+      "fluxo-de-solda",
+      "pincas",
+      "termo-retratil",
+      "oculos-protecao"
+    ],
+    "tempo_min": [60, 120],
+    "dominios": {
+      "eletronica_solda": 3,
+      "radio_video": 2
+    },
+    "riscos": ["Ligar o VTX sem antena queima o transmissor."],
+    "como_saber_que_deu_certo": [
+      "A antena está rosqueada e presa ao frame.",
+      "Os fios não passam por onde giram as hélices."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["vtx-sem-antena", "vtx-anatel"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: A03 400mW 5.8G VTX",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/a03-400mw-5-8g-vtx",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "Betaflight: VTX (guia oficial)",
+        "tipo": "documentacao_oficial",
+        "url": "https://betaflight.com/docs/wiki/guides/current/VTX",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "organizar-cabos",
+    "titulo": "Organizar e prender os fios",
+    "objetivo": "Prender fios de motor e de vídeo com abraçadeiras, proteger a antena de vídeo e conferir que nada encosta nas hélices.",
+    "por_que_importa": "Fio solto entra na hélice e corta o vídeo ou o rádio no meio do voo.",
+    "pecas": ["frame"],
+    "ferramentas": ["kit-fixacao", "alicate-corte-desencapador"],
+    "tempo_min": [20, 40],
+    "dominios": {
+      "mecanica": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": ["Girando cada hélice com a mão (sem bateria), nada encosta nela."],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": []
+  },
+  {
+    "id": "primeiro-power-on",
+    "titulo": "Primeira ligação, sem hélices",
+    "objetivo": "Sem hélices, ligar a bateria através do smoke stopper e observar: LEDs acendem, os motores apitam a melodia de inicialização e nada esquenta ou cheira a queimado.",
+    "por_que_importa": "Se houver curto, o smoke stopper limita a corrente e salva as placas.",
+    "pecas": ["stack", "bateria"],
+    "ferramentas": ["smoke-stopper", "lipo-checker"],
+    "tempo_min": [10, 20],
+    "dominios": {
+      "potencia_lipo": 2
+    },
+    "riscos": ["Curto-circuito pode queimar placas ou causar fogo."],
+    "como_saber_que_deu_certo": [
+      "Os LEDs acendem e os motores tocam a melodia.",
+      "Nenhuma peça esquenta em 1 minuto."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["primeiro-power-on", "helices", "lipo"],
+    "variaveis": [],
+    "fontes": [],
+    "checkpoint": {
+      "bloqueante": true,
+      "itens": [
+        "As hélices NÃO estão instaladas.",
+        "Vou ligar pelo smoke stopper e desconectar se sair fumaça.",
+        "A bateria está carregada e sem estufar."
+      ]
+    }
+  },
+  {
+    "id": "instalar-configurator",
+    "titulo": "Abrir o Betaflight no computador",
+    "objetivo": "Usar o Betaflight App no navegador (Chrome ou Edge) ou o Betaflight Configurator instalado, e ligar a controladora com um cabo USB de dados.",
+    "por_que_importa": "É pelo Betaflight que você configura tudo. Cabo só de carga não conecta.",
+    "pecas": ["stack"],
+    "ferramentas": ["cabo-usb-dados"],
+    "tempo_min": [20, 40],
+    "dominios": {
+      "firmware_config": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "O Betaflight mostra a aba Setup e o modelo 3D se mexe junto com o drone."
+    ],
+    "erros_comuns": [
+      "Usar cabo USB só de carga.",
+      "Abrir outro programa que ocupa a porta (ex.: um configurador aberto em duas janelas)."
+    ],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "Betaflight App (configurador oficial no navegador)",
+        "tipo": "documentacao_oficial",
+        "url": "https://app.betaflight.com/",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "Betaflight: Setup Guide (guia oficial de configuração)",
+        "tipo": "documentacao_oficial",
+        "url": "https://betaflight.com/docs/wiki/getting-started/setup-guide",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "backup-firmware",
+    "titulo": "Fazer backup e atualizar o firmware",
+    "objetivo": "No CLI, digitar diff all e salvar o texto (backup). Depois gravar a versão estável do Betaflight para a sua placa (o configurador detecta o alvo).",
+    "por_que_importa": "O backup permite voltar atrás. Versões novas corrigem defeitos.",
+    "pecas": ["stack"],
+    "ferramentas": ["cabo-usb-dados"],
+    "tempo_min": [20, 40],
+    "dominios": {
+      "firmware_config": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "O arquivo do backup está salvo no computador.",
+      "A aba Setup mostra a versão e o alvo da placa."
+    ],
+    "erros_comuns": ["Gravar o firmware de outra placa.", "Desligar o USB no meio da gravação."],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "Betaflight: Setup Guide (guia oficial de configuração)",
+        "tipo": "documentacao_oficial",
+        "url": "https://betaflight.com/docs/wiki/getting-started/setup-guide",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "calibrar-acelerometro",
+    "titulo": "Conferir orientação e calibrar o acelerômetro",
+    "objetivo": "Com o drone nivelado na mesa, conferir que o modelo 3D acompanha os movimentos e clicar em calibrar o acelerômetro.",
+    "por_que_importa": "Acelerômetro descalibrado faz o drone deslizar para um lado no modo angle.",
+    "pecas": ["stack"],
+    "ferramentas": [],
+    "tempo_min": [10, 20],
+    "dominios": {
+      "firmware_config": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "Inclinando o drone para a frente, o modelo 3D inclina para a frente.",
+      "Parado na mesa, o horizonte fica reto."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "Betaflight: Setup Guide (guia oficial de configuração)",
+        "tipo": "documentacao_oficial",
+        "url": "https://betaflight.com/docs/wiki/getting-started/setup-guide",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "portas-receptor",
+    "titulo": "Configurar a porta e o protocolo do receptor",
+    "objetivo": "Na aba Ports, ligar Serial RX na UART2 e SmartAudio (periférico) na UART1. Na aba Receiver, modo Serial com o protocolo CRSF.",
+    "por_que_importa": "Sem a porta certa a controladora não escuta o receptor nem controla o VTX.",
+    "pecas": ["stack", "receptor", "vtx"],
+    "ferramentas": [],
+    "tempo_min": [20, 40],
+    "dominios": {
+      "firmware_config": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "A aba Receiver mostra as barras dos canais.",
+      "Ao salvar, a controladora reinicia sem erro."
+    ],
+    "erros_comuns": ["Ligar MSP e Serial RX na mesma UART (o configurador recusa)."],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": ["serialrx_provider"],
+    "fontes": [
+      {
+        "titulo": "Betaflight: Setup Guide (guia oficial de configuração)",
+        "tipo": "documentacao_oficial",
+        "url": "https://betaflight.com/docs/wiki/getting-started/setup-guide",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ExpressLRS: Configuring your flight controller",
+        "tipo": "documentacao_oficial",
+        "url": "https://www.expresslrs.org/quick-start/receivers/configuring-fc/",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "bind-radio",
+    "titulo": "Parear o rádio com o receptor (bind)",
+    "objetivo": "Atualizar rádio e receptor para a mesma versão do ExpressLRS e parear com a mesma frase de bind (ou ligando o receptor 3 vezes seguidas).",
+    "por_que_importa": "Sem pareamento o drone não responde ao rádio.",
+    "pecas": ["radio_tx", "receptor"],
+    "ferramentas": ["cabo-usb-dados"],
+    "tempo_min": [20, 60],
+    "dominios": {
+      "radio_video": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "O LED do receptor fica aceso fixo.",
+      "Mexendo os manches, as barras da aba Receiver se mexem do jeito certo (canais na ordem AETR)."
+    ],
+    "erros_comuns": ["Versões diferentes do ExpressLRS no rádio e no receptor."],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "ExpressLRS: Binding",
+        "tipo": "documentacao_oficial",
+        "url": "https://www.expresslrs.org/quick-start/binding/",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ExpressLRS: Configuring your flight controller",
+        "tipo": "documentacao_oficial",
+        "url": "https://www.expresslrs.org/quick-start/receivers/configuring-fc/",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "parametros-cli",
+    "titulo": "Aplicar os parâmetros do projeto",
+    "objetivo": "Copiar os comandos set da lista de parâmetros do projeto para o CLI, mandar save e conferir que a placa reiniciou.",
+    "por_que_importa": "Os parâmetros ligam o failsafe que desarma, os avisos de bateria e o protocolo dos motores, conferidos no código do Betaflight.",
+    "pecas": ["stack", "bateria"],
+    "ferramentas": ["cabo-usb-dados"],
+    "tempo_min": [15, 30],
+    "dominios": {
+      "firmware_config": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "get failsafe_procedure mostra DROP.",
+      "A tela de bateria do OSD mostra 6S quando a bateria cheia está ligada."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [
+      "failsafe_procedure",
+      "failsafe_delay",
+      "vbat_warning_cell_voltage",
+      "vbat_min_cell_voltage",
+      "bat_capacity",
+      "osd_cap_alarm",
+      "motor_pwm_protocol"
+    ],
+    "fontes": [
+      {
+        "titulo": "Betaflight: Failsafe (guia oficial)",
+        "tipo": "documentacao_oficial",
+        "url": "https://betaflight.com/docs/wiki/guides/current/Failsafe",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "Betaflight: Setup Guide (guia oficial de configuração)",
+        "tipo": "documentacao_oficial",
+        "url": "https://betaflight.com/docs/wiki/getting-started/setup-guide",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "modos",
+    "titulo": "Configurar os modos (ARM, ANGLE e BEEPER)",
+    "objetivo": "Na aba Modes: ARM numa chave de 2 posições, ANGLE (nivelamento automático, para os primeiros voos) e BEEPER (bipe para achar o drone caído).",
+    "por_que_importa": "Armar numa chave (e não no manche) evita armar sem querer. O modo angle ajuda nos primeiros voos.",
+    "pecas": ["radio_tx", "stack"],
+    "ferramentas": [],
+    "tempo_min": [20, 40],
+    "dominios": {
+      "firmware_config": 2,
+      "pilotagem_testes": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "A faixa amarela do modo acende quando você mexe na chave.",
+      "Com a chave de ARM ligada sem bateria (só USB), o drone não arma (segurança do USB)."
+    ],
+    "erros_comuns": ["Pôr o ARM na mesma chave de outro modo."],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "Betaflight: Setup Guide (guia oficial de configuração)",
+        "tipo": "documentacao_oficial",
+        "url": "https://betaflight.com/docs/wiki/getting-started/setup-guide",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "Betaflight: Arming Sequence & Safety",
+        "tipo": "documentacao_oficial",
+        "url": "https://betaflight.com/docs/wiki/guides/current/Arming-Sequence-And-Safety",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "direcao-motores",
+    "titulo": "Conferir a ordem e o sentido dos motores (sem hélices)",
+    "objetivo": "Na aba Motors, sem hélices e com bateria: girar cada motor devagar e conferir o número e o sentido com o desenho do Betaflight. Corrigir o sentido no menu Motor direction.",
+    "por_que_importa": "Motor girando ao contrário faz o drone capotar ao decolar.",
+    "pecas": ["motor", "stack", "bateria"],
+    "ferramentas": [],
+    "tempo_min": [20, 40],
+    "dominios": {
+      "firmware_config": 2,
+      "mecanica": 1
+    },
+    "riscos": ["Motor pode girar de repente durante o teste."],
+    "como_saber_que_deu_certo": ["Cada motor gira no número e no sentido do desenho."],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["helices"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "Betaflight: Setup Guide (guia oficial de configuração)",
+        "tipo": "documentacao_oficial",
+        "url": "https://betaflight.com/docs/wiki/getting-started/setup-guide",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "checkpoint": {
+      "bloqueante": true,
+      "itens": ["As hélices NÃO estão instaladas.", "O drone está preso ou parado sobre a mesa."]
+    }
+  },
+  {
+    "id": "vtx-canal",
+    "titulo": "Escolher canal e potência do vídeo",
+    "objetivo": "Carregar a tabela de VTX do A03, escolher um canal livre (Raceband) e a menor potência (25 mW). Combinar o canal com quem voar junto.",
+    "por_que_importa": "Dois VTX no mesmo canal derrubam o vídeo um do outro. Potência alta esquenta e aumenta a interferência (veja o alerta da Anatel).",
+    "pecas": ["vtx"],
+    "ferramentas": [],
+    "tempo_min": [20, 40],
+    "dominios": {
+      "radio_video": 2,
+      "firmware_config": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "Os óculos mostram a imagem da câmera no canal escolhido.",
+      "A potência está em 25 mW."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["vtx-anatel"],
+    "variaveis": ["vtx_low_power_disarm"],
+    "fontes": [
+      {
+        "titulo": "Betaflight: VTX (guia oficial)",
+        "tipo": "documentacao_oficial",
+        "url": "https://betaflight.com/docs/wiki/guides/current/VTX",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "osd",
+    "titulo": "Montar a tela do OSD",
+    "objetivo": "Na aba OSD, mostrar tensão da bateria, avisos, tempo de voo, qualidade do link (LQ) e consumo (mAh).",
+    "por_que_importa": "É na tela dos óculos que você vê a bateria acabando e o sinal do rádio caindo.",
+    "pecas": ["stack"],
+    "ferramentas": [],
+    "tempo_min": [15, 30],
+    "dominios": {
+      "firmware_config": 1,
+      "radio_video": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": ["Nos óculos aparecem a tensão, o tempo e os avisos."],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "Betaflight: Setup Guide (guia oficial de configuração)",
+        "tipo": "documentacao_oficial",
+        "url": "https://betaflight.com/docs/wiki/getting-started/setup-guide",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "teste-failsafe-bancada",
+    "titulo": "Testar o failsafe na bancada (sem hélices)",
+    "objetivo": "Sem hélices, armar, subir um pouco o acelerador e desligar o rádio: em cerca de 1,5 s os motores devem parar e o OSD mostrar o aviso de failsafe.",
+    "por_que_importa": "Se o failsafe não funcionar, um drone sem sinal continua voando sem controle.",
+    "pecas": ["radio_tx", "stack", "motor"],
+    "ferramentas": [],
+    "tempo_min": [20, 40],
+    "dominios": {
+      "firmware_config": 2,
+      "seguranca_regulamentacao": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": ["Os motores param sozinhos depois de desligar o rádio."],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["helices"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "Betaflight: Failsafe (guia oficial)",
+        "tipo": "documentacao_oficial",
+        "url": "https://betaflight.com/docs/wiki/guides/current/Failsafe",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ExpressLRS: Before your first flight",
+        "tipo": "documentacao_oficial",
+        "url": "https://www.expresslrs.org/quick-start/pre-1stflight/",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "checkpoint": {
+      "bloqueante": true,
+      "itens": [
+        "As hélices NÃO estão instaladas.",
+        "Testei desligando o rádio e os motores pararam."
+      ]
+    }
+  },
+  {
+    "id": "bluejay-rpm",
+    "titulo": "Gravar Bluejay e ligar o filtro RPM (opcional)",
+    "objetivo": "Gravar o firmware Bluejay na ESC pelo ESC Configurator e, no Betaflight, ligar dshot_bidir e o filtro RPM.",
+    "por_que_importa": "O filtro RPM deixa o voo mais suave e os motores mais frios; a ESC de fábrica (BLHeli_S) não tem esse recurso.",
+    "pecas": ["stack"],
+    "ferramentas": ["cabo-usb-dados"],
+    "tempo_min": [30, 60],
+    "dominios": {
+      "firmware_config": 3
+    },
+    "riscos": ["Gravar o arquivo errado na ESC pode travá-la."],
+    "como_saber_que_deu_certo": ["A aba Motors mostra a rotação de cada motor."],
+    "erros_comuns": ["Ligar dshot_bidir sem ter gravado o Bluejay (os motores não armam)."],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "ESC Configurator (Bluejay, BLHeli_S e AM32)",
+        "tipo": "documentacao_oficial",
+        "url": "https://esc-configurator.com/",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "Betaflight: DShot RPM Filtering",
+        "tipo": "documentacao_oficial",
+        "url": "https://betaflight.com/docs/wiki/guides/current/DSHOT-RPM-Filtering",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "condicao": {
+      "tem_componente": ["iflight-blitz-mini-atf435-e55s"]
+    },
+    "opcional": true
+  },
+  {
+    "id": "local-de-voo",
+    "titulo": "Escolher o local e pedir o acesso ao espaço aéreo",
+    "objetivo": "Escolher um campo aberto, longe de pessoas, casas e aeroportos, pedir o acesso no SARPAS e levar o observador.",
+    "por_que_importa": "Um 5\" passa de 100 km/h: o lugar certo é a principal proteção para os outros.",
+    "pecas": [],
+    "ferramentas": [],
+    "tempo_min": [30, 90],
+    "dominios": {
+      "seguranca_regulamentacao": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "O pedido no SARPAS está aprovado.",
+      "O observador sabe que precisa avisar se alguém se aproximar."
+    ],
+    "erros_comuns": [],
+    "local": "espaco_aberto",
+    "alertas": ["regulamentacao", "video-e-visada"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "DECEA: ICA 100-40/2026",
+        "tipo": "norma",
+        "url": "https://publicacoes.decea.mil.br/publicacao/ica-100-40",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "DECEA: portal Drone/RPAS (SARPAS)",
+        "tipo": "documentacao_oficial",
+        "url": "https://www.decea.mil.br/drone/",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "instalar-helices",
+    "titulo": "Instalar as hélices no sentido certo",
+    "objetivo": "Com a bateria desconectada, colocar cada hélice no motor certo (o sentido do desenho do Betaflight), apertar a porca M5 com a chave de hélice.",
+    "por_que_importa": "Hélice no motor errado não gera empuxo: o drone capota ao decolar.",
+    "pecas": ["helice", "motor"],
+    "ferramentas": ["chave-porca-helice"],
+    "tempo_min": [10, 20],
+    "dominios": {
+      "mecanica": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "As bordas de ataque das hélices batem com o sentido de giro do motor.",
+      "As porcas estão apertadas."
+    ],
+    "erros_comuns": [],
+    "local": "espaco_aberto",
+    "alertas": ["helices"],
+    "variaveis": [],
+    "fontes": [],
+    "checkpoint": {
+      "bloqueante": true,
+      "itens": ["A bateria está DESCONECTADA.", "Conferi o sentido de cada hélice com o desenho."]
+    }
+  },
+  {
+    "id": "primeiro-voo",
+    "titulo": "Primeiro voo: pairar baixo no modo angle",
+    "objetivo": "Com o observador ao lado, armar no chão, decolar devagar no modo angle, pairar a 1 ou 2 m e pousar. Pousar na hora em que o OSD avisar bateria baixa.",
+    "por_que_importa": "O primeiro voo mostra se está tudo certo antes de qualquer manobra.",
+    "pecas": ["bateria"],
+    "ferramentas": [],
+    "tempo_min": [20, 40],
+    "dominios": {
+      "pilotagem_testes": 3
+    },
+    "riscos": ["Hélice de 5\" causa ferimentos graves."],
+    "como_saber_que_deu_certo": [
+      "O drone sobe reto e fica parado sem oscilar.",
+      "Você pousou antes do alerta crítico de bateria."
+    ],
+    "erros_comuns": [],
+    "local": "espaco_aberto",
+    "alertas": ["fpv-5pol-perigo", "video-e-visada"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "Betaflight: Arming Sequence & Safety",
+        "tipo": "documentacao_oficial",
+        "url": "https://betaflight.com/docs/wiki/guides/current/Arming-Sequence-And-Safety",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "checkpoint": {
+      "bloqueante": true,
+      "itens": [
+        "O observador está ao meu lado e não há pessoas na área.",
+        "O pedido no SARPAS está aprovado.",
+        "Testei o failsafe na bancada."
+      ]
+    }
+  },
+  {
+    "id": "treinar-acro",
+    "titulo": "Treinar o modo acro ao ar livre",
+    "objetivo": "Aos poucos, trocar para o modo acro (como no simulador), sempre alto o bastante e longe de obstáculos e pessoas.",
+    "por_que_importa": "Freestyle é feito em acro. Pular etapas é o jeito mais rápido de quebrar o drone.",
+    "pecas": ["bateria"],
+    "ferramentas": [],
+    "tempo_min": [300, 900],
+    "dominios": {
+      "pilotagem_testes": 3
+    },
+    "riscos": ["Perder a orientação em acro e cair."],
+    "como_saber_que_deu_certo": [
+      "Você faz curvas e para no ar sem perder altura.",
+      "Você sempre volta antes do alerta de bateria."
+    ],
+    "erros_comuns": [],
+    "local": "espaco_aberto",
+    "alertas": ["fpv-5pol-perigo"],
+    "variaveis": [],
+    "fontes": []
+  },
+  {
+    "id": "pos-voo",
+    "titulo": "Depois de voar: conferir e guardar",
+    "objetivo": "Conferir temperatura dos motores (mornos, não quentes), hélices sem lascas, parafusos e soldas. Deixar as baterias na carga de armazenamento.",
+    "por_que_importa": "Hélice lascada desbalanceia e quebra; LiPo guardada cheia estufa.",
+    "pecas": ["helice", "bateria"],
+    "ferramentas": ["carregador-balanceador", "lipo-checker"],
+    "tempo_min": [15, 30],
+    "dominios": {
+      "potencia_lipo": 2,
+      "mecanica": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "As baterias estão em 3,80–3,85 V por célula.",
+      "Hélices lascadas foram trocadas."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["lipo"],
+    "variaveis": [],
+    "fontes": []
+  }
+]

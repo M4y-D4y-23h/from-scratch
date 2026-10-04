@@ -24,16 +24,23 @@ import { verificationStatusSchema } from "@/domain/core/verification";
 // ---------------------------------------------------------------------------
 
 /**
- * Furação (padrão de furos de fixação), ex.: "16x19 M3", "30.5x30.5 M3", "9x9 M2".
- * Os números são as distâncias entre furos em mm; "M3" é a rosca do parafuso.
+ * Furação (padrão de furos de fixação), em dois formatos:
+ * - retangular "AxB M3" (ex.: "16x19 M3", "30.5x30.5 M3", "9x9 M2"): distâncias entre furos em mm;
+ * - circular "ØD NxMr" (ex.: "Ø6.6 3xM1.4", motores de whoop): N furos de rosca Mr num círculo de
+ *   D mm de diâmetro.
+ * "M3" é a rosca do parafuso (opcional no formato retangular).
  */
 export const mountPatternSchema = z
   .string()
-  .regex(/^\d+(\.\d+)?x\d+(\.\d+)?( M\d(\.\d)?)?$/, "use o formato 16x19 M3");
+  .regex(
+    /^(\d+(\.\d+)?x\d+(\.\d+)?( M\d(\.\d)?)?|Ø\d+(\.\d+)? \dxM\d(\.\d)?)$/,
+    "use o formato 16x19 M3 (ou Ø6.6 3xM1.4 para furação circular)",
+  );
 export type MountPattern = z.infer<typeof mountPatternSchema>;
 
-/** Normaliza "19x16 M3" → "16x19 M3" para comparar furações. */
+/** Normaliza "19x16 M3" → "16x19 M3" para comparar furações (circular fica igual). */
 export function normalizeMountPattern(pattern: string): string {
+  if (pattern.trim().startsWith("Ø")) return pattern.trim();
   const [dims = "", thread] = pattern.trim().split(/\s+/);
   const nums = dims
     .split("x")
@@ -42,12 +49,17 @@ export function normalizeMountPattern(pattern: string): string {
   return `${nums.join("x")}${thread ? ` ${thread}` : ""}`;
 }
 
-type ParsedMount = { a: number; b: number; rosca?: string };
+type ParsedMount =
+  | { tipo: "retangular"; a: number; b: number; rosca?: string }
+  | { tipo: "circular"; diametro: number; furos: number; rosca: string };
 
 function parseMountPattern(pattern: string): ParsedMount | undefined {
-  const m = /^(\d+(?:\.\d+)?)x(\d+(?:\.\d+)?)(?: (M\d(?:\.\d)?))?$/.exec(pattern.trim());
-  if (!m) return undefined;
-  return { a: Number(m[1]), b: Number(m[2]), rosca: m[3] };
+  const r = /^(\d+(?:\.\d+)?)x(\d+(?:\.\d+)?)(?: (M\d(?:\.\d)?))?$/.exec(pattern.trim());
+  if (r) return { tipo: "retangular", a: Number(r[1]), b: Number(r[2]), rosca: r[3] };
+  const c = /^Ø(\d+(?:\.\d+)?) (\d)x(M\d(?:\.\d)?)$/.exec(pattern.trim());
+  if (c)
+    return { tipo: "circular", diametro: Number(c[1]), furos: Number(c[2]), rosca: c[3] ?? "" };
+  return undefined;
 }
 
 /**
@@ -55,21 +67,34 @@ function parseMountPattern(pattern: string): ParsedMount | undefined {
  * perpendicular. Ela encaixa se a base oferecer A num eixo e B no outro (a peça pode girar 90°).
  * A base pode listar vários padrões nos mesmos eixos: o braço do X500 V2 tem "16x16" e "19x19",
  * então aceita um motor "16x19" (é assim que a Holybro vende o kit). A rosca (M2, M3) precisa ser a
- * mesma quando as duas estão informadas. Tolerância de 0,3 mm para arredondamentos de datasheet.
+ * mesma quando as duas estão informadas. Furação circular só encaixa em circular com o mesmo
+ * número de furos e a mesma rosca. Tolerância de 0,3 mm para arredondamentos de datasheet.
  */
 export function mountFits(part: string, base: readonly string[]): boolean {
   const p = parseMountPattern(part);
   if (!p) return false;
+  const near = (x: number, v: number) => Math.abs(x - v) <= 0.3;
+  if (p.tipo === "circular") {
+    return base.some((pattern) => {
+      const q = parseMountPattern(pattern);
+      return (
+        q?.tipo === "circular" &&
+        q.furos === p.furos &&
+        q.rosca === p.rosca &&
+        near(q.diametro, p.diametro)
+      );
+    });
+  }
   const eixo1: number[] = [];
   const eixo2: number[] = [];
   for (const pattern of base) {
     const q = parseMountPattern(pattern);
-    if (!q) continue;
+    if (q?.tipo !== "retangular") continue;
     if (p.rosca && q.rosca && p.rosca !== q.rosca) continue;
     eixo1.push(q.a);
     eixo2.push(q.b);
   }
-  const has = (eixo: number[], v: number) => eixo.some((x) => Math.abs(x - v) <= 0.3);
+  const has = (eixo: number[], v: number) => eixo.some((x) => near(x, v));
   return (has(eixo1, p.a) && has(eixo2, p.b)) || (has(eixo2, p.a) && has(eixo1, p.b));
 }
 
@@ -138,6 +163,8 @@ export const frameSpecsSchema = z.object({
   geometria: z.enum(["X", "true-X", "stretch-X", "H", "deadcat"]).optional(),
   distancia_entre_eixos_mm: z.number().positive().optional(),
   helice_max_pol: z.number().positive().optional(),
+  /** Frames com dutos (whoops): a hélice precisa ter o tamanho do duto; menor perde empuxo. */
+  helice_min_pol: z.number().positive().optional(),
   furacao_motor: z.array(mountPatternSchema).optional(),
   furacao_stack: z.array(mountPatternSchema).optional(),
   espessura_braco_mm: z.number().positive().optional(),
@@ -153,6 +180,11 @@ export const frameSpecsSchema = z.object({
   /** Dutos/protetores ao redor das hélices (whoops). */
   protecao_helices: z.boolean().optional(),
   trem_de_pouso: z.boolean().optional(),
+  /** Encaixe da bateria (whoops): seção interna largura × altura (mm). Bateria mais grossa não
+   *  entra; frames de 5" usam strap e não têm este limite. */
+  slot_bateria_mm: z
+    .object({ largura: z.number().positive(), altura: z.number().positive() })
+    .optional(),
 });
 
 export const motorSpecsSchema = z.object({
@@ -285,7 +317,8 @@ export const cameraSpecsSchema = z.object({
   tensao_v_min: z.number().positive().optional(),
   tensao_v_max: z.number().positive().optional(),
   corrente_ma: z.number().positive().optional(),
-  formato: z.enum(["micro_19mm", "nano_14mm", "full_22mm", "aio"]).optional(),
+  /** Tamanho da câmera (encaixe no frame): whoop = câmera minúscula presa no canopy. */
+  formato: z.enum(["micro_19mm", "nano_14mm", "full_22mm", "aio", "whoop"]).optional(),
 });
 
 export const videoReceiverSpecsSchema = z.object({
@@ -424,6 +457,8 @@ export const componentSchema = z.discriminatedUnion("categoria", [
       fc: fcSpecsSchema,
       esc: esc4in1SpecsSchema,
       receptor: receiverSpecsSchema.optional(),
+      /** VTX embutido na placa (AIO de whoop "5 em 1"). */
+      vtx: vtxSpecsSchema.optional(),
     }),
   ),
   component("bateria", batterySpecsSchema),
@@ -449,6 +484,8 @@ export const componentSchema = z.discriminatedUnion("categoria", [
   component("consumivel", genericSpecsSchema),
   /** Conjunto vendido numa caixa só (ex.: kit ARF); o conteúdo vem em "inclui". */
   component("kit", genericSpecsSchema),
+  /** Acessório que voa preso ao drone (ex.: canopy do whoop, que segura a câmera). */
+  component("acessorio", genericSpecsSchema),
   /** Baterias do rádio (ficam no chão). */
   component(
     "bateria_radio",
@@ -628,12 +665,20 @@ export const archetypeSlotSchema = z.object({
     .optional(),
 });
 
+/**
+ * Jeito típico de voar do arquétipo: muda a corrente média em relação à de pairar (autonomia).
+ * estavel = filmagem/GPS; freestyle = acrobacias com acelerações fortes; indoor = whoop em casa.
+ */
+export const FLIGHT_STYLES = ["estavel", "freestyle", "indoor"] as const;
+export type FlightStyle = (typeof FLIGHT_STYLES)[number];
+
 export const archetypeSchema = z.object({
   id: z.string().regex(/^[a-z0-9][a-z0-9-]*$/),
   nome: z.string().min(1),
   descricao: z.string().min(1),
   para_quem: z.string().min(1),
   firmware: firmwareSchema,
+  estilo_voo: z.enum(FLIGHT_STYLES).default("estavel"),
   /** Perfil de parâmetros de firmware usado pelo arquétipo (id em perfis_firmware). */
   perfil_firmware: z.string().optional(),
   faixas: z.object({

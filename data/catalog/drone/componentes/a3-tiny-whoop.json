@@ -1,0 +1,796 @@
+[
+  {
+    "id": "betafpv-air65-ii-frame",
+    "categoria": "frame",
+    "marca": "BETAFPV",
+    "modelo": "Air65 II (frame de whoop 65 mm)",
+    "descricao_leiga": "Estrutura de plástico flexível com dutos em volta das hélices: protege a casa, as pessoas e o próprio drone nas batidas.",
+    "massa_g": 2.65,
+    "dimensoes_mm": {
+      "comprimento": 82.6,
+      "largura": 82.6,
+      "altura": 15.1
+    },
+    "preco_referencia_usd": {
+      "min": 4.99,
+      "max": 4.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da BETAFPV",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da BETAFPV: página do produto",
+          "tipo": "loja",
+          "url": "https://betafpv.com/products/air65-ii-brushless-whoop-frame",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Em 04/10/2026."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "BETAFPV Air65 II frame"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "frame whoop 65mm"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: Air65 II Brushless Whoop Frame (especificação oficial)",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/air65-ii-brushless-whoop-frame",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "BETAFPV: Matrix 1S 5IN1 II (frames compatíveis)",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/matrix-1s-5in1-ii-brushless-flight-controller",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "Entre-eixos de 65 mm, hélices de 31 mm, encaixe de bateria de 11,4 x 6,2 mm.",
+      "A BETAFPV lista a Matrix 1S 5IN1 II (furação de 26 x 26 mm) como compatível com este frame (página da FC, \"Recommended Parts\"); por isso registramos 25,5 e 26 mm. Os furos são para parafusos autoatarraxantes de 1,2 a 1,4 mm."
+    ],
+    "faixas": ["economica"],
+    "specs": {
+      "geometria": "X",
+      "distancia_entre_eixos_mm": 65,
+      "helice_max_pol": 1.22,
+      "furacao_motor": ["Ø6.6 3xM1.4"],
+      "furacao_stack": ["25.5x25.5", "26x26"],
+      "material": "plastico",
+      "protecao_helices": true,
+      "slot_bateria_mm": {
+        "largura": 11.4,
+        "altura": 6.2
+      },
+      "helice_min_pol": 1.2
+    }
+  },
+  {
+    "id": "betafpv-air75-ii-frame",
+    "categoria": "frame",
+    "marca": "BETAFPV",
+    "modelo": "Air75 II (frame de whoop 75 mm)",
+    "descricao_leiga": "Estrutura de whoop um pouco maior (75 mm): mais estável, aguenta bateria maior e voa mais tempo.",
+    "massa_g": 4.0,
+    "dimensoes_mm": {
+      "comprimento": 99.1,
+      "largura": 99.1,
+      "altura": 16.2
+    },
+    "preco_referencia_usd": {
+      "min": 4.99,
+      "max": 4.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da BETAFPV",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da BETAFPV: página do produto",
+          "tipo": "loja",
+          "url": "https://betafpv.com/products/air75-ii-brushless-whoop-frame",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Em 04/10/2026."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "BETAFPV Air75 II frame"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "frame whoop 75mm"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: Air75 II Brushless Whoop Frame (especificação oficial)",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/air75-ii-brushless-whoop-frame",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "BETAFPV: Matrix 1S 5IN1 II (frames compatíveis)",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/matrix-1s-5in1-ii-brushless-flight-controller",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "Entre-eixos de 75 mm, hélices de 40 mm, encaixe de bateria de 16,3 x 6,3 mm.",
+      "A BETAFPV lista a Matrix 1S 5IN1 II (furação de 26 x 26 mm) como compatível com este frame (página da FC, \"Recommended Parts\"); por isso registramos 25,5 e 26 mm. Os furos são para parafusos autoatarraxantes de 1,2 a 1,4 mm."
+    ],
+    "faixas": ["equilibrada", "premium"],
+    "specs": {
+      "geometria": "X",
+      "distancia_entre_eixos_mm": 75,
+      "helice_max_pol": 1.575,
+      "furacao_motor": ["Ø6.6 3xM1.4"],
+      "furacao_stack": ["25.5x25.5", "26x26"],
+      "material": "plastico",
+      "protecao_helices": true,
+      "slot_bateria_mm": {
+        "largura": 16.3,
+        "altura": 6.3
+      },
+      "helice_min_pol": 1.5
+    }
+  },
+  {
+    "id": "betafpv-0702-2026-freestyle",
+    "categoria": "motor",
+    "marca": "BETAFPV",
+    "modelo": "0702 (2026) Freestyle 25000KV, 1S (pacote com 4)",
+    "descricao_leiga": "Motorzinho sem escova para whoop de 65 mm em bateria 1S. Plugue JST de 3 pinos: não precisa soldar.",
+    "massa_g": 1.5,
+    "unidades_por_pacote": 4,
+    "preco_referencia_usd": {
+      "min": 39.99,
+      "max": 39.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da BETAFPV",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da BETAFPV: página do produto",
+          "tipo": "loja",
+          "url": "https://betafpv.com/products/0702-brushless-motors-2026",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Em 04/10/2026, pacote com 4 motores (versão Freestyle)."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "BETAFPV 0702 brushless motor 2026 freestyle 25000KV"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "motor 0702 whoop"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: 0702 Brushless Motors (2026) (especificação oficial)",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/0702-brushless-motors-2026",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "BETAFPV: 0702 (2026) Load Performance (tabela de empuxo)",
+        "tipo": "pagina_fabricante",
+        "url": "https://cdn.shopify.com/s/files/1/1778/6615/files/0702_Brushless_Motors_2026_load_performance.jpg",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "25000KV, 1S (4,2 V), corrente máxima 3,86 A e 15,01 W com hélice GF 1207. Eixo de 1,0 mm; 3 furos M1,4 num círculo de 6,6 mm; fio de 35 mm com plugue JST 1,25 de 3 pinos.",
+      "Vem com 12 parafusos M1,4 x 3."
+    ],
+    "specs": {
+      "estator": "0702",
+      "kv": 25000,
+      "celulas_min": 1,
+      "celulas_max": 1,
+      "furacao": ["Ø6.6 3xM1.4"],
+      "eixo_mm": 1,
+      "fixacao_helice": ["pressao_1mm"],
+      "corrente_max_a": 3.86
+    }
+  },
+  {
+    "id": "betafpv-0802-2026-freestyle",
+    "categoria": "motor",
+    "marca": "BETAFPV",
+    "modelo": "0802 (2026) Freestyle 22000KV, 1S (pacote com 4)",
+    "descricao_leiga": "Motor sem escova para whoop de 75 mm em bateria 1S: mais força para hélices de 40 mm. Plugue JST, sem solda.",
+    "massa_g": 1.88,
+    "unidades_por_pacote": 4,
+    "preco_referencia_usd": {
+      "min": 39.99,
+      "max": 39.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da BETAFPV",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da BETAFPV: página do produto",
+          "tipo": "loja",
+          "url": "https://betafpv.com/products/0802-brushless-motors-2026",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Em 04/10/2026, pacote com 4 motores (versão Freestyle)."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "BETAFPV 0802 brushless motor 2026 freestyle 22000KV"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "motor 0802 whoop"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: 0802 Brushless Motors (2026) (especificação oficial)",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/0802-brushless-motors-2026",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "BETAFPV: 0802 (2026) Load Performance (tabela de empuxo)",
+        "tipo": "pagina_fabricante",
+        "url": "https://cdn.shopify.com/s/files/1/1778/6615/files/0802_Brushless_Motors_2026_load_performance.jpg",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "22000KV, 1S (4,2 V), corrente máxima 5,90 A e 22,73 W com hélice GF 1614. Eixo de 1,0 mm; 3 furos M1,4 num círculo de 6,6 mm; plugue JST 1,25 de 3 pinos.",
+      "Vem com 12 parafusos M1,4 x 3."
+    ],
+    "specs": {
+      "estator": "0802",
+      "kv": 22000,
+      "celulas_min": 1,
+      "celulas_max": 1,
+      "furacao": ["Ø6.6 3xM1.4"],
+      "eixo_mm": 1,
+      "fixacao_helice": ["pressao_1mm"],
+      "corrente_max_a": 5.9
+    }
+  },
+  {
+    "id": "gemfan-1207-3b",
+    "categoria": "helice",
+    "marca": "Gemfan",
+    "modelo": "1207 tripá 31 mm (eixo de 1,0 mm)",
+    "descricao_leiga": "Hélice de 31 mm para whoop de 65 mm, encaixada por pressão no eixo. Pacote com 4.",
+    "massa_g": 0.15,
+    "unidades_por_pacote": 4,
+    "preco_referencia_usd": {
+      "min": 1.99,
+      "max": 1.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da BETAFPV (revenda Gemfan)",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da BETAFPV (revenda Gemfan): página do produto",
+          "tipo": "loja",
+          "url": "https://betafpv.com/products/gemfan-1207-3-blade-propellers-1-0mm-shaft",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Em 04/10/2026, pacote com 4."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "Gemfan 1207 3 blade 31mm 1.0mm"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "helice whoop 31mm 1mm"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: Gemfan 1207 3-Blade Propellers (especificação)",
+        "tipo": "loja",
+        "url": "https://betafpv.com/products/gemfan-1207-3-blade-propellers-1-0mm-shaft",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": ["31 mm de diâmetro, passo de 0,7\", furo de 1,0 mm, policarbonato, 0,15 g cada."],
+    "specs": {
+      "diametro_pol": 1.22,
+      "passo_pol": 0.7,
+      "pas": 3,
+      "material": "plastico",
+      "fixacao": "pressao_1mm"
+    }
+  },
+  {
+    "id": "gemfan-1614-3b",
+    "categoria": "helice",
+    "marca": "Gemfan",
+    "modelo": "1614 tripá 40 mm (eixo de 1,0 mm)",
+    "descricao_leiga": "Hélice de 40 mm para whoop de 75 mm, encaixada por pressão no eixo. Pacote com 4.",
+    "massa_g": 0.24,
+    "unidades_por_pacote": 4,
+    "preco_referencia_usd": {
+      "min": 1.99,
+      "max": 1.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da BETAFPV (revenda Gemfan)",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da BETAFPV (revenda Gemfan): página do produto",
+          "tipo": "loja",
+          "url": "https://betafpv.com/products/gemfan-1614-3-blade-propellers-1-0mm-shaft",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Em 04/10/2026, pacote com 4."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "Gemfan 1614 3 blade 40mm 1.0mm"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "helice whoop 40mm 1mm"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: Gemfan 1614 3-Blade Propellers (especificação)",
+        "tipo": "loja",
+        "url": "https://betafpv.com/products/gemfan-1614-3-blade-propellers-1-0mm-shaft",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": ["40 mm de diâmetro, passo de 1,4\", furo de 1,0 mm, policarbonato, 0,24 g cada."],
+    "specs": {
+      "diametro_pol": 1.575,
+      "passo_pol": 1.4,
+      "pas": 3,
+      "material": "plastico",
+      "fixacao": "pressao_1mm"
+    }
+  },
+  {
+    "id": "betafpv-matrix-1s-5in1-ii",
+    "categoria": "fc_aio",
+    "marca": "BETAFPV",
+    "modelo": "Matrix 1S 5IN1 II (versão sem solda)",
+    "descricao_leiga": "Placa única com controladora (Betaflight), ESC dos 4 motores, receptor ExpressLRS e transmissor de vídeo. Na versão sem solda, motores e bateria só encaixam.",
+    "massa_g": 4.13,
+    "preco_referencia_usd": {
+      "min": 54.99,
+      "max": 54.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da BETAFPV",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da BETAFPV: página do produto",
+          "tipo": "loja",
+          "url": "https://betafpv.com/products/matrix-1s-5in1-ii-brushless-flight-controller",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Em 04/10/2026 (mesmo preço com ou sem solda)."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "BETAFPV Matrix 1S 5IN1 II solder-free"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "betafpv matrix 1s aio"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: Matrix 1S Brushless Flight Controller (5IN1 II) (especificação oficial)",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/matrix-1s-5in1-ii-brushless-flight-controller",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "Betaflight: configuração oficial BETAFPVG473_V2",
+        "tipo": "documentacao_oficial",
+        "url": "https://github.com/betaflight/config/blob/15d8c3fa076e9f43e2135050c90265f7f3e92166/configs/BEFH/BETAFPVG473_V2/config.h",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "inclui": [
+      {
+        "componente_id": "betafpv-matrix-antena-vtx",
+        "quantidade": 1
+      }
+    ],
+    "notas": [
+      "MCU STM32G473, OSD AT7456E, 16 MB de blackbox, sensores de tensão e corrente, BEC de 5 V 3 A. Furação de 26 x 26 mm. 4,13 g sem a antena.",
+      "UART2 fica ligada ao VTX e a UART3 ao receptor; UART1 e UART4 ficam livres.",
+      "ESC de 12 A contínuos (18 A de pico), só 1S, firmware Bluejay (aceita DShot bidirecional para o filtro RPM).",
+      "Receptor ExpressLRS 2,4 GHz serial (CRSF), atualizável por Wi-Fi. VTX de 5,8 GHz, 48 canais, 25/100/200/400 mW, controle por SmartAudio.",
+      "Firmware de fábrica: Betaflight 4.5.3 (BETAFPVG473_V2). A BETAFPV avisa que algumas placas saem com giroscópio alternativo (ICM42622, BMI270 ou LSM6DSK320X) e pede para não gravar o Betaflight oficial nelas. A configuração oficial BETAFPVG473_V2 (commit 15d8c3f) já lista os quatro sensores, mas siga o fabricante: se não tiver certeza, fique com o firmware de fábrica."
+    ],
+    "notas_seguranca": [
+      "Instale a antena de vídeo antes de ligar a bateria (ou deixe o VTX em potência 0): sem antena o transmissor queima."
+    ],
+    "specs": {
+      "fc": {
+        "mcu": "STM32G473",
+        "firmwares": [
+          {
+            "nome": "Betaflight",
+            "alvo": "BETAFPVG473_V2",
+            "lista_oficial": true
+          }
+        ],
+        "uarts": [
+          {
+            "nome": "UART1"
+          },
+          {
+            "nome": "UART4"
+          }
+        ],
+        "saidas_motor": 4,
+        "becs": [
+          {
+            "tensao_v": 5,
+            "corrente_a": 3
+          }
+        ],
+        "entrada_celulas_min": 1,
+        "entrada_celulas_max": 1,
+        "furacao": ["26x26"],
+        "osd_analogico": true,
+        "sensor_tensao": true,
+        "sensor_corrente": true
+      },
+      "esc": {
+        "corrente_continua_a": 12,
+        "corrente_pico_a": 18,
+        "celulas_min": 1,
+        "celulas_max": 1,
+        "firmware": "Bluejay",
+        "protocolos": ["DShot300", "DShot600"],
+        "conector_bateria": "BT2.0"
+      },
+      "receptor": {
+        "link": "elrs_2g4",
+        "saidas": ["CRSF"],
+        "esp": true
+      },
+      "vtx": {
+        "sistema": "analogico_5g8",
+        "potencias_mw": [25, 100, 200, 400],
+        "controle": "SmartAudio"
+      }
+    }
+  },
+  {
+    "id": "betafpv-matrix-antena-vtx",
+    "categoria": "antena",
+    "marca": "BETAFPV",
+    "modelo": "Antena de 5,8 GHz da Matrix 1S",
+    "descricao_leiga": "Antena do transmissor de vídeo da placa. Vem na caixa da Matrix 1S.",
+    "vendido_separadamente": false,
+    "massa_estimada_g": {
+      "valor": 0.5,
+      "motivo": "A BETAFPV publica o peso da placa sem a antena. Antena de fio para whoop: estimamos 0,5 g; a soma do drone pronto (21,3 g no Air75 II) confere com essa ordem de grandeza."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "BETAFPV Matrix 1S 5IN1 II"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: Matrix 1S 5IN1 II (conteúdo da caixa)",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/matrix-1s-5in1-ii-brushless-flight-controller",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "specs": {
+      "frequencia_ghz": 5.8
+    }
+  },
+  {
+    "id": "betafpv-c03",
+    "categoria": "camera_fpv",
+    "marca": "BETAFPV",
+    "modelo": "C03 FPV Micro Camera 1200TVL",
+    "descricao_leiga": "Câmera analógica minúscula (1,45 g) para whoop. Plugue sem solda.",
+    "massa_g": 1.45,
+    "dimensoes_mm": {
+      "comprimento": 15,
+      "largura": 11,
+      "altura": 14
+    },
+    "preco_referencia_usd": {
+      "min": 11.99,
+      "max": 11.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da BETAFPV",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da BETAFPV: página do produto",
+          "tipo": "loja",
+          "url": "https://betafpv.com/products/c03-fpv-micro-camera",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Em 04/10/2026."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "BETAFPV C03 FPV micro camera"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "camera fpv whoop c03"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: C03 FPV Camera (especificação oficial)",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/c03-fpv-micro-camera",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "1200TVL, lente de 2,1 mm (160°), 100 mA a 5 V ou 120 mA a 3,3 V. Plugue JST 0,8. A caixa traz um canopy Micro; usamos o Air II Canopy, que é o do drone pronto da BETAFPV."
+    ],
+    "specs": {
+      "sistema": "analogico_5g8",
+      "tensao_v_min": 3.3,
+      "tensao_v_max": 5,
+      "corrente_ma": 100,
+      "formato": "whoop"
+    }
+  },
+  {
+    "id": "betafpv-air-ii-canopy",
+    "categoria": "acessorio",
+    "marca": "BETAFPV",
+    "modelo": "Air II Canopy",
+    "descricao_leiga": "Capinha de plástico que segura a câmera em cima da placa e protege a eletrônica nas batidas.",
+    "massa_g": 0.5,
+    "preco_referencia_usd": {
+      "min": 2.99,
+      "max": 2.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da BETAFPV",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da BETAFPV: página do produto",
+          "tipo": "loja",
+          "url": "https://betafpv.com/products/air-ii-canopy",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Em 04/10/2026, unidade."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "BETAFPV Air II canopy"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "canopy whoop"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: Air II Canopy (especificação oficial)",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/air-ii-canopy",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "0,5 g; inclinação da câmera de 15° a 45°; serve em câmeras com lente de 9 a 10 mm (C02, C03)."
+    ],
+    "specs": {}
+  },
+  {
+    "id": "betafpv-lava-ii-1s-320",
+    "categoria": "bateria",
+    "marca": "BETAFPV",
+    "modelo": "LAVA II 1S 320 mAh 95C LiHV (pacote com 5)",
+    "descricao_leiga": "Bateria pequena de 1 célula para whoop de 65 mm. Vem em pacote com 5.",
+    "massa_g": 8.2,
+    "dimensoes_mm": {
+      "comprimento": 64,
+      "largura": 10,
+      "altura": 6
+    },
+    "unidades_por_pacote": 5,
+    "preco_referencia_usd": {
+      "min": 21.99,
+      "max": 21.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da BETAFPV",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da BETAFPV: página do produto",
+          "tipo": "loja",
+          "url": "https://betafpv.com/products/lava-ii-1s-battery",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Em 04/10/2026, pacote com 5."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "BETAFPV LAVA II 1S 320mAh"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "bateria 1s 300mah bt2.0"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: LAVA II 1S Battery (especificação oficial)",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/lava-ii-1s-battery",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "LiHV: 4,35 V cheia, 3,85 V de armazenamento. 95C, conector BT2.0, 1,22 Wh, 8,2 g, 64 x 10 x 6 mm."
+    ],
+    "notas_seguranca": [
+      "Bateria LiHV: carregue no modo LiHV (4,35 V por célula) só se o carregador tiver esse modo; na dúvida, o modo LiPo (4,20 V) é seguro.",
+      "Mesmo pequena, ela pode pegar fogo: carregue sobre superfície que não pega fogo e sem sair de perto.",
+      "Bateria estufada ou amassada não deve ser usada nem carregada."
+    ],
+    "specs": {
+      "celulas": 1,
+      "capacidade_mah": 320,
+      "c_continuo": 95,
+      "conector": "BT2.0",
+      "quimica": "LiHV"
+    }
+  },
+  {
+    "id": "betafpv-lava-ii-1s-480",
+    "categoria": "bateria",
+    "marca": "BETAFPV",
+    "modelo": "LAVA II 1S 480 mAh 95C LiHV (pacote com 4)",
+    "descricao_leiga": "Bateria de 1 célula para whoop de 75 mm. Vem em pacote com 4.",
+    "massa_g": 12.6,
+    "dimensoes_mm": {
+      "comprimento": 61,
+      "largura": 15.5,
+      "altura": 6
+    },
+    "unidades_por_pacote": 4,
+    "preco_referencia_usd": {
+      "min": 21.99,
+      "max": 21.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da BETAFPV",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da BETAFPV: página do produto",
+          "tipo": "loja",
+          "url": "https://betafpv.com/products/lava-ii-1s-battery",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Em 04/10/2026, pacote com 4."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "BETAFPV LAVA II 1S 480mAh"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "bateria 1s 450mah bt2.0"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: LAVA II 1S Battery (especificação oficial)",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/lava-ii-1s-battery",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "LiHV: 4,35 V cheia, 3,85 V de armazenamento. 95C, conector BT2.0, 1,82 Wh, 12,6 g, 61 x 15,5 x 6 mm."
+    ],
+    "notas_seguranca": [
+      "Bateria LiHV: carregue no modo LiHV (4,35 V por célula) só se o carregador tiver esse modo; na dúvida, o modo LiPo (4,20 V) é seguro.",
+      "Mesmo pequena, ela pode pegar fogo: carregue sobre superfície que não pega fogo e sem sair de perto.",
+      "Bateria estufada ou amassada não deve ser usada nem carregada."
+    ],
+    "specs": {
+      "celulas": 1,
+      "capacidade_mah": 480,
+      "c_continuo": 95,
+      "conector": "BT2.0",
+      "quimica": "LiHV"
+    }
+  },
+  {
+    "id": "betafpv-hexacharger-1s",
+    "categoria": "carregador",
+    "marca": "BETAFPV",
+    "modelo": "HexaCharger 1S (6 portas)",
+    "descricao_leiga": "Carregador para 6 baterias 1S ao mesmo tempo, com modo de armazenamento. Liga num carregador de celular USB-C.",
+    "massa_g": 109,
+    "dimensoes_mm": {
+      "comprimento": 106,
+      "largura": 56,
+      "altura": 25.5
+    },
+    "preco_referencia_usd": {
+      "min": 24.99,
+      "max": 24.99,
+      "data": "2026-10-04",
+      "loja": "Loja oficial da BETAFPV",
+      "fontes": [
+        {
+          "titulo": "Loja oficial da BETAFPV: página do produto",
+          "tipo": "loja",
+          "url": "https://betafpv.com/products/hexacharger-1s-charger",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "observacao": "Em 04/10/2026 (versão padrão de 24 W)."
+    },
+    "onde_comprar": [
+      {
+        "tipo_loja": "importacao",
+        "termo_busca": "BETAFPV HexaCharger 1S"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "carregador 1s bt2.0 6 portas"
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: HexaCharger 1S Charger (especificação oficial)",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/hexacharger-1s-charger",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "LiPo e LiHV (4,20 V ou 4,35 V), armazenamento a 3,85 V, BT2.0 e PH2.0. 24 W no total (1 A por porta com as 6 em uso).",
+      "Alimentação por USB-C PD (5 V 3 A a 12 V 2,5 A): use um carregador de celular USB-C; ele não vem na caixa."
+    ],
+    "notas_seguranca": [
+      "Carregue a 0,5 A as baterias de 280–320 mAh e a 1 A as de 480–680 mAh (tabela do fabricante)."
+    ],
+    "specs": {
+      "celulas_min": 1,
+      "celulas_max": 1,
+      "entrada": "DC",
+      "corrente_max_a": 3
+    }
+  }
+]

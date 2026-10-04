@@ -1,0 +1,236 @@
+{
+  "id": "a2-fpv-5pol",
+  "nome": "FPV 5\" de freestyle",
+  "descricao": "Quadricóptero de 5 polegadas em bateria 6S, com Betaflight, vídeo analógico em óculos FPV e rádio ExpressLRS. Feito para acrobacias: muito rápido e ágil.",
+  "para_quem": "Quem já treinou no simulador e quer aprender a soldar, configurar o Betaflight e voar freestyle.",
+  "firmware": "Betaflight",
+  "perfil_firmware": "betaflight-4.5",
+  "estilo_voo": "freestyle",
+  "faixas": {
+    "helice_pol": [5, 5.1],
+    "celulas": [6, 6],
+    "massa_alvo_g": [550, 800],
+    "twr_alvo": [6, 14]
+  },
+  "slots": [
+    {
+      "slot": "frame",
+      "categorias": ["frame"],
+      "quantidade": 1,
+      "obrigatorio": true
+    },
+    {
+      "slot": "motores",
+      "categorias": ["motor"],
+      "quantidade": 4,
+      "obrigatorio": true
+    },
+    {
+      "slot": "helices",
+      "categorias": ["helice"],
+      "quantidade": 4,
+      "obrigatorio": true,
+      "compra_por_faixa": {
+        "economica": 8,
+        "equilibrada": 12,
+        "premium": 16
+      }
+    },
+    {
+      "slot": "stack",
+      "categorias": ["stack"],
+      "quantidade": 1,
+      "obrigatorio": true
+    },
+    {
+      "slot": "conector_bateria",
+      "categorias": ["conector"],
+      "quantidade": 1,
+      "obrigatorio": true
+    },
+    {
+      "slot": "receptor",
+      "categorias": ["receptor"],
+      "quantidade": 1,
+      "obrigatorio": true
+    },
+    {
+      "slot": "radio",
+      "categorias": ["radio_tx"],
+      "quantidade": 1,
+      "obrigatorio": true
+    },
+    {
+      "slot": "bateria_radio",
+      "categorias": ["bateria_radio"],
+      "quantidade": 1,
+      "obrigatorio": true
+    },
+    {
+      "slot": "bateria",
+      "categorias": ["bateria"],
+      "quantidade": 1,
+      "obrigatorio": true,
+      "filtro_specs": {
+        "celulas": 6
+      },
+      "compra_por_faixa": {
+        "economica": 3,
+        "equilibrada": 4,
+        "premium": 6
+      }
+    },
+    {
+      "slot": "camera",
+      "categorias": ["camera_fpv"],
+      "quantidade": 1,
+      "obrigatorio": true,
+      "filtro_specs": {
+        "formato": "micro_19mm"
+      }
+    },
+    {
+      "slot": "vtx",
+      "categorias": ["vtx"],
+      "quantidade": 1,
+      "obrigatorio": true
+    },
+    {
+      "slot": "antena_video",
+      "categorias": ["antena"],
+      "quantidade": 1,
+      "obrigatorio": true
+    },
+    {
+      "slot": "oculos",
+      "categorias": ["oculos_fpv"],
+      "quantidade": 1,
+      "obrigatorio": true
+    }
+  ],
+  "alertas": [
+    {
+      "id": "fpv-5pol-perigo",
+      "nivel": "perigo",
+      "titulo": "Um 5\" de freestyle é rápido e perigoso",
+      "texto": "Drones como este passam de 100 km/h (a iFlight informa até 190 km/h num 5\" parecido) e as hélices giram a mais de 20 mil rotações por minuto. Uma batida machuca muito.",
+      "acoes": [
+        "Arme só no local de voo, com o drone no chão e você atrás dele.",
+        "Voe longe de pessoas, animais, carros e casas.",
+        "Desarme na hora se o drone cair ou perder o controle.",
+        "Use a chave de ARM (nunca arme pelo manche)."
+      ],
+      "fontes": [
+        {
+          "titulo": "iFlight: Nazgul ECO DC5 WTFPV (velocidade máxima e tempo pairando informados pelo fabricante)",
+          "tipo": "pagina_fabricante",
+          "url": "https://shop.iflight.com/Nazgul-DC5-ECO-WTFPV-Pro2328",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "Betaflight: Arming Sequence & Safety",
+          "tipo": "documentacao_oficial",
+          "url": "https://betaflight.com/docs/wiki/guides/current/Arming-Sequence-And-Safety",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "verificado_em": "2026-10-04"
+    },
+    {
+      "id": "acima-250g",
+      "nivel": "regulatorio",
+      "titulo": "Drone acima de 250 g: cadastro e regras de voo",
+      "texto": "Este drone passa de 250 g. Para voo recreativo, a ANAC exige cadastro do drone (com a identificação colada nele) e decolar e pousar longe de pessoas; o DECEA exige pedido de acesso ao espaço aéreo no SARPAS, limita o voo recreativo a 60 m de altura e 300 m de distância e exige um observador ao seu lado quando você usa óculos FPV. Informativo, não é aconselhamento jurídico: verifique as regras vigentes.",
+      "acoes": [
+        "Cadastre o drone na ANAC antes de voar.",
+        "Peça o acesso no SARPAS do DECEA para cada voo.",
+        "Com óculos FPV, voe sempre com um observador ao lado."
+      ],
+      "fontes": [
+        {
+          "titulo": "ANAC: Resolução nº 806/2026 (UA até 250 g e aeromodelos)",
+          "tipo": "norma",
+          "url": "https://www.anac.gov.br/assuntos/legislacao/legislacao-1/resolucoes/2026/resolucao-806",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "DECEA: ICA 100-40/2026",
+          "tipo": "norma",
+          "url": "https://publicacoes.decea.mil.br/publicacao/ica-100-40",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "DECEA: portal Drone/RPAS (SARPAS)",
+          "tipo": "documentacao_oficial",
+          "url": "https://www.decea.mil.br/drone/",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "verificado_em": "2026-10-04"
+    },
+    {
+      "id": "vtx-sem-antena",
+      "nivel": "atencao",
+      "titulo": "Nunca ligue o transmissor de vídeo sem antena",
+      "texto": "Sem antena, a energia que deveria sair pelo ar volta para o transmissor de vídeo, que pode queimar em segundos.",
+      "acoes": [
+        "Rosqueie a antena antes de ligar a bateria, sempre.",
+        "Se a antena soltar, desligue a bateria antes de recolocar."
+      ],
+      "fontes": [
+        {
+          "titulo": "BETAFPV: A03 400mW 5.8G VTX",
+          "tipo": "pagina_fabricante",
+          "url": "https://betafpv.com/products/a03-400mw-5-8g-vtx",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "verificado_em": "2026-10-04"
+    },
+    {
+      "id": "vtx-anatel",
+      "nivel": "regulatorio",
+      "titulo": "Transmissor de vídeo de 5,8 GHz e a Anatel",
+      "texto": "Transmissores precisam de homologação da Anatel. Os transmissores de vídeo analógicos de 5,8 GHz costumam passar do limite dos equipamentos de radiação restrita (que dispensam licença), mesmo na menor potência. Informativo, não é aconselhamento jurídico: verifique as regras vigentes.",
+      "acoes": [
+        "Use a menor potência que dê imagem boa (25 mW).",
+        "Consulte a Anatel sobre homologação antes de usar."
+      ],
+      "fontes": [
+        {
+          "titulo": "Anatel: Ato nº 14.448/2017 (radiação restrita)",
+          "tipo": "norma",
+          "url": "https://informacoes.anatel.gov.br/legislacao/atos-de-certificacao-de-produtos/2017/1139-",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "Anatel: Homologar produtos de telecomunicações",
+          "tipo": "documentacao_oficial",
+          "url": "https://www.gov.br/pt-br/servicos/homologar-produtos-de-telecomunicacoes-anatel",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "verificado_em": "2026-10-04"
+    }
+  ],
+  "fontes": [
+    {
+      "titulo": "iFlight: Nazgul Evoque F5 V3 Frame Kit",
+      "tipo": "pagina_fabricante",
+      "url": "https://shop.iflight.com/Nazgul-Evoque-F5-V3-Frame-Kit-Pro2407",
+      "acessado_em": "2026-10-04"
+    },
+    {
+      "titulo": "iFlight: XING2 2207 (parafusos M3x8 e porca M5 inclusos)",
+      "tipo": "pagina_fabricante",
+      "url": "https://shop.iflight.com/xing2-2207-4s-6s-fpv-motor-unibell-pro1464",
+      "acessado_em": "2026-10-04"
+    },
+    {
+      "titulo": "Betaflight: Setup Guide (guia oficial de configuração)",
+      "tipo": "documentacao_oficial",
+      "url": "https://betaflight.com/docs/wiki/getting-started/setup-guide",
+      "acessado_em": "2026-10-04"
+    }
+  ]
+}

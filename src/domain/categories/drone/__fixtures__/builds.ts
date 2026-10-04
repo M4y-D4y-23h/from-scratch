@@ -236,6 +236,7 @@ export const TEST_ARCHETYPE: Archetype = {
   descricao: "Arquétipo de teste.",
   para_quem: "Testes automatizados.",
   firmware: "ArduPilot",
+  estilo_voo: "estavel",
   faixas: { helice_pol: [9, 11], celulas: [3, 4], massa_alvo_g: [800, 1500], twr_alvo: [2, 4] },
   slots: [
     { slot: "frame", categorias: ["frame"], quantidade: 1, obrigatorio: true, coberto_por: [] },

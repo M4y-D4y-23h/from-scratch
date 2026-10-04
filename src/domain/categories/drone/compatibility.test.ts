@@ -16,6 +16,7 @@ import {
 } from "./__fixtures__/builds";
 import type { Build } from "./build";
 import { requiredUarts, validateBuild, type ValidationContext } from "./compatibility";
+import { SRC } from "./sources";
 
 function run(build: Build, over: Partial<ValidationContext> = {}): ValidationReport {
   return validateBuild(ctxFor(build, over)).report;
@@ -496,11 +497,36 @@ describe("firmware do arquétipo", () => {
       "gps_com_bussola",
       "bussola_longe_da_potencia",
       "failsafe_rtl",
-      "monitor_bateria",
     ]) {
       expect(ids(report), id).not.toContain(id);
     }
     // A FC de teste só declara ArduPilot.
     expect(rule(report, "fc_firmware_oficial").status).toBe("falhou");
+    // Medir a bateria e o failsafe valem para qualquer firmware, com o texto do Betaflight.
+    expect(rule(report, "monitor_bateria").titulo).toContain("aviso de bateria baixa");
+    expect(rule(report, "failsafe_configurado").status).toBe("sem_dado");
+  });
+
+  it("failsafe do Betaflight exige DROP e a guarda de 1,5 s no perfil", () => {
+    const betaflight = { ...TEST_ARCHETYPE, firmware: "Betaflight" as const };
+    const perfil = (params: Array<{ nome: string; valor: string | number }>) => ({
+      ...TEST_FIRMWARE,
+      id: "betaflight-teste",
+      firmware: "Betaflight" as const,
+      parametros: params.map((p) => ({ ...p, explicacao: "teste", fontes: [SRC.spec] })),
+    });
+    const ok = run(baseBuild(), {
+      archetype: betaflight,
+      firmwareProfile: perfil([
+        { nome: "failsafe_procedure", valor: "DROP" },
+        { nome: "failsafe_delay", valor: 15 },
+      ]),
+    });
+    expect(rule(ok, "failsafe_configurado").status).toBe("passou");
+    const semDrop = run(baseBuild(), {
+      archetype: betaflight,
+      firmwareProfile: perfil([{ nome: "failsafe_delay", valor: 15 }]),
+    });
+    expect(rule(semDrop, "failsafe_configurado").status).toBe("falhou");
   });
 });

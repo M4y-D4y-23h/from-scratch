@@ -1,0 +1,257 @@
+{
+  "id": "a3-tiny-whoop",
+  "nome": "Tiny Whoop para aprender dentro de casa",
+  "descricao": "Micro drone de 65 a 75 mm, com menos de 50 g, hélices protegidas por dutos, bateria 1S e placa tudo-em-um com Betaflight. Montagem sem solda (peças de encaixe).",
+  "para_quem": "Quem nunca montou nem pilotou um drone e quer aprender em casa, com o menor risco.",
+  "firmware": "Betaflight",
+  "perfil_firmware": "betaflight-4.5",
+  "estilo_voo": "indoor",
+  "faixas": {
+    "helice_pol": [1.2, 1.6],
+    "celulas": [1, 1],
+    "massa_alvo_g": [20, 45],
+    "twr_alvo": [3, 7]
+  },
+  "massa_max_g": 250,
+  "slots": [
+    {
+      "slot": "frame",
+      "categorias": ["frame"],
+      "quantidade": 1,
+      "obrigatorio": true
+    },
+    {
+      "slot": "motores",
+      "categorias": ["motor"],
+      "quantidade": 4,
+      "obrigatorio": true
+    },
+    {
+      "slot": "helices",
+      "categorias": ["helice"],
+      "quantidade": 4,
+      "obrigatorio": true,
+      "compra_por_faixa": {
+        "economica": 8,
+        "equilibrada": 12,
+        "premium": 16
+      }
+    },
+    {
+      "slot": "fc",
+      "categorias": ["fc_aio"],
+      "quantidade": 1,
+      "obrigatorio": true
+    },
+    {
+      "slot": "antena_video",
+      "categorias": ["antena"],
+      "quantidade": 1,
+      "obrigatorio": true
+    },
+    {
+      "slot": "camera",
+      "categorias": ["camera_fpv"],
+      "quantidade": 1,
+      "obrigatorio": true,
+      "filtro_specs": {
+        "formato": "whoop"
+      }
+    },
+    {
+      "slot": "canopy",
+      "categorias": ["acessorio"],
+      "quantidade": 1,
+      "obrigatorio": true
+    },
+    {
+      "slot": "bateria",
+      "categorias": ["bateria"],
+      "quantidade": 1,
+      "obrigatorio": true,
+      "filtro_specs": {
+        "celulas": 1
+      },
+      "compra_por_faixa": {
+        "economica": 5,
+        "equilibrada": 8,
+        "premium": 12
+      }
+    },
+    {
+      "slot": "carregador",
+      "categorias": ["carregador"],
+      "quantidade": 1,
+      "obrigatorio": true
+    },
+    {
+      "slot": "radio",
+      "categorias": ["radio_tx"],
+      "quantidade": 1,
+      "obrigatorio": true
+    },
+    {
+      "slot": "bateria_radio",
+      "categorias": ["bateria_radio"],
+      "quantidade": 1,
+      "obrigatorio": true
+    },
+    {
+      "slot": "oculos",
+      "categorias": ["oculos_fpv"],
+      "quantidade": 1,
+      "obrigatorio": true
+    }
+  ],
+  "alertas": [
+    {
+      "id": "ate-250g",
+      "nivel": "regulatorio",
+      "titulo": "Drone de até 250 g: o que muda nas regras",
+      "texto": "Até 250 g, a ANAC dispensa o cadastro do drone e o seguro; quem tem menos de 18 anos precisa voar acompanhado por um piloto adulto. Dentro de casa (área confinada) o voo não é atividade em espaço aéreo, então as regras do DECEA não se aplicam. Ao ar livre, mesmo até 250 g, vale o pedido de acesso ao espaço aéreo no SARPAS, o limite recreativo de 60 m de altura e 300 m de distância e o observador ao lado quando você usa óculos FPV. Informativo, não é aconselhamento jurídico: verifique as regras vigentes.",
+      "acoes": [
+        "Dentro de casa: tudo bem voar sem o SARPAS, com cuidado com as pessoas.",
+        "Ao ar livre: peça o acesso no SARPAS e leve um observador se usar os óculos.",
+        "Menor de 18 anos: voe sempre com um adulto responsável."
+      ],
+      "fontes": [
+        {
+          "titulo": "ANAC: Resolução nº 806/2026 (UA até 250 g e aeromodelos)",
+          "tipo": "norma",
+          "url": "https://www.anac.gov.br/assuntos/legislacao/legislacao-1/resolucoes/2026/resolucao-806",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "DECEA: ICA 100-40/2026",
+          "tipo": "norma",
+          "url": "https://publicacoes.decea.mil.br/publicacao/ica-100-40",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "DECEA: portal Drone/RPAS (SARPAS)",
+          "tipo": "documentacao_oficial",
+          "url": "https://www.decea.mil.br/drone/",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "verificado_em": "2026-10-04"
+    },
+    {
+      "id": "whoop-em-casa",
+      "nivel": "atencao",
+      "titulo": "Whoop em casa: dutos protegem, mas não totalmente",
+      "texto": "Os dutos em volta das hélices evitam a maior parte dos cortes, mas a hélice ainda machuca olhos e dedos, prende cabelo e assusta animais.",
+      "acoes": [
+        "Nunca voe perto do rosto de ninguém.",
+        "Mantenha crianças pequenas e animais fora do cômodo.",
+        "Desarme na hora se o drone bater e ficar preso em algo.",
+        "Pegue o drone só desarmado."
+      ],
+      "fontes": [
+        {
+          "titulo": "Betaflight: Arming Sequence & Safety",
+          "tipo": "documentacao_oficial",
+          "url": "https://betaflight.com/docs/wiki/guides/current/Arming-Sequence-And-Safety",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "verificado_em": "2026-10-04"
+    },
+    {
+      "id": "vtx-sem-antena",
+      "nivel": "atencao",
+      "titulo": "Nunca ligue a placa sem a antena de vídeo",
+      "texto": "A placa tem o transmissor de vídeo embutido. Sem antena, a energia volta para o transmissor, que pode queimar em segundos.",
+      "acoes": [
+        "Instale a antena antes da primeira ligação.",
+        "Se a antena soltar, desligue a bateria antes de recolocar."
+      ],
+      "fontes": [
+        {
+          "titulo": "BETAFPV: Matrix 1S 5IN1 II (ligações, bind e firmware)",
+          "tipo": "pagina_fabricante",
+          "url": "https://betafpv.com/products/matrix-1s-5in1-ii-brushless-flight-controller",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "verificado_em": "2026-10-04"
+    },
+    {
+      "id": "vtx-anatel",
+      "nivel": "regulatorio",
+      "titulo": "Transmissor de vídeo de 5,8 GHz e a Anatel",
+      "texto": "Transmissores precisam de homologação da Anatel. Os transmissores de vídeo analógicos de 5,8 GHz costumam passar do limite dos equipamentos de radiação restrita (que dispensam licença), mesmo na menor potência. Informativo, não é aconselhamento jurídico: verifique as regras vigentes.",
+      "acoes": [
+        "Use a menor potência que dê imagem boa (25 mW dentro de casa).",
+        "Consulte a Anatel sobre homologação antes de usar."
+      ],
+      "fontes": [
+        {
+          "titulo": "Anatel: Ato nº 14.448/2017 (radiação restrita)",
+          "tipo": "norma",
+          "url": "https://informacoes.anatel.gov.br/legislacao/atos-de-certificacao-de-produtos/2017/1139-",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "Anatel: Homologar produtos de telecomunicações",
+          "tipo": "documentacao_oficial",
+          "url": "https://www.gov.br/pt-br/servicos/homologar-produtos-de-telecomunicacoes-anatel",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "verificado_em": "2026-10-04"
+    },
+    {
+      "id": "lihv",
+      "nivel": "atencao",
+      "titulo": "Bateria LiHV: carga e armazenamento",
+      "texto": "As baterias LAVA II são LiHV: cheias têm 4,35 V (a LiPo comum tem 4,20 V). Carregar uma LiPo comum no modo LiHV passa do limite dela e pode causar fogo.",
+      "acoes": [
+        "Use o modo LiHV só em bateria LiHV.",
+        "Carregue na corrente recomendada (0,5 A até 320 mAh; 1 A para 480–680 mAh).",
+        "Guarde em 3,85 V (modo de armazenamento) se não for voar."
+      ],
+      "fontes": [
+        {
+          "titulo": "BETAFPV: LAVA II 1S (LiHV, 4,35 V, armazenamento 3,85 V)",
+          "tipo": "pagina_fabricante",
+          "url": "https://betafpv.com/products/lava-ii-1s-battery",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "BETAFPV: HexaCharger 1S (correntes de carga recomendadas)",
+          "tipo": "pagina_fabricante",
+          "url": "https://betafpv.com/products/hexacharger-1s-charger",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "verificado_em": "2026-10-04"
+    }
+  ],
+  "fontes": [
+    {
+      "titulo": "BETAFPV: Air65 II (frame e drone pronto)",
+      "tipo": "pagina_fabricante",
+      "url": "https://betafpv.com/products/air65-ii-brushless-whoop-quadcopter",
+      "acessado_em": "2026-10-04"
+    },
+    {
+      "titulo": "BETAFPV: Air75 II (frame e drone pronto)",
+      "tipo": "pagina_fabricante",
+      "url": "https://betafpv.com/products/air75-ii-brushless-whoop-quadcopter",
+      "acessado_em": "2026-10-04"
+    },
+    {
+      "titulo": "BETAFPV: Matrix 1S 5IN1 II (ligações, bind e firmware)",
+      "tipo": "pagina_fabricante",
+      "url": "https://betafpv.com/products/matrix-1s-5in1-ii-brushless-flight-controller",
+      "acessado_em": "2026-10-04"
+    },
+    {
+      "titulo": "Betaflight: Setup Guide (guia oficial de configuração)",
+      "tipo": "documentacao_oficial",
+      "url": "https://betaflight.com/docs/wiki/getting-started/setup-guide",
+      "acessado_em": "2026-10-04"
+    }
+  ]
+}

@@ -32,6 +32,17 @@ describe("furação", () => {
     expect(mountFits("25.5x25.5", ["25.5x25.5 M2"])).toBe(true);
   });
 
+  it("furação circular (motores de whoop): mesmo número de furos, rosca e diâmetro", () => {
+    expect(mountPatternSchema.safeParse("Ø6.6 3xM1.4").success).toBe(true);
+    expect(mountPatternSchema.safeParse("Ø6.6 3x M1.4").success).toBe(false);
+    expect(mountFits("Ø6.6 3xM1.4", ["Ø6.6 3xM1.4"])).toBe(true);
+    expect(mountFits("Ø6.6 3xM1.4", ["Ø6.8 3xM1.4"])).toBe(true);
+    expect(mountFits("Ø6.6 3xM1.4", ["Ø9 3xM1.4"])).toBe(false);
+    expect(mountFits("Ø6.6 3xM1.4", ["Ø6.6 4xM1.4"])).toBe(false);
+    expect(mountFits("Ø6.6 3xM1.4", ["9x9 M2"])).toBe(false);
+    expect(mountFits("9x9 M2", ["Ø6.6 3xM1.4"])).toBe(false);
+  });
+
   it("normaliza a ordem das medidas para comparar", () => {
     expect(normalizeMountPattern("19x16 M3")).toBe("16x19 M3");
     expect(normalizeMountPattern("30.5x30.5 M3")).toBe("30.5x30.5 M3");

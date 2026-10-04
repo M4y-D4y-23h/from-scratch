@@ -1,0 +1,152 @@
+[
+  {
+    "id": "betafpv-0702-2026-freestyle-gf1207-1s",
+    "motor_id": "betafpv-0702-2026-freestyle",
+    "helice_id": "gemfan-1207-3b",
+    "celulas": 1,
+    "tensao_teste_v": 3.9,
+    "pontos": [
+      {
+        "throttle_pct": 20,
+        "empuxo_g": 1.1,
+        "corrente_a": 0.21,
+        "potencia_w": 0.81
+      },
+      {
+        "throttle_pct": 30,
+        "empuxo_g": 3.5,
+        "corrente_a": 0.57,
+        "potencia_w": 2.23
+      },
+      {
+        "throttle_pct": 40,
+        "empuxo_g": 6.5,
+        "corrente_a": 0.97,
+        "potencia_w": 3.82
+      },
+      {
+        "throttle_pct": 50,
+        "empuxo_g": 10.4,
+        "corrente_a": 1.43,
+        "potencia_w": 5.58
+      },
+      {
+        "throttle_pct": 60,
+        "empuxo_g": 14.3,
+        "corrente_a": 1.84,
+        "potencia_w": 7.21
+      },
+      {
+        "throttle_pct": 70,
+        "empuxo_g": 17.7,
+        "corrente_a": 2.24,
+        "potencia_w": 8.76
+      },
+      {
+        "throttle_pct": 80,
+        "empuxo_g": 21.4,
+        "corrente_a": 2.68,
+        "potencia_w": 10.45
+      },
+      {
+        "throttle_pct": 90,
+        "empuxo_g": 25.2,
+        "corrente_a": 3.19,
+        "potencia_w": 12.4
+      },
+      {
+        "throttle_pct": 100,
+        "empuxo_g": 28.8,
+        "corrente_a": 3.86,
+        "potencia_w": 15.01
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: 0702 (2026) Freestyle 25000KV com GF 1207-3P (Load Performance)",
+        "tipo": "pagina_fabricante",
+        "url": "https://cdn.shopify.com/s/files/1/1778/6615/files/0702_Brushless_Motors_2026_load_performance.jpg",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "Transcrito da imagem oficial \"Load Performance\" da BETAFPV. Tensão de 3,93 V (20%) a 3,86 V (100%) durante o teste; registramos 3,9 V.",
+      "A BETAFPV observa que os dados são de amostras de teste."
+    ]
+  },
+  {
+    "id": "betafpv-0802-2026-freestyle-gf1614-1s",
+    "motor_id": "betafpv-0802-2026-freestyle",
+    "helice_id": "gemfan-1614-3b",
+    "celulas": 1,
+    "tensao_teste_v": 3.9,
+    "pontos": [
+      {
+        "throttle_pct": 20,
+        "empuxo_g": 2.3,
+        "corrente_a": 0.27,
+        "potencia_w": 1.04
+      },
+      {
+        "throttle_pct": 30,
+        "empuxo_g": 7.1,
+        "corrente_a": 0.69,
+        "potencia_w": 2.7
+      },
+      {
+        "throttle_pct": 40,
+        "empuxo_g": 12.4,
+        "corrente_a": 1.25,
+        "potencia_w": 4.9
+      },
+      {
+        "throttle_pct": 50,
+        "empuxo_g": 18,
+        "corrente_a": 1.87,
+        "potencia_w": 7.31
+      },
+      {
+        "throttle_pct": 60,
+        "empuxo_g": 24,
+        "corrente_a": 2.48,
+        "potencia_w": 9.67
+      },
+      {
+        "throttle_pct": 70,
+        "empuxo_g": 29.9,
+        "corrente_a": 3.18,
+        "potencia_w": 12.36
+      },
+      {
+        "throttle_pct": 80,
+        "empuxo_g": 36.3,
+        "corrente_a": 3.96,
+        "potencia_w": 15.36
+      },
+      {
+        "throttle_pct": 90,
+        "empuxo_g": 41.7,
+        "corrente_a": 4.76,
+        "potencia_w": 18.43
+      },
+      {
+        "throttle_pct": 100,
+        "empuxo_g": 47.7,
+        "corrente_a": 5.9,
+        "potencia_w": 22.73
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: 0802 (2026) Freestyle 22000KV com GF 1614-3P (Load Performance)",
+        "tipo": "pagina_fabricante",
+        "url": "https://cdn.shopify.com/s/files/1/1778/6615/files/0802_Brushless_Motors_2026_load_performance.jpg",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "Transcrito da imagem oficial \"Load Performance\" da BETAFPV. Tensão de 3,93 V (20%) a 3,86 V (100%) durante o teste; registramos 3,9 V.",
+      "A BETAFPV observa que os dados são de amostras de teste."
+    ]
+  }
+]

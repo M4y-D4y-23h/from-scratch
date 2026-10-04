@@ -115,6 +115,16 @@ export function escOf(build: Build) {
   return undefined;
 }
 
+/** Transmissor de vídeo: avulso ou embutido na AIO ("5 em 1" de whoop). */
+export function vtxOf(build: Build) {
+  const vtx = firstOf(build, "vtx");
+  if (vtx) return { componente: vtx.componente, specs: vtx.componente.specs, integrado: false };
+  const aio = firstOf(build, "fc_aio");
+  if (aio?.componente.specs.vtx)
+    return { componente: aio.componente, specs: aio.componente.specs.vtx, integrado: true };
+  return undefined;
+}
+
 /** Receptor de rádio: avulso ou integrado na AIO. */
 export function receiverOf(build: Build) {
   const rx = firstOf(build, "receptor");

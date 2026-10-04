@@ -58,9 +58,18 @@ export const DEFAULT_DRONE_CONFIG = {
     camera_fpv: 300,
   } as Partial<Record<string, number>>,
   autonomia: {
-    /** Corrente média de voo real em relação à de pairar: voo calmo ≈ 1,0; com manobras e vento
-     *  sobe. A faixa vira a faixa de autonomia mostrada como ⚠️. */
-    fator_corrente_voo: [1.0, 1.25] as const,
+    /** Corrente média de voo em relação à de pairar, por estilo de voo do arquétipo. A faixa
+     *  vira a faixa de autonomia mostrada como ⚠️. Heurística do From Scratch (não há fonte
+     *  oficial para "corrente média"), conferida com o tempo publicado pelos fabricantes:
+     *  - estavel (filmagem/GPS): voo calmo ≈ 1,0; manobras e vento até 1,25.
+     *  - freestyle (5"): de cruzeiro (1,0) a acrobacias (3,0). Acelerar a 100% puxa mais de 20× a
+     *    corrente de pairar (tabela do motor), mas só por segundos.
+     *  - indoor (whoop): quase sempre perto de pairar, com subidas curtas (1,0 a 1,5). */
+    fator_corrente_voo: {
+      estavel: [1.0, 1.25],
+      freestyle: [1.0, 3.0],
+      indoor: [1.0, 1.5],
+    } as const,
     /** Eficiência dos reguladores (BEC) ao alimentar eletrônicos a partir da bateria. */
     eficiencia_bec: 0.85,
   },
@@ -94,6 +103,26 @@ export const DEFAULT_DRONE_CONFIG = {
     peso_media: 0.4,
     /** Nota abaixo de cada limite → Iniciante, Intermediário, Avançado; acima → Especialista. */
     limites_rotulo: [1.5, 2.5, 3.5] as const,
+  },
+  /**
+   * Comparação de classes de tamanho do Arquétipo 1 (~450 mm × 5"–7", SPEC B.2.1): critério "mais
+   * fácil e seguro para um leigo, dentro do orçamento". Pesos PROPOSTOS pelo From Scratch, para o
+   * dono do projeto aprovar (PROGRESS, Fase 1). Somam 1. Só concorrem as opções que atendem aos
+   * requisitos do arquétipo (GPS com bússola, ArduPilot, failsafe com RTL).
+   */
+  comparacao_tamanho: {
+    pesos: {
+      /** Nota de dificuldade (menor = melhor). */
+      facilidade: 0.3,
+      /** Potência máxima dos motores (menor = drone menos violento, mais seguro para leigo). */
+      seguranca: 0.3,
+      /** Autonomia máxima estimada (maior = melhor). */
+      autonomia: 0.15,
+      /** Entre-eixos (maior = mais espaço para montar e mexer). */
+      espaco_montagem: 0.1,
+      /** Custo das peças, ponto médio da faixa (menor = melhor). */
+      custo: 0.15,
+    },
   },
   regras_voo_recreativo: {
     /** DECEA ICA 100-40/2026, art. 32: operação recreativa até 200 ft (60 m) AGL e 300 m. */

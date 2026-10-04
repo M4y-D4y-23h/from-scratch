@@ -1,0 +1,59 @@
+[
+  {
+    "id": "xing2-2207-1855kv-gf51466-6s",
+    "motor_id": "iflight-xing2-2207-1855kv",
+    "helice_id": "gemfan-51466-hurricane",
+    "celulas": 6,
+    "tensao_teste_v": 24,
+    "pontos": [
+      {
+        "throttle_pct": 50,
+        "empuxo_g": 864,
+        "corrente_a": 8.23,
+        "potencia_w": 197.5
+      },
+      {
+        "throttle_pct": 60,
+        "empuxo_g": 1021,
+        "corrente_a": 11.86,
+        "potencia_w": 284.6
+      },
+      {
+        "throttle_pct": 70,
+        "empuxo_g": 1208,
+        "corrente_a": 17.63,
+        "potencia_w": 423.1
+      },
+      {
+        "throttle_pct": 80,
+        "empuxo_g": 1339,
+        "corrente_a": 22.48,
+        "potencia_w": 539.5
+      },
+      {
+        "throttle_pct": 90,
+        "empuxo_g": 1509,
+        "corrente_a": 27.38,
+        "potencia_w": 657.1
+      },
+      {
+        "throttle_pct": 100,
+        "empuxo_g": 1685,
+        "corrente_a": 35.08,
+        "potencia_w": 841.9
+      }
+    ],
+    "fontes": [
+      {
+        "titulo": "iFlight: relatório de teste XING2 2207 1855KV (Datasheet, hélice GF51466, 24 V)",
+        "tipo": "pagina_fabricante",
+        "url": "https://shop.iflight.com/image/catalog/TEST%20REPORT/XING2-2207-1855KV.png",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "notas": [
+      "Transcrito da imagem oficial da iFlight (aba Description da página do motor). Temperatura no fim do teste: 55 °C.",
+      "A tabela começa em 50%: um 5\" paira bem abaixo disso, então a corrente de pairar é estimada (veja calculations.ts)."
+    ]
+  }
+]

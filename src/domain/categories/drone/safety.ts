@@ -2,6 +2,7 @@ import { REGULATORY_DISCLAIMER, type SafetyAlert } from "@/domain/core/safety";
 
 import { type Build, hasCategory } from "./build";
 import type { BuildMetrics } from "./compatibility";
+import { conditionMatches } from "./firmware";
 import type { Archetype } from "./schema";
 import { SRC } from "./sources";
 
@@ -65,7 +66,7 @@ export const GLOBAL_ALERTS: readonly SafetyAlert[] = [
       "Na primeira vez que a bateria é ligada, um curto-circuito pode queimar placas na hora ou causar fogo.",
     acoes: [
       "Com o multímetro em continuidade, confira que o positivo e o negativo da entrada de energia não estão ligados entre si.",
-      "Ligue a bateria pela primeira vez através do smoke stopper, sem hélices.",
+      "Ligue a bateria pela primeira vez sem hélices e, se houver smoke stopper para o conector do drone (XT30/XT60), através dele.",
       "Se sair fumaça ou cheiro de queimado, desconecte a bateria imediatamente.",
     ],
     fontes: [],
@@ -101,21 +102,32 @@ export const GLOBAL_ALERTS: readonly SafetyAlert[] = [
   },
 ];
 
-export const GLOBAL_ALERT_IDS: readonly string[] = GLOBAL_ALERTS.map((a) => a.id);
+/** Alertas calculados a partir do build (dynamicAlerts): os passos também podem citá-los. */
+const DYNAMIC_ALERT_IDS = ["video-e-visada", "uso-nao-recreativo"] as const;
+
+/** Ids que os passos podem citar além dos alertas do próprio arquétipo. */
+export const GLOBAL_ALERT_IDS: readonly string[] = [
+  ...GLOBAL_ALERTS.map((a) => a.id),
+  ...DYNAMIC_ALERT_IDS,
+];
 
 /** Alertas que só aparecem quando a opção do projeto pede (os demais do arquétipo valem sempre). */
 const CONDICIONAIS: Record<string, (build: Build, m: BuildMetrics) => boolean> = {
   "celular-experimental": (b) => b.opcoes.controle === "celular_experimental",
   iphone: (b) => b.opcoes.celular !== "android",
   "acima-250g": (_, m) => m.auw.massa_total_g === undefined || m.auw.massa_total_g > 250,
+  "ate-250g": (_, m) => m.auw.massa_total_g !== undefined && m.auw.massa_total_g <= 250,
 };
+
+/** Alertas globais que só fazem sentido quando algum passo do guia usa a ferramenta. */
+const GLOBAIS_POR_FERRAMENTA: Record<string, string> = { solda: "ferro-de-solda" };
 
 /** Alertas calculados a partir das escolhas do projeto. */
 function dynamicAlerts(build: Build): SafetyAlert[] {
   const alertas: SafetyAlert[] = [];
   if (hasCategory(build, "receptor_video") || hasCategory(build, "oculos_fpv")) {
     alertas.push({
-      id: "video-e-visada",
+      id: "video-e-visada" satisfies (typeof DYNAMIC_ALERT_IDS)[number],
       nivel: "regulatorio",
       titulo: "Ver o vídeo não substitui ver o drone",
       texto: `No voo recreativo você precisa ver o drone com os próprios olhos o tempo todo. Se for olhar a tela do celular ou usar óculos FPV, tenha um observador ao seu lado vendo o drone. ${REGULATORY_DISCLAIMER}`,
@@ -129,7 +141,7 @@ function dynamicAlerts(build: Build): SafetyAlert[] {
   }
   if (build.opcoes.uso === "nao_recreativo") {
     alertas.push({
-      id: "uso-nao-recreativo",
+      id: "uso-nao-recreativo" satisfies (typeof DYNAMIC_ALERT_IDS)[number],
       nivel: "regulatorio",
       titulo: "Uso não recreativo segue o RBAC nº 100",
       texto: `Filmagem paga ou qualquer uso que não seja lazer segue o RBAC nº 100 da ANAC (cadastro, seguro e outras exigências) e as regras do DECEA para operações não recreativas. ${REGULATORY_DISCLAIMER}`,
@@ -148,7 +160,17 @@ export function projectAlerts(
   metrics: BuildMetrics,
 ): SafetyAlert[] {
   const doArquetipo = archetype.alertas.filter((a) => CONDICIONAIS[a.id]?.(build, metrics) ?? true);
-  const todos = [...GLOBAL_ALERTS, ...doArquetipo, ...dynamicAlerts(build)];
+  const ferramentas = new Set(
+    archetype.passos
+      .filter((p) => conditionMatches(p.condicao, build))
+      .flatMap((p) => p.ferramentas),
+  );
+  // Montagem sem solda (whoop de encaixe) não mostra o alerta de solda.
+  const globais = GLOBAL_ALERTS.filter((a) => {
+    const ferramenta = GLOBAIS_POR_FERRAMENTA[a.id];
+    return ferramenta === undefined || ferramentas.has(ferramenta);
+  });
+  const todos = [...globais, ...doArquetipo, ...dynamicAlerts(build)];
   const vistos = new Set<string>();
   return todos.filter((a) => (vistos.has(a.id) ? false : (vistos.add(a.id), true)));
 }

@@ -500,3 +500,61 @@ Datas no formato AAAA-MM-DD. "Verificado em" indica quando a informação extern
 - **Consequências:** com o catálogo atual, o Arquétipo 1 sai "Avançado" (nota 2,7): configurar
   ArduPilot exige diagnosticar avisos de pré-arme e logs (nível 3). A comparação 450 mm × 5" e
   os arquétipos 2 e 3 usam o mesmo solver.
+
+## ADR-0020: arquétipos 2 (FPV 5") e 3 (Tiny Whoop): peças, regras novas e autonomia
+
+- **Data:** 2026-10-04 · **Status:** aceita
+- **Contexto:** a SPEC pede os arquétipos FPV 5" freestyle (Betaflight) e Tiny Whoop sub-250 g
+  (iniciante, indoor), com peças reais, passos e regras próprias. Os dois têm coisas que o
+  Arquétipo 1 não tinha: placa "tudo em um" com VTX embutido, motores de whoop com furação
+  circular, dutos, encaixe justo de bateria e tabelas de empuxo de FPV que começam em 50%.
+- **Peças (com página oficial lida em 04/10/2026, tudo ❓ não verificado):**
+  - **5":** frame iFlight Nazgul Evoque F5 V3; motor iFlight XING2 2207 1855KV (6S) com a tabela
+    oficial da iFlight (hélice Gemfan 51466, 24 V, 50% a 100%); stack iFlight BLITZ Mini ATF435 +
+    E55S (20 x 20 mm, a única do frame com ficha completa publicada); bateria CNHL MiniStar 6S
+    1500 mAh 120C (a 1300 mAh não passa no C-rating com a corrente da tabela); câmera Caddx Ratel /
+    Ratel Pro e VTX BETAFPV A03 (os do Arquétipo 1); óculos BETAFPV VR04 ou iFlight Analog. O
+    rabicho XT60 é item genérico sem página oficial: fica "sem preço pesquisado".
+  - **Whoop (BETAFPV):** frames Air65 II (econômica) e Air75 II; motores 0702 e 0802 (2026)
+    Freestyle com as tabelas "Load Performance" (20% a 100%, 1S); AIO Matrix 1S 5IN1 II (FC + ESC +
+    receptor ELRS + VTX), câmera C03, Air II Canopy, baterias LAVA II 1S LiHV, carregador
+    HexaCharger 1S. Montagem sem solda.
+  - **Premium do 5" fica analógico:** o padrão do mercado hoje é vídeo digital (DJI O4, Walksnail,
+    HDZero), mas as lojas oficiais não publicam em texto tensão, consumo e peso do VTX digital.
+    Fica para a curadoria do catálogo (Fase 3), sem inventar números.
+- **Regras e modelos novos:**
+  - VTX embutido na AIO (`vtxOf`); antena que vem na caixa do VTX/AIO passa sem precisar do tipo
+    de conector; peça "não vendida separadamente" só entra no build se vier na caixa de outra.
+  - UART do controle do VTX: conta para VTX digital (MSP) e para VTX analógico numa FC com OSD
+    (Betaflight); numa Pixhawk sem OSD, não.
+  - Furação circular ("Ø6.6 3xM1.4"); hélice mínima em frame com dutos (`helice_min_pol`);
+    bateria no encaixe do whoop (`slot_bateria_mm` × dimensões da bateria); tamanho da câmera por
+    arquétipo (`filtro_specs.formato`: 19 mm no 5", câmera de canopy no whoop).
+  - Monitor de bateria e failsafe valem para qualquer firmware. No Betaflight o failsafe exigido é
+    `failsafe_procedure = DROP` com guarda de 1,5 s (padrão do Betaflight; sem GPS, parar os
+    motores é mais seguro que seguir voando sem controle).
+  - BEC não publicado pelo fabricante vira "sem dado" (antes virava falha).
+  - Telemetria para o celular (ADR-0017) só nos arquétipos ArduPilot.
+  - Perfil `betaflight-4.5`: nomes conferidos no código-fonte das versões 4.5.3 e 2026.6.2. Inclui
+    `vbat_max_cell_voltage = 440` para baterias LiHV: com o padrão 430, a placa divide 4,35 V por
+    4,30 V, conta 2 células numa 1S cheia e dispara o alerta de bateria baixa.
+- **Autonomia:**
+  - **Abaixo da tabela:** o 5" paira bem abaixo de 50% de acelerador, onde as tabelas de FPV
+    começam. A corrente de pairar é estimada com a mesma eficiência (g/A) do primeiro ponto, o que
+    tende a superestimar o consumo nos motores de 5". Calibração: a iFlight informa ~11,5 min
+    pairando para o Nazgul ECO DC5 (643 g, 6S 1550 mAh); a conta dá de 10,6 a 12,1 min (teste em
+    `calculations.test.ts`).
+  - **Estilo de voo:** o fator "corrente média ÷ corrente de pairar" passa a depender do arquétipo
+    (`estilo_voo`): estável 1,0–1,25; freestyle 1,0–3,0; indoor 1,0–1,5. É heurística do From
+    Scratch, conferida com o tempo publicado pelos fabricantes (testes de aceite).
+- **Comparação 450 mm × 5"–7" (Arquétipo 1, `size-comparison.ts`):** cada candidato é validado
+  com as regras do Arquétipo 1 (sem GPS com bússola ou sem ArduPilot, não pode ser a escolha) e
+  recebe uma nota ponderada: facilidade 0,3, segurança (potência máxima) 0,3, autonomia 0,15,
+  espaço para montar 0,1, custo 0,15, proporcional ao melhor. **Os pesos estão em `config.ts`
+  para o dono aprovar.** O catálogo ainda não tem um 5"–7" com GPS; o representante da classe é o
+  FPV 5" do Arquétipo 2 (mesmo tamanho de hélice e motor).
+- **Consequências:** FPV 5" sai "Avançado" (nota 2,8), com TWR ~9 e de 3 a 10 min de voo; o whoop
+  sai com a menor nota dos três (1,8, "Intermediário": sem solda, mas com ferramentas pequenas,
+  carga de LiHV e prática de voo). Com a fórmula e os limites da SPEC B.8, nenhum build com algum
+  passo de nível 2 chega a "Iniciante"; se o dono quiser o whoop como "Iniciante", o ajuste é nos
+  limites dos rótulos, não nos níveis dos passos.
