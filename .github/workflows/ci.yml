@@ -1,0 +1,81 @@
+# Prova automática de que o projeto instala, compila e passa nos testes no
+# Windows (sistema principal do dono do projeto) e no Linux. Ver ADR-0012.
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NEXT_TELEMETRY_DISABLED: "1"
+
+jobs:
+  verificar:
+    name: Verificar (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Instalar o Node.js 24 (LTS)
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      - name: Instalar o pnpm (versão do campo packageManager)
+        uses: pnpm/action-setup@v6
+        with:
+          cache: true
+
+      - name: Instalar dependências
+        run: pnpm install --frozen-lockfile
+
+      - name: Formatação
+        run: pnpm format:check
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Tipos
+        run: pnpm typecheck
+
+      - name: Testes de unidade
+        run: pnpm test
+
+      - name: Build de produção
+        run: pnpm build
+
+      - name: Instalar o Chromium do Playwright (Linux)
+        if: runner.os == 'Linux'
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Instalar o Chromium do Playwright (Windows)
+        if: runner.os == 'Windows'
+        run: pnpm test:e2e:install
+
+      - name: Testes no navegador (Playwright)
+        run: pnpm test:e2e
+
+      - name: Guardar o relatório do Playwright (se falhar)
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report-${{ matrix.os }}
+          path: playwright-report/
+          retention-days: 7
