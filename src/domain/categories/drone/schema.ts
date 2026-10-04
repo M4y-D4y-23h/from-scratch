@@ -1,0 +1,561 @@
+import { z } from "zod";
+
+import { difficultyDomainSchema, difficultyLevelSchema } from "@/domain/core/difficulty";
+import { locationKindSchema } from "@/domain/core/location";
+import { priceRangeSchema } from "@/domain/core/money";
+import { safetyAlertSchema } from "@/domain/core/safety";
+import { isoDateSchema, sourceSchema } from "@/domain/core/source";
+import { verificationStatusSchema } from "@/domain/core/verification";
+
+/*
+ * Schemas do catálogo de drones (SPEC B.5).
+ *
+ * Convenção de nomes: entidades com os nomes da SPEC (Component, ThrustData...), campos em
+ * português snake_case, mantendo em inglês os termos técnicos que perderiam o sentido se
+ * traduzidos (kv, throttle, failsafe, stack, frame...). Toda grandeza física tem a unidade no
+ * nome do campo (_mm, _g, _a, _v, _mah, _pol = polegadas).
+ *
+ * Quase todos os campos de specs são opcionais de propósito: só preenchemos o que tem fonte
+ * confiável (SPEC B.6). Regra sem dado responde "sem dado", nunca chuta.
+ */
+
+// ---------------------------------------------------------------------------
+// Tipos auxiliares
+// ---------------------------------------------------------------------------
+
+/**
+ * Furação (padrão de furos de fixação), ex.: "16x19 M3", "30.5x30.5 M3", "9x9 M2".
+ * Os números são as distâncias entre furos em mm; "M3" é a rosca do parafuso.
+ */
+export const mountPatternSchema = z
+  .string()
+  .regex(/^\d+(\.\d+)?x\d+(\.\d+)?( M\d(\.\d)?)?$/, "use o formato 16x19 M3");
+export type MountPattern = z.infer<typeof mountPatternSchema>;
+
+/** Normaliza "19x16 M3" → "16x19 M3" para comparar furações. */
+export function normalizeMountPattern(pattern: string): string {
+  const [dims = "", thread] = pattern.trim().split(/\s+/);
+  const nums = dims
+    .split("x")
+    .map(Number)
+    .sort((a, b) => a - b);
+  return `${nums.join("x")}${thread ? ` ${thread}` : ""}`;
+}
+
+export const BATTERY_CONNECTORS = [
+  "XT60",
+  "XT30",
+  "XT90",
+  "XT60H",
+  "BT2.0",
+  "PH2.0",
+  "A30",
+  "EC5",
+] as const;
+export const batteryConnectorSchema = z.enum(BATTERY_CONNECTORS);
+
+/** Protocolos de link de rádio de controle. */
+export const RC_LINKS = ["elrs_2g4", "elrs_900", "elrs_dual", "crossfire", "outro"] as const;
+export const rcLinkSchema = z.enum(RC_LINKS);
+
+/** Saídas seriais que um receptor pode fornecer para a FC. */
+export const RX_OUTPUTS = ["CRSF", "MAVLink", "SBUS"] as const;
+
+/** Sistemas de vídeo: peças de sistemas diferentes não conversam entre si. */
+export const VIDEO_SYSTEMS = ["analogico_5g8", "dji_o4", "walksnail", "hdzero", "wifi_ip"] as const;
+export const videoSystemSchema = z.enum(VIDEO_SYSTEMS);
+export type VideoSystem = z.infer<typeof videoSystemSchema>;
+
+/** Como a hélice prende no motor. */
+export const PROP_MOUNTS = [
+  "eixo_5mm_porca", // eixo M5 com porca (hélices de 5" e 450 mm com adaptador)
+  "autoaperto", // rosca própria da hélice (ex.: DJI 9450 self-tightening)
+  "t_mount", // 3 parafusos (micros e alguns 3")
+  "pressao_1mm", // encaixe por pressão em eixo de 1 mm (whoop)
+  "pressao_1_5mm", // encaixe por pressão em eixo de 1,5 mm (whoop/micro)
+] as const;
+export const propMountSchema = z.enum(PROP_MOUNTS);
+
+export const FIRMWARES = ["ArduPilot", "Betaflight", "INAV"] as const;
+export const firmwareSchema = z.enum(FIRMWARES);
+export type Firmware = z.infer<typeof firmwareSchema>;
+
+export const WHERE_TO_BUY_KINDS = [
+  "marketplace_nacional", // Mercado Livre, Amazon Brasil...
+  "importacao", // AliExpress e lojas no exterior
+  "loja_hobby_robotica", // lojas brasileiras de hobby/robótica (tipo de loja, sem link)
+  "loja_ferramentas", // ferramentas, EPI
+  "fabricante", // loja oficial do fabricante
+] as const;
+
+/** Onde comprar: só termos de busca, nunca link de anúncio específico (SPEC B.1.6). */
+export const whereToBuySchema = z.object({
+  tipo_loja: z.enum(WHERE_TO_BUY_KINDS),
+  termo_busca: z.string().min(2),
+  observacao: z.string().optional(),
+});
+export type WhereToBuy = z.infer<typeof whereToBuySchema>;
+
+const range = (s: z.ZodNumber) => z.tuple([s, s]).refine(([a, b]) => b >= a, "faixa invertida");
+
+// ---------------------------------------------------------------------------
+// Specs por categoria de peça
+// ---------------------------------------------------------------------------
+
+export const frameSpecsSchema = z.object({
+  geometria: z.enum(["X", "true-X", "stretch-X", "H", "deadcat"]).optional(),
+  distancia_entre_eixos_mm: z.number().positive().optional(),
+  helice_max_pol: z.number().positive().optional(),
+  furacao_motor: z.array(mountPatternSchema).optional(),
+  furacao_stack: z.array(mountPatternSchema).optional(),
+  espessura_braco_mm: z.number().positive().optional(),
+  material: z.enum(["fibra_de_carbono", "fibra_de_vidro_nylon", "plastico", "pcb"]).optional(),
+  /** Placa de distribuição de energia embutida no frame (comum em frames 450). */
+  pdb_integrada: z.boolean().optional(),
+  /** Dutos/protetores ao redor das hélices (whoops). */
+  protecao_helices: z.boolean().optional(),
+  trem_de_pouso: z.boolean().optional(),
+});
+
+export const motorSpecsSchema = z.object({
+  /** Tamanho do estator "DDHH": 2212 = 22 mm de diâmetro x 12 mm de altura. */
+  estator: z
+    .string()
+    .regex(/^\d{4}$/)
+    .optional(),
+  kv: z.number().positive().optional(),
+  celulas_min: z.int().min(1).optional(),
+  celulas_max: z.int().min(1).optional(),
+  furacao: z.array(mountPatternSchema).optional(),
+  eixo_mm: z.number().positive().optional(),
+  fixacao_helice: z.array(propMountSchema).optional(),
+  /** Corrente máxima informada pelo fabricante (A). */
+  corrente_max_a: z.number().positive().optional(),
+});
+
+export const propSpecsSchema = z.object({
+  diametro_pol: z.number().positive().optional(),
+  passo_pol: z.number().positive().optional(),
+  pas: z.int().min(2).max(6).optional(),
+  material: z.enum(["plastico", "nylon_fibra_de_vidro", "fibra_de_carbono"]).optional(),
+  fixacao: propMountSchema.optional(),
+});
+
+const escCommon = {
+  corrente_continua_a: z.number().positive().optional(),
+  corrente_pico_a: z.number().positive().optional(),
+  celulas_min: z.int().min(1).optional(),
+  celulas_max: z.int().min(1).optional(),
+  firmware: z.enum(["BLHeli_S", "BLHeli_32", "AM32", "Bluejay", "SimonK", "outro"]).optional(),
+  protocolos: z
+    .array(z.enum(["PWM", "OneShot125", "Multishot", "DShot150", "DShot300", "DShot600"]))
+    .optional(),
+};
+
+/** ESC individual (um por motor). */
+export const escSpecsSchema = z.object(escCommon);
+
+/** ESC 4 em 1 (uma placa para os quatro motores). Corrente informada é por motor. */
+export const esc4in1SpecsSchema = z.object({
+  ...escCommon,
+  furacao: z.array(mountPatternSchema).optional(),
+  sensor_corrente: z.boolean().optional(),
+  /** Conector de bateria que vem soldado/incluso (ex.: rabicho XT60). */
+  conector_bateria: batteryConnectorSchema.optional(),
+});
+
+export const becSchema = z.object({
+  tensao_v: z.number().positive(),
+  corrente_a: z.number().positive(),
+  observacao: z.string().optional(),
+});
+
+export const uartSchema = z.object({
+  nome: z.string().min(1),
+  /** RX com DMA: o ArduPilot pede DMA na UART do receptor CRSF/ELRS em placas F4/F7. */
+  dma_rx: z.boolean().optional(),
+  observacao: z.string().optional(),
+});
+
+export const fcSpecsSchema = z.object({
+  mcu: z.string().optional(),
+  flash_mb: z.number().positive().optional(),
+  firmwares: z
+    .array(
+      z.object({
+        nome: firmwareSchema,
+        /** Nome da placa no firmware (ex.: "MatekH743" no ArduPilot). */
+        alvo: z.string().min(1),
+        /** Consta na lista oficial de placas suportadas daquele firmware. */
+        lista_oficial: z.boolean(),
+      }),
+    )
+    .optional(),
+  /** UARTs livres para periféricos (receptor, GPS, telemetria...). Não inclui a USB. */
+  uarts: z.array(uartSchema).optional(),
+  saidas_motor: z.int().min(1).optional(),
+  becs: z.array(becSchema).optional(),
+  entrada_celulas_min: z.int().min(1).optional(),
+  entrada_celulas_max: z.int().min(1).optional(),
+  furacao: z.array(mountPatternSchema).optional(),
+  barometro: z.boolean().optional(),
+  osd_analogico: z.boolean().optional(),
+  sensor_corrente: z.boolean().optional(),
+  sensor_tensao: z.boolean().optional(),
+  cartao_sd: z.boolean().optional(),
+});
+
+export const receiverSpecsSchema = z.object({
+  link: rcLinkSchema.optional(),
+  saidas: z.array(z.enum(RX_OUTPUTS)).optional(),
+  /** Baseado em ESP (tem Wi-Fi): requisito do modo MAVLink do ELRS. */
+  esp: z.boolean().optional(),
+  tensao_v_min: z.number().positive().optional(),
+  tensao_v_max: z.number().positive().optional(),
+  corrente_ma: z.number().positive().optional(),
+});
+
+export const radioSpecsSchema = z.object({
+  link: rcLinkSchema.optional(),
+  modulo: z.enum(["interno", "externo"]).optional(),
+  esp: z.boolean().optional(),
+  /** Tem TX Backpack com Wi-Fi: permite mandar a telemetria MAVLink para o celular. */
+  backpack_wifi: z.boolean().optional(),
+  firmware_radio: z.enum(["EdgeTX", "OpenTX", "outro"]).optional(),
+  /** Funciona como joystick USB no PC (para treinar em simulador). */
+  joystick_usb: z.boolean().optional(),
+  potencia_max_mw: z.number().positive().optional(),
+  /** Ex.: "2 baterias 18650 (não inclusas)". */
+  alimentacao: z.string().optional(),
+});
+
+export const vtxSpecsSchema = z.object({
+  sistema: videoSystemSchema.optional(),
+  potencias_mw: z.array(z.number().positive()).optional(),
+  tensao_v_min: z.number().positive().optional(),
+  tensao_v_max: z.number().positive().optional(),
+  corrente_ma_max: z.number().positive().optional(),
+  controle: z.enum(["SmartAudio", "Tramp", "MSP", "nenhum"]).optional(),
+  conector_antena: z.enum(["MMCX", "U.FL", "SMA", "RP-SMA"]).optional(),
+  furacao: z.array(mountPatternSchema).optional(),
+});
+
+export const cameraSpecsSchema = z.object({
+  sistema: videoSystemSchema.optional(),
+  tensao_v_min: z.number().positive().optional(),
+  tensao_v_max: z.number().positive().optional(),
+  corrente_ma: z.number().positive().optional(),
+  formato: z.enum(["micro_19mm", "nano_14mm", "full_22mm", "aio"]).optional(),
+});
+
+export const videoReceiverSpecsSchema = z.object({
+  sistema: videoSystemSchema.optional(),
+  interface: z.enum(["usb_uvc", "hdmi", "av"]).optional(),
+  android: z.boolean().optional(),
+  ios: z.boolean().optional(),
+  app: z.string().optional(),
+});
+
+export const gogglesSpecsSchema = z.object({
+  sistema: videoSystemSchema.optional(),
+  receptor_analogico: z.boolean().optional(),
+});
+
+export const antennaSpecsSchema = z.object({
+  frequencia_ghz: z.number().positive().optional(),
+  polarizacao: z.enum(["RHCP", "LHCP", "linear"]).optional(),
+  conector: z.enum(["MMCX", "U.FL", "SMA", "RP-SMA"]).optional(),
+});
+
+export const gpsSpecsSchema = z.object({
+  gnss: z.string().optional(),
+  /** Chip da bússola embutida; null = módulo sem bússola. */
+  bussola: z.string().nullable().optional(),
+  protocolo: z.enum(["UBX", "NMEA"]).optional(),
+  tensao_v: z.number().positive().optional(),
+  corrente_ma: z.number().positive().optional(),
+});
+
+export const gpsMastSpecsSchema = z.object({
+  altura_mm: z.number().positive().optional(),
+  dobravel: z.boolean().optional(),
+});
+
+export const TELEMETRY_KINDS = ["wifi_esp32_dronebridge", "wifi_esp8266_mavesp"] as const;
+export const telemetrySpecsSchema = z.object({
+  tipo: z.enum(TELEMETRY_KINDS).optional(),
+  alcance_m_tipico: z.number().positive().optional(),
+  tensao_v: z.number().positive().optional(),
+  corrente_ma: z.number().positive().optional(),
+  baud: z.int().positive().optional(),
+});
+
+export const powerModuleSpecsSchema = z.object({
+  mede_corrente: z.boolean().optional(),
+  mede_tensao: z.boolean().optional(),
+  celulas_max: z.int().min(1).optional(),
+  corrente_continua_a: z.number().positive().optional(),
+  becs: z.array(becSchema).optional(),
+  conector: batteryConnectorSchema.optional(),
+  /** Também distribui energia para os ESCs (PDB). */
+  pdb: z.boolean().optional(),
+});
+
+export const batterySpecsSchema = z.object({
+  celulas: z.int().min(1).optional(),
+  capacidade_mah: z.number().positive().optional(),
+  /** C contínuo informado pelo fabricante (costuma ser otimista). */
+  c_continuo: z.number().positive().optional(),
+  c_pico: z.number().positive().optional(),
+  conector: batteryConnectorSchema.optional(),
+  quimica: z.enum(["LiPo", "LiHV", "Li-ion"]).optional(),
+});
+
+export const chargerSpecsSchema = z.object({
+  potencia_w: z.number().positive().optional(),
+  celulas_min: z.int().min(1).optional(),
+  celulas_max: z.int().min(1).optional(),
+  balanceador: z.boolean().optional(),
+  entrada: z.enum(["AC", "DC", "AC_DC"]).optional(),
+  corrente_max_a: z.number().positive().optional(),
+});
+
+export const connectorSpecsSchema = z.object({
+  tipo: batteryConnectorSchema.optional(),
+});
+
+export const genericSpecsSchema = z.object({}).loose();
+
+// ---------------------------------------------------------------------------
+// Componente
+// ---------------------------------------------------------------------------
+
+const componentBase = {
+  id: z.string().regex(/^[a-z0-9][a-z0-9-]*$/, "use letras minúsculas, números e hífens"),
+  marca: z.string().min(1),
+  modelo: z.string().min(1),
+  /** Para que serve, em uma frase para leigos. */
+  descricao_leiga: z.string().min(1),
+  massa_g: z.number().positive().optional(),
+  dimensoes_mm: z
+    .object({ comprimento: z.number(), largura: z.number(), altura: z.number() })
+    .optional(),
+  /** Quantas unidades vêm no item vendido (ex.: hélices em pacote com 4). */
+  unidades_por_pacote: z.int().min(1).default(1),
+  preco_estimado_brl: priceRangeSchema,
+  onde_comprar: z.array(whereToBuySchema).min(1),
+  fontes: z.array(sourceSchema).default([]),
+  status_verificacao: verificationStatusSchema.default("nao_verificado"),
+  notas_seguranca: z.array(z.string()).default([]),
+  notas: z.array(z.string()).default([]),
+  licenca_modelo_3d: z.string().optional(),
+};
+
+const component = <C extends string, S extends z.ZodType>(categoria: C, specs: S) =>
+  z.object({ ...componentBase, categoria: z.literal(categoria), specs });
+
+export const componentSchema = z.discriminatedUnion("categoria", [
+  component("frame", frameSpecsSchema),
+  component("motor", motorSpecsSchema),
+  component("helice", propSpecsSchema),
+  component("esc", escSpecsSchema),
+  component("esc_4em1", esc4in1SpecsSchema),
+  component("fc", fcSpecsSchema),
+  component("stack", z.object({ fc: fcSpecsSchema, esc: esc4in1SpecsSchema })),
+  component(
+    "fc_aio",
+    z.object({
+      fc: fcSpecsSchema,
+      esc: esc4in1SpecsSchema,
+      receptor: receiverSpecsSchema.optional(),
+    }),
+  ),
+  component("bateria", batterySpecsSchema),
+  component("receptor", receiverSpecsSchema),
+  component("radio_tx", radioSpecsSchema),
+  component("vtx", vtxSpecsSchema),
+  component("camera_fpv", cameraSpecsSchema),
+  component("receptor_video", videoReceiverSpecsSchema),
+  component("oculos_fpv", gogglesSpecsSchema),
+  component("antena", antennaSpecsSchema),
+  component("gps", gpsSpecsSchema),
+  component("mastro_gps", gpsMastSpecsSchema),
+  component("telemetria", telemetrySpecsSchema),
+  component("modulo_energia", powerModuleSpecsSchema),
+  component("buzzer", genericSpecsSchema),
+  component("camera_acao", genericSpecsSchema),
+  component("carregador", chargerSpecsSchema),
+  component("fonte", genericSpecsSchema),
+  component("conector", connectorSpecsSchema),
+  component("cabo", genericSpecsSchema),
+  component("parafuso", genericSpecsSchema),
+  component("strap", genericSpecsSchema),
+  component("consumivel", genericSpecsSchema),
+]);
+export type Component = z.infer<typeof componentSchema>;
+export type ComponentCategory = Component["categoria"];
+export type ComponentOf<C extends ComponentCategory> = Extract<Component, { categoria: C }>;
+
+export function isCategory<C extends ComponentCategory>(
+  component: Component,
+  categoria: C,
+): component is ComponentOf<C> {
+  return component.categoria === categoria;
+}
+
+// ---------------------------------------------------------------------------
+// Tabela de empuxo (motor + hélice + nº de células)
+// ---------------------------------------------------------------------------
+
+export const thrustPointSchema = z.object({
+  throttle_pct: z.number().min(0).max(100),
+  empuxo_g: z.number().nonnegative(),
+  corrente_a: z.number().nonnegative(),
+  potencia_w: z.number().nonnegative().optional(),
+});
+export type ThrustPoint = z.infer<typeof thrustPointSchema>;
+
+export const thrustDataSchema = z.object({
+  id: z.string().regex(/^[a-z0-9][a-z0-9-]*$/),
+  motor_id: z.string(),
+  helice_id: z.string(),
+  celulas: z.int().min(1),
+  /** Tensão usada no teste do fabricante (V), quando informada. */
+  tensao_teste_v: z.number().positive().optional(),
+  pontos: z.array(thrustPointSchema).min(2),
+  /** Tabela de empuxo sem fonte não entra no catálogo. */
+  fontes: z.array(sourceSchema).min(1),
+  status_verificacao: verificationStatusSchema.default("nao_verificado"),
+  notas: z.array(z.string()).default([]),
+});
+export type ThrustData = z.infer<typeof thrustDataSchema>;
+
+// ---------------------------------------------------------------------------
+// Ferramentas, consumíveis e EPI
+// ---------------------------------------------------------------------------
+
+export const toolSchema = z.object({
+  id: z.string().regex(/^[a-z0-9][a-z0-9-]*$/),
+  nome: z.string().min(1),
+  tipo: z.enum(["ferramenta", "consumivel", "epi"]),
+  prioridade: z.enum(["essencial", "recomendada", "opcional"]),
+  para_que_serve: z.string().min(1),
+  por_que_necessaria: z.string().min(1),
+  alternativa_barata: z.string().optional(),
+  cuidados: z.array(z.string()).default([]),
+  preco_estimado_brl: priceRangeSchema,
+  onde_comprar: z.array(whereToBuySchema).min(1),
+  /** Arquétipos que usam a ferramenta; vazio = todos. */
+  arquetipos: z.array(z.string()).default([]),
+  fontes: z.array(sourceSchema).default([]),
+});
+export type Tool = z.infer<typeof toolSchema>;
+
+// ---------------------------------------------------------------------------
+// Passos de montagem (templates por arquétipo)
+// ---------------------------------------------------------------------------
+
+/** Condição para um passo aparecer (ex.: só quando a telemetria é por Wi-Fi no drone). */
+export const stepConditionSchema = z.object({
+  /** O build precisa ter alguma peça destas categorias. */
+  tem_categoria: z.array(z.string()).optional(),
+  /** O build não pode ter peças destas categorias. */
+  sem_categoria: z.array(z.string()).optional(),
+  /** Opção de telemetria escolhida. */
+  telemetria: z.array(z.string()).optional(),
+});
+
+export const buildStepTemplateSchema = z.object({
+  id: z.string().regex(/^[a-z0-9][a-z0-9-]*$/),
+  titulo: z.string().min(1),
+  objetivo: z.string().min(1),
+  por_que_importa: z.string().min(1),
+  /** Categorias de peça usadas/destacadas no 3D. */
+  pecas: z.array(z.string()).default([]),
+  ferramentas: z.array(z.string()).default([]),
+  tempo_min: range(z.number().nonnegative()),
+  dominios: z.partialRecord(difficultyDomainSchema, difficultyLevelSchema),
+  riscos: z.array(z.string()).default([]),
+  /** Checklist que o usuário precisa marcar para avançar (SPEC B.9). */
+  checkpoint: z
+    .object({ bloqueante: z.literal(true), itens: z.array(z.string()).min(1) })
+    .optional(),
+  como_saber_que_deu_certo: z.array(z.string()).min(1),
+  erros_comuns: z.array(z.string()).default([]),
+  local: locationKindSchema,
+  /** Alertas de segurança (ids) mostrados neste passo. */
+  alertas: z.array(z.string()).default([]),
+  /** Variáveis preenchidas pelo projeto, ex.: "{RTL_ALT_M}". */
+  variaveis: z.array(z.string()).default([]),
+  condicao: stepConditionSchema.optional(),
+  fontes: z.array(sourceSchema).default([]),
+});
+export type BuildStepTemplate = z.infer<typeof buildStepTemplateSchema>;
+
+// ---------------------------------------------------------------------------
+// Parâmetros de firmware (dados versionados, nunca texto solto do LLM)
+// ---------------------------------------------------------------------------
+
+export const firmwareParamSchema = z.object({
+  nome: z.string().min(1),
+  valor: z.union([z.number(), z.string()]),
+  unidade: z.string().optional(),
+  explicacao: z.string().min(1),
+  /** Em que condição o parâmetro se aplica (ex.: só com telemetria ELRS MAVLink). */
+  condicao: stepConditionSchema.optional(),
+  fontes: z.array(sourceSchema).min(1),
+});
+export type FirmwareParam = z.infer<typeof firmwareParamSchema>;
+
+export const firmwareProfileSchema = z.object({
+  firmware: firmwareSchema,
+  /** Ex.: "ArduCopter". */
+  veiculo: z.string().optional(),
+  versao_min: z.string(),
+  versao_max: z.string().optional(),
+  verificado_em: isoDateSchema,
+  parametros: z.array(firmwareParamSchema),
+  notas: z.array(z.string()).default([]),
+});
+export type FirmwareProfile = z.infer<typeof firmwareProfileSchema>;
+
+// ---------------------------------------------------------------------------
+// Arquétipo
+// ---------------------------------------------------------------------------
+
+/** Um "lugar" na lista de peças do arquétipo (ex.: 4 motores, 1 FC...). */
+export const archetypeSlotSchema = z.object({
+  slot: z.string().min(1),
+  /** Categorias aceitas no slot (ex.: ESC individual ou 4 em 1, ou uma stack). */
+  categorias: z.array(z.string()).min(1),
+  quantidade: z.int().min(1),
+  obrigatorio: z.boolean(),
+  /** Se outro slot já trouxer esta função (ex.: stack inclui o ESC), este fica vazio. */
+  coberto_por: z.array(z.string()).default([]),
+});
+
+export const archetypeSchema = z.object({
+  id: z.string().regex(/^[a-z0-9][a-z0-9-]*$/),
+  nome: z.string().min(1),
+  descricao: z.string().min(1),
+  para_quem: z.string().min(1),
+  firmware: firmwareSchema,
+  faixas: z.object({
+    helice_pol: range(z.number().positive()),
+    celulas: range(z.number().int().positive()),
+    massa_alvo_g: range(z.number().positive()),
+    twr_alvo: range(z.number().positive()),
+  }),
+  /** Limite de massa que faz parte da promessa do arquétipo (ex.: sub-250 g). */
+  massa_max_g: z.number().positive().optional(),
+  slots: z.array(archetypeSlotSchema).min(1),
+  orcamento_referencia_brl: z.object({
+    economica: z.number().positive(),
+    equilibrada: z.number().positive(),
+    premium: z.number().positive(),
+  }),
+  passos: z.array(buildStepTemplateSchema),
+  alertas: z.array(safetyAlertSchema).default([]),
+  fontes: z.array(sourceSchema).default([]),
+});
+export type Archetype = z.infer<typeof archetypeSchema>;
