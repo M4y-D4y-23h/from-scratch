@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 
 import { DEFAULT_DRONE_CONFIG } from "@/domain/categories/drone/config";
+import { computeDifficulty } from "@/domain/categories/drone/difficulty";
 import { buildProjectReport } from "@/domain/categories/drone/project";
+import { compareSizeClasses } from "@/domain/categories/drone/size-comparison";
 import { solve } from "@/domain/categories/drone/solver";
 import { loadDroneCatalog } from "@/server/catalog/load";
 
@@ -155,5 +157,49 @@ describe("Arquétipo 1: projeto completo (painéis)", () => {
     const locais = projeto.locais.map((l) => l.local);
     expect(locais).toEqual(expect.arrayContaining(["comprar_pronto", "em_casa", "espaco_aberto"]));
     expect(locais).not.toContain("servico_externo");
+  });
+});
+
+describe('Arquétipo 1: comparação de tamanho (450 mm × 5")', () => {
+  const fpv = catalog.arquetipos.find((a) => a.id === "a2-fpv-5pol");
+  if (!fpv) throw new Error("arquétipo a2-fpv-5pol não está no catálogo");
+  const plano450 = result.faixas[0]!;
+  const plano5 = solve({ archetype: fpv, catalog, config: DEFAULT_DRONE_CONFIG }).faixas[0]!;
+  const comparacao = compareSizeClasses(
+    archetype,
+    [
+      {
+        rotulo: "Classe 450 mm (X500 V2)",
+        plano: plano450,
+        dificuldade: computeDifficulty(plano450.build, archetype, DEFAULT_DRONE_CONFIG),
+      },
+      {
+        rotulo: 'Classe 5" (FPV)',
+        plano: plano5,
+        dificuldade: computeDifficulty(plano5.build, fpv, DEFAULT_DRONE_CONFIG),
+      },
+    ],
+    catalog,
+    DEFAULT_DRONE_CONFIG,
+  );
+  const valor = (id: string, rotulo: string) =>
+    comparacao.criterios.find((k) => k.id === id)?.valores.find((v) => v.rotulo === rotulo)?.valor;
+
+  it('escolhe a classe 450 mm e explica por que o 5" não atende', () => {
+    expect(comparacao.escolha).toBe("Classe 450 mm (X500 V2)");
+    const cinco = comparacao.candidatos.find((c) => c.rotulo === 'Classe 5" (FPV)');
+    expect(cinco?.atende).toBe(false);
+    expect(cinco?.faltando.join(" ")).toContain("GPS com bússola");
+    expect(comparacao.explicacao).toContain("não atende");
+  });
+
+  it('mostra os números: o 5" é mais violento, voa menos e tem menos espaço para montar', () => {
+    const a = "Classe 450 mm (X500 V2)";
+    const b = 'Classe 5" (FPV)';
+    expect(valor("seguranca", b)!).toBeGreaterThan(2 * valor("seguranca", a)!);
+    expect(valor("autonomia", b)!).toBeLessThan(valor("autonomia", a)!);
+    expect(valor("espaco_montagem", b)!).toBeLessThan(valor("espaco_montagem", a)!);
+    const soma = comparacao.criterios.reduce((s, k) => s + k.peso, 0);
+    expect(soma).toBeCloseTo(1, 9);
   });
 });
