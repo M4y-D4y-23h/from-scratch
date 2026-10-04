@@ -246,6 +246,7 @@ export const TEST_ARCHETYPE: Archetype = {
 };
 
 export const TEST_FIRMWARE: FirmwareProfile = {
+  id: "arducopter-teste",
   firmware: "ArduPilot",
   veiculo: "ArduCopter",
   versao_min: "4.7.0",

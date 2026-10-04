@@ -14,3 +14,6 @@ blob-report/
 
 # Bloco gerenciado pelo `next dev` (precisa ficar idêntico ao que o Next escreve).
 AGENTS.md
+
+# Migrações geradas pelo drizzle-kit (não editar à mão)
+src/server/db/migrations/

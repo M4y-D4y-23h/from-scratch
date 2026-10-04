@@ -30,3 +30,6 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 .vercel
+
+# Banco local (recriado a partir do catálogo versionado)
+/data/local/

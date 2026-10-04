@@ -508,6 +508,8 @@ export const firmwareParamSchema = z.object({
 export type FirmwareParam = z.infer<typeof firmwareParamSchema>;
 
 export const firmwareProfileSchema = z.object({
+  /** Ex.: "arducopter-4.7". */
+  id: z.string().regex(/^[a-z0-9][a-z0-9.-]*$/),
   firmware: firmwareSchema,
   /** Ex.: "ArduCopter". */
   veiculo: z.string().optional(),
@@ -540,6 +542,8 @@ export const archetypeSchema = z.object({
   descricao: z.string().min(1),
   para_quem: z.string().min(1),
   firmware: firmwareSchema,
+  /** Perfil de parâmetros de firmware usado pelo arquétipo (id em perfis_firmware). */
+  perfil_firmware: z.string().optional(),
   faixas: z.object({
     helice_pol: range(z.number().positive()),
     celulas: range(z.number().int().positive()),
