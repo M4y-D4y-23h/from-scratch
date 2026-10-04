@@ -199,7 +199,8 @@ Datas no formato AAAA-MM-DD. "Verificado em" indica quando a informação extern
 
 ## ADR-0013: arquitetura do Arquétipo 1 (drone com GPS, RTL, vídeo e celular)
 
-- **Data:** 2026-10-04 · **Status:** **proposta, aguardando revisão** (base para a Fase 1)
+- **Data:** 2026-10-04 · **Status:** aceita com ajustes: a escolha da telemetria padrão foi
+  revista no **ADR-0017** (lá também estão resolvidos o baud e o failsafe do modo MAVLink do ELRS)
 - **Contexto:** a SPEC (B.2.1) pede para confirmar a viabilidade técnica atual na documentação
   oficial do ArduPilot e do QGroundControl. Como `ardupilot.org` e `docs.qgroundcontrol.com`
   estavam bloqueados na sessão de nuvem, li o **código-fonte oficial dessas documentações** no
@@ -340,3 +341,106 @@ Datas no formato AAAA-MM-DD. "Verificado em" indica quando a informação extern
   - `@libsql/client`: funciona, mas é assíncrono e traz um cliente de rede (Turso) que não usamos.
 - **Consequências:** o arquivo do banco fica em `data/local/` (ignorado pelo git) e é recriado a
   partir do catálogo versionado. O CI no Windows prova que a instalação continua sem compilação.
+
+## ADR-0015: catálogo em arquivos JSON versionados; o banco é só um espelho
+
+- **Data:** 2026-10-04 · **Status:** aceita (decisão 3 da revisão da Fase 0, delegada a mim)
+- **Contexto:** o catálogo (peças, tabelas de empuxo, ferramentas, arquétipos, passos, parâmetros
+  de firmware) precisa ser editado e verificado por você (página `/catalogo`, SPEC B.6), testado
+  no CI e usado pelo motor de cálculo. Era preciso escolher onde mora a "versão oficial".
+- **Decisão:**
+  - **Fonte da verdade: `data/catalog/drone/`**, em JSON, uma pasta por tipo (`componentes/`,
+    `empuxo/`, `ferramentas/`, `arquetipos/`, `passos/`, `firmware/`). Cada arquivo é validado
+    pelo schema zod e o conjunto passa por `checkCatalog` (ids únicos, tabela de empuxo apontando
+    para motor e hélice que existem, empuxo que não diminui com mais acelerador, passos citando
+    ferramentas e alertas que existem, selo ✅ só com fonte que tem link e data, "onde comprar"
+    sem link de anúncio).
+  - **Banco = espelho**: as tabelas do catálogo são reconstruídas numa transação sempre que o
+    hash SHA-256 dos arquivos muda (`catalogo_meta`). O glossário (`docs/GLOSSARIO.md`) segue a
+    mesma regra.
+  - A futura página `/catalogo` vai gravar nos arquivos JSON (o app é local) e pedir nova
+    sincronização. Cada verificação sua vira um `git diff` legível.
+  - Cada versão de projeto guarda uma cópia do que usou e o hash do catálogo, para continuar
+    reproduzível mesmo depois que o catálogo mudar.
+- **Por quê:** revisável no git (preço/spec verificado aparece com data e fonte no diff);
+  testável no CI do Windows e do Linux sem banco; não se perde se o banco for apagado; um lugar
+  só para editar; os mesmos arquivos alimentam testes, seed e app.
+- **Alternativas descartadas:** banco como fonte da verdade depois do seed (as verificações
+  ficariam fora do git e do CI, e um banco apagado perderia o trabalho); catálogo em arquivos
+  TypeScript (a página `/catalogo` não conseguiria editar com segurança).
+- **Consequências:** `data/local/` (o banco) pode ser apagado a qualquer momento; `pnpm db:sync`
+  ou a primeira abertura do app recria tudo. Edições feitas direto no banco são perdidas na
+  próxima sincronização (por isso as tabelas do espelho não devem ser editadas à mão).
+
+## ADR-0016: selos de confiança de valores calculados
+
+- **Data:** 2026-10-04 · **Status:** aceita (decisão 2 da revisão da Fase 0, delegada a mim)
+- **Contexto:** a SPEC define ✅/⚠️/❓ para dados do catálogo, mas não diz que selo recebe um
+  valor calculado a partir deles (TWR, autonomia, total em R$, resultado de uma regra).
+- **Decisão** (`src/domain/core/verification.ts`, testada):
+  - Um valor derivado **herda o selo mais fraco** das entradas: uma peça ❓ deixa o cálculo ❓.
+  - **Cálculo/estimativa nunca passa de ⚠️**, mesmo com tudo verificado: TWR, autonomia, ponto
+    de pairar e somas de preço dependem de vento, temperatura, desgaste e margens.
+  - **Comparação direta entre specs** (furação 16x19 = 16x19, conector XT60 = XT60) pode ser ✅
+    se todas as specs comparadas forem ✅.
+  - **Falta de dado nunca vira "passou"**: a regra responde "sem dado" com selo ❓. O relatório
+    tem duas bandeiras: `bloqueado` (alguma regra bloqueante falhou) e `incompleto` (alguma regra
+    bloqueante ficou sem dado). O app só pode dizer "compatível" quando as duas são falsas.
+  - Regras baseadas em fato documentado oficialmente (ex.: "não há QGroundControl oficial para
+    iPhone") usam ✅; heurísticas configuráveis (ex.: distância da bússola) usam ⚠️.
+- **Por quê:** um leigo confia no ✅. Um TWR calculado com uma tabela de empuxo não conferida
+  não pode parecer verificado.
+- **Consequências:** enquanto o catálogo estiver todo ❓ (como manda a SPEC B.6), os resultados
+  aparecerão ❓. Isso é intencional: à medida que você verificar peças e tabelas, os selos sobem.
+
+## ADR-0017: arquitetura final do Arquétipo 1 (revisão do ADR-0013)
+
+- **Data:** 2026-10-04 · **Status:** aceita (decisão 1 da revisão da Fase 0, delegada a mim);
+  substitui a parte "Telemetria" da decisão proposta no ADR-0013
+- **Contexto:** o ADR-0013 deixou a telemetria Wi-Fi no drone (opção A) como padrão porque o
+  failsafe no modo MAVLink do ELRS (opção B) "não estava descrito" e havia divergência de baud.
+  Com a rede liberada, conferi direto no **código-fonte** dos dois projetos:
+  - **ExpressLRS** [`35bfdd2`](https://github.com/ExpressLRS/ExpressLRS/blob/35bfdd21cfa14e949eedb6aa08d135a8e496b0cf/src/src/rx-serial/SerialMavlink.cpp)
+    (2026-10-04): no modo MAVLink o receptor manda os canais do rádio como mensagens
+    `RC_CHANNELS_OVERRIDE` a cada 10 ms e **para de mandar quando o link cai** (`sendRCFrame`
+    retorna sem enviar se não chegou quadro novo). A porta serial nesse modo é **460800 baud**
+    ([`rx_main.cpp`](https://github.com/ExpressLRS/ExpressLRS/blob/35bfdd21cfa14e949eedb6aa08d135a8e496b0cf/src/src/rx_main.cpp)).
+  - **ArduPilot** [`e204ca7`](https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/ArduCopter/radio.cpp)
+    (2026-10-02): `Copter::read_radio()` aciona o **failsafe de rádio** quando passa
+    `RC_FS_TIMEOUT` (padrão 1 s) sem entrada nova; `RC_Channels::read_input()` conta os
+    overrides do MAVLink como entrada. Ou seja: perder o link no modo B dispara o mesmo failsafe
+    → RTL do modo CRSF, em ~1 s.
+  - A wiki do ArduPilot manda `SERIALx_BAUD = 115` no modo MAVLink do ELRS; o firmware do ELRS
+    usa 460800 e a documentação do ELRS (atualizada em 27/07/2026) manda `460`. **Usamos 460**: a
+    wiki está desatualizada nesse ponto.
+  - No ArduCopter 4.7 os parâmetros de taxa de telemetria saíram de `SRx_*` para `MAVn_*`, e
+    `SYSID_MYGCS` virou `MAV_GCS_SYSID` (padrão 255, o mesmo id que o receptor ELRS usa por
+    padrão para mandar os comandos) (`ArduCopter/Parameters.cpp` e `libraries/GCS_MAVLink/GCS.cpp`
+    no mesmo commit).
+- **Decisão:**
+  - **Telemetria padrão = B (ELRS em modo MAVLink)** sempre que rádio e receptor forem ELRS
+    baseados em ESP e o rádio tiver TX Backpack com Wi-Fi (o solver escolhe rádios assim e a
+    regra `elrs_mavlink_requisitos` confere). **A (Wi-Fi no drone)** fica como alternativa para
+    rádios sem backpack. Sem nenhuma das duas, o drone voa só com o rádio e o OSD.
+  - Mantido do ADR-0013: ArduCopter 4.7.x; FC H7 (2 MB) da lista oficial; rádio RC como
+    controle principal; celular Android como tela; controle só pelo celular apenas como
+    "experimental", com alertas; vídeo analógico 5,8 GHz com receptor USB como padrão.
+  - O perfil de parâmetros do modo B inclui `SERIALx_PROTOCOL = 2`, `SERIALx_BAUD = 460`,
+    `RSSI_TYPE = 5`, e o guia exige conferir que `RC_OVERRIDE_TIME` não é 0 e que o bit 1 de
+    `RC_OPTIONS` ("ignorar overrides do MAVLink") está desligado. Com qualquer um dos dois o drone
+    não recebe o rádio.
+  - **Teste de bancada obrigatório (sem hélices) nas duas opções:** desligar o rádio e ver o
+    QGroundControl acusar o failsafe de rádio e o modo mudar para RTL.
+- **Por que B é melhor como padrão:**
+  1. Telemetria (mapa, bateria, altura, botão de retorno) em **todo o alcance legal** (300 m
+     no voo recreativo, ICA 100-40), não só nos ~150 m do Wi-Fi no drone. Um leigo vendo o mapa
+     congelar no meio do voo tende a se assustar.
+  2. **Menos peças e menos pontos de falha:** sem placa ESP32 para gravar, alimentar, fixar e
+     afastar do GPS; uma UART a menos; menos peso e consumo.
+  3. **Mais barato:** nada a comprar além do rádio e do receptor, que já estão no projeto.
+  4. **Mesma segurança no failsafe de rádio** (conferido no código, acima) e mesma conexão no
+     celular (QGroundControl por UDP 14550).
+- **Custos aceitos:** limita a escolha de rádios (precisa de ESP + backpack; a maioria dos
+  rádios ELRS atuais tem); a taxa de telemetria fica fixa em 1:2 (metade dos pacotes vai para
+  telemetria, irrelevante para um drone de filmagem); o Wi-Fi do backpack alcança só 5–10 m, mas
+  o celular fica com o piloto, ao lado do rádio.
