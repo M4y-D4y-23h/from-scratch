@@ -50,9 +50,9 @@ CREATE TABLE `ferramentas` (
 	`nome` text NOT NULL,
 	`tipo` text NOT NULL,
 	`prioridade` text NOT NULL,
-	`preco_min_brl` real NOT NULL,
-	`preco_max_brl` real NOT NULL,
-	`preco_data` text NOT NULL,
+	`preco_min_brl` real,
+	`preco_max_brl` real,
+	`preco_data` text,
 	`dados` text NOT NULL
 );
 --> statement-breakpoint

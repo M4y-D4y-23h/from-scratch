@@ -504,7 +504,8 @@ export const toolSchema = z.object({
   por_que_necessaria: z.string().min(1),
   alternativa_barata: z.string().optional(),
   cuidados: z.array(z.string()).default([]),
-  preco_estimado_brl: priceRangeSchema,
+  /** Ausente = preço ainda não pesquisado (o custo mostra o item à parte, sem somar). */
+  preco_estimado_brl: priceRangeSchema.optional(),
   onde_comprar: z.array(whereToBuySchema).min(1),
   /** Arquétipos que usam a ferramenta; vazio = todos. */
   arquetipos: z.array(z.string()).default([]),
@@ -630,11 +631,14 @@ export const archetypeSchema = z.object({
   /** Limite de massa que faz parte da promessa do arquétipo (ex.: sub-250 g). */
   massa_max_g: z.number().positive().optional(),
   slots: z.array(archetypeSlotSchema).min(1),
-  orcamento_referencia_brl: z.object({
-    economica: z.number().positive(),
-    equilibrada: z.number().positive(),
-    premium: z.number().positive(),
-  }),
+  /** Orçamento de referência por faixa (R$), quando definido. */
+  orcamento_referencia_brl: z
+    .object({
+      economica: z.number().positive(),
+      equilibrada: z.number().positive(),
+      premium: z.number().positive(),
+    })
+    .optional(),
   passos: z.array(buildStepTemplateSchema),
   alertas: z.array(safetyAlertSchema).default([]),
   fontes: z.array(sourceSchema).default([]),

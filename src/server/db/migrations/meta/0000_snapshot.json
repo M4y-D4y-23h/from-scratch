@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "b670f0c5-52d2-4632-a92c-082559ebfb08",
+  "id": "b18df620-0de1-4d54-81d3-ea98364f4183",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "arquetipos": {
@@ -316,21 +316,21 @@
           "name": "preco_min_brl",
           "type": "real",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
         },
         "preco_max_brl": {
           "name": "preco_max_brl",
           "type": "real",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
         },
         "preco_data": {
           "name": "preco_data",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
         },
         "dados": {

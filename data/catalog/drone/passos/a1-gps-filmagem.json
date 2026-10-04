@@ -1,0 +1,1409 @@
+[
+  {
+    "id": "treinar-simulador",
+    "titulo": "Treinar no simulador",
+    "objetivo": "Aprender a decolar, pairar, girar e pousar no computador, usando o rádio como joystick.",
+    "por_que_importa": "Os primeiros erros de pilotagem acontecem com todo mundo; no simulador eles não custam nada.",
+    "pecas": ["radio_tx"],
+    "ferramentas": ["simulador-voo", "cabo-usb-dados"],
+    "tempo_min": [300, 900],
+    "dominios": {
+      "pilotagem_testes": 2,
+      "fisica_voo": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "Você consegue pairar parado e pousar devagar sem bater, várias vezes seguidas."
+    ],
+    "erros_comuns": [
+      "Pular o simulador e aprender no drone real.",
+      "Treinar só com o drone 'parado no ar' do modo com GPS: treine também sem ajuda."
+    ],
+    "local": "em_casa",
+    "alertas": ["simulador"],
+    "variaveis": [],
+    "fontes": []
+  },
+  {
+    "id": "conferir-pecas",
+    "titulo": "Conferir peças e bateria ao receber",
+    "objetivo": "Comparar o que chegou com a lista do projeto e inspecionar a bateria LiPo.",
+    "por_que_importa": "Peça errada ou bateria danificada descoberta no meio da montagem atrasa tudo, e LiPo danificada é risco de fogo.",
+    "pecas": ["bateria", "kit"],
+    "ferramentas": ["lipo-checker", "bolsa-anti-chamas"],
+    "tempo_min": [30, 60],
+    "dominios": {
+      "potencia_lipo": 1,
+      "mecanica": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "Todas as peças da lista estão aqui.",
+      "A bateria não está estufada, amassada nem com fio descascado, e cada célula marca tensão parecida no LiPo checker."
+    ],
+    "erros_comuns": ["Deixar a LiPo solta na gaveta em vez de na bolsa anti-chamas."],
+    "local": "em_casa",
+    "alertas": ["lipo"],
+    "variaveis": [],
+    "fontes": []
+  },
+  {
+    "id": "bancada-segura",
+    "titulo": "Preparar a bancada",
+    "objetivo": "Montar um canto de trabalho seguro: tapete de silicone, boa luz, ventilação, óculos e o kit de segurança por perto.",
+    "por_que_importa": "Solda, LiPo e hélices pedem um lugar organizado; improviso é a maior causa de acidente.",
+    "pecas": [],
+    "ferramentas": [
+      "tapete-silicone",
+      "oculos-protecao",
+      "exaustor-solda",
+      "toalha-grande",
+      "extintor",
+      "kit-primeiros-socorros",
+      "organizador-parafusos"
+    ],
+    "tempo_min": [30, 60],
+    "dominios": {
+      "seguranca_regulamentacao": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "Toalha, extintor e kit de primeiros socorros estão ao alcance da mão."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["solda"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "ArduPilot (Copter): Multicopter Safety",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/safety-multicopter.html",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "regras-de-voo",
+    "titulo": "Entender as regras de voo",
+    "objetivo": "Ler as regras da ANAC, do DECEA e da Anatel e planejar o cadastro do drone.",
+    "por_que_importa": "Voar sem cadastro ou fora dos limites pode gerar multa e, principalmente, risco para outras pessoas e aeronaves.",
+    "pecas": [],
+    "ferramentas": [],
+    "tempo_min": [60, 120],
+    "dominios": {
+      "seguranca_regulamentacao": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "Você sabe os limites do voo recreativo (60 m de altura, 300 m de distância, sempre vendo o drone) e como pedir acesso no SARPAS.",
+      "O cadastro do drone na ANAC está feito ou agendado."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["regulamentacao", "acima-250g", "vtx-anatel"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "ANAC: Resolução nº 806/2026 (UA até 250 g e aeromodelos)",
+        "tipo": "norma",
+        "url": "https://www.anac.gov.br/assuntos/legislacao/legislacao-1/resolucoes/2026/resolucao-806",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "DECEA: ICA 100-40/2026",
+        "tipo": "norma",
+        "url": "https://publicacoes.decea.mil.br/publicacao/ica-100-40",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "DECEA: portal Drone/RPAS (SARPAS)",
+        "tipo": "documentacao_oficial",
+        "url": "https://www.decea.mil.br/drone/",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "montar-suportes",
+    "titulo": "Montar trem de pouso e suportes",
+    "objetivo": "Montar o suporte da bateria, a placa de carga e o trem de pouso do X500 V2, seguindo o guia.",
+    "por_que_importa": "É a base onde ficam a bateria e o drone em pé; peça frouxa vibra e atrapalha a controladora.",
+    "pecas": ["frame"],
+    "ferramentas": ["chaves-hexagonais"],
+    "tempo_min": [30, 60],
+    "dominios": {
+      "mecanica": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "Trem de pouso firme, sem folga; suporte da bateria desliza nos trilhos e trava."
+    ],
+    "erros_comuns": ["Apertar demais parafusos em peças de plástico (espanam)."],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "PX4: guia de montagem Holybro X500 V2 + Pixhawk 6C",
+        "tipo": "documentacao_oficial",
+        "url": "https://github.com/PX4/PX4-Autopilot/blob/9fda8a51a4952dd6964fb7e2c86e0a4f748f740b/docs/en/frames_multicopter/holybro_x500v2_pixhawk6c.md",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "Holybro: X500 V2 Kits",
+        "tipo": "pagina_fabricante",
+        "url": "https://holybro.com/products/x500-v2-kits",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "montar-bracos",
+    "titulo": "Montar braços e placas do frame",
+    "objetivo": "Encaixar os quatro braços (motores e ESCs já vêm instalados) entre as placas e apertar os parafusos com contraporca.",
+    "por_que_importa": "Braço solto gira em voo e o drone cai.",
+    "pecas": ["frame", "motor", "esc", "modulo_energia"],
+    "ferramentas": ["chaves-hexagonais"],
+    "tempo_min": [40, 90],
+    "dominios": {
+      "mecanica": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "Os braços não giram nem balançam quando você força com a mão.",
+      "Os cabos dos ESCs passam por dentro dos braços até a placa de energia."
+    ],
+    "erros_comuns": [
+      "Apertar os parafusos antes de encaixar os quatro braços (os últimos não entram).",
+      "Prender um cabo entre o braço e a placa."
+    ],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "PX4: guia de montagem Holybro X500 V2 + Pixhawk 6C",
+        "tipo": "documentacao_oficial",
+        "url": "https://github.com/PX4/PX4-Autopilot/blob/9fda8a51a4952dd6964fb7e2c86e0a4f748f740b/docs/en/frames_multicopter/holybro_x500v2_pixhawk6c.md",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "entender-motores",
+    "titulo": "Entender a posição e o giro de cada motor",
+    "objetivo": "Identificar motor 1 a 4 e o sentido de giro de cada um no diagrama 'Quad X' do ArduPilot e na placa de baixo do frame.",
+    "por_que_importa": "Motor ligado na saída errada ou girando ao contrário faz o drone capotar na decolagem.",
+    "pecas": ["motor"],
+    "ferramentas": [],
+    "tempo_min": [15, 30],
+    "dominios": {
+      "fisica_voo": 1,
+      "mecanica": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "Você sabe apontar no drone qual é o motor 1, 2, 3 e 4 e para que lado cada um gira."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "ArduPilot (Copter): Connect ESCs and Motors (ordem dos motores)",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/connect-escs-and-motors.html",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "PX4: guia de montagem Holybro X500 V2 + Pixhawk 6C",
+        "tipo": "documentacao_oficial",
+        "url": "https://github.com/PX4/PX4-Autopilot/blob/9fda8a51a4952dd6964fb7e2c86e0a4f748f740b/docs/en/frames_multicopter/holybro_x500v2_pixhawk6c.md",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "ligar-energia",
+    "titulo": "Ligar o módulo de energia e a PDB",
+    "objetivo": "Ligar o PM02 V3 entre o conector da bateria e a placa de energia (XT60 nos dois lados) e levar o cabo de 6 pinos até a porta POWER1 da Pixhawk.",
+    "por_que_importa": "Sem o módulo de energia a controladora não liga nem mede a bateria, e o retorno por bateria baixa não funciona.",
+    "pecas": ["modulo_energia", "fc"],
+    "ferramentas": ["kit-fixacao"],
+    "tempo_min": [20, 40],
+    "dominios": {
+      "potencia_lipo": 2
+    },
+    "riscos": ["Inverter polaridade queima as placas: o XT60 só encaixa de um jeito, não force."],
+    "como_saber_que_deu_certo": [
+      "O cabo do PM02 está na POWER1.",
+      "Os conectores XT60 encaixam até o fim, sem forçar."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "PX4: guia de montagem Holybro X500 V2 + Pixhawk 6C",
+        "tipo": "documentacao_oficial",
+        "url": "https://github.com/PX4/PX4-Autopilot/blob/9fda8a51a4952dd6964fb7e2c86e0a4f748f740b/docs/en/frames_multicopter/holybro_x500v2_pixhawk6c.md",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "Holybro: PM02 V3",
+        "tipo": "pagina_fabricante",
+        "url": "https://holybro.com/products/pm02-v3-12s-power-module",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "teste-curto",
+    "titulo": "Procurar curto-circuito antes de ligar",
+    "objetivo": "Com o multímetro em continuidade, medir entre o positivo e o negativo do XT60 de entrada.",
+    "por_que_importa": "Um curto na primeira ligação queima placas na hora ou causa fogo.",
+    "pecas": ["modulo_energia"],
+    "ferramentas": ["multimetro"],
+    "tempo_min": [10, 20],
+    "dominios": {
+      "eletronica_solda": 1,
+      "potencia_lipo": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "O multímetro NÃO apita entre + e − (um bipe curto que some é normal por causa dos capacitores)."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["primeiro-power-on"],
+    "variaveis": [],
+    "fontes": [],
+    "checkpoint": {
+      "bloqueante": true,
+      "itens": [
+        "Medi a continuidade entre + e − e não há curto.",
+        "As hélices NÃO estão nos motores.",
+        "Vou ligar a bateria pela primeira vez através do smoke stopper."
+      ]
+    }
+  },
+  {
+    "id": "fixar-controladora",
+    "titulo": "Fixar a controladora",
+    "objetivo": "Prender a Pixhawk no centro da placa de cima com a espuma anti-vibração, com a seta apontando para a frente do drone.",
+    "por_que_importa": "A controladora sente cada vibração; seta virada faz o drone entender a frente errada.",
+    "pecas": ["fc"],
+    "ferramentas": ["kit-fixacao"],
+    "tempo_min": [15, 30],
+    "dominios": {
+      "mecanica": 1,
+      "firmware_config": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": ["A Pixhawk está firme, no centro, com a seta para a frente."],
+    "erros_comuns": ["Usar fita dura em vez de espuma: as vibrações chegam aos sensores."],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "PX4: guia de montagem Holybro X500 V2 + Pixhawk 6C",
+        "tipo": "documentacao_oficial",
+        "url": "https://github.com/PX4/PX4-Autopilot/blob/9fda8a51a4952dd6964fb7e2c86e0a4f748f740b/docs/en/frames_multicopter/holybro_x500v2_pixhawk6c.md",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ArduPilot (Copter): Measuring Vibration",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/common-measuring-vibration.html",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "ligar-escs",
+    "titulo": "Ligar os ESCs nas saídas da controladora",
+    "objetivo": "Conectar o sinal de cada ESC na saída principal (MAIN) com o número do motor certo, conforme o diagrama Quad X.",
+    "por_que_importa": "Saída trocada faz o drone capotar ao decolar.",
+    "pecas": ["esc", "fc"],
+    "ferramentas": [],
+    "tempo_min": [20, 40],
+    "dominios": {
+      "eletronica_solda": 1,
+      "firmware_config": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": ["Cada ESC está na saída com o mesmo número do motor dele."],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "ArduPilot (Copter): Connect ESCs and Motors (ordem dos motores)",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/connect-escs-and-motors.html",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "PX4: guia de montagem Holybro X500 V2 + Pixhawk 6C",
+        "tipo": "documentacao_oficial",
+        "url": "https://github.com/PX4/PX4-Autopilot/blob/9fda8a51a4952dd6964fb7e2c86e0a4f748f740b/docs/en/frames_multicopter/holybro_x500v2_pixhawk6c.md",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "montar-gps",
+    "titulo": "Montar o GPS no suporte",
+    "objetivo": "Fixar o GPS no alto do suporte do X500, com a seta para a frente, e ligar o cabo na porta certa da Pixhawk.",
+    "por_que_importa": "A bússola do GPS precisa ficar longe dos fios de potência para o drone saber para onde está virado.",
+    "pecas": ["gps", "frame"],
+    "ferramentas": ["chaves-hexagonais", "kit-fixacao"],
+    "tempo_min": [20, 40],
+    "dominios": {
+      "mecanica": 1,
+      "radio_video": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "GPS no alto do suporte, seta para a frente, cabo preso sem tensão."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["bussola-interferencia"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "PX4: guia de montagem Holybro X500 V2 + Pixhawk 6C",
+        "tipo": "documentacao_oficial",
+        "url": "https://github.com/PX4/PX4-Autopilot/blob/9fda8a51a4952dd6964fb7e2c86e0a4f748f740b/docs/en/frames_multicopter/holybro_x500v2_pixhawk6c.md",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ArduPilot (Copter): GPS/Compass (montagem)",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/common-installing-3dr-ublox-gps-compass-module.html",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "gps2-micro-m10",
+    "titulo": "Ligar o Micro M10 na porta GPS2",
+    "objetivo": "O Micro M10 usa o conector de 6 pinos: ligue na porta GPS2 da Pixhawk.",
+    "por_que_importa": "Na porta errada a controladora não encontra o GPS.",
+    "pecas": ["gps"],
+    "ferramentas": [],
+    "tempo_min": [5, 10],
+    "dominios": {
+      "firmware_config": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": ["O cabo de 6 pinos está na GPS2."],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "ArduPilot (Copter): Pixhawk 6C / 6C Mini",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/common-holybro-pixhawk6C.html",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "condicao": {
+      "tem_componente": ["holybro-micro-m10-gps"]
+    }
+  },
+  {
+    "id": "soldar-receptor",
+    "titulo": "Soldar e ligar o receptor do rádio",
+    "objetivo": "Soldar o cabo do receptor ELRS (5 V, GND, TX e RX cruzados) e ligar na porta TELEM1. Prender as antenas em V, longe da fibra de carbono.",
+    "por_que_importa": "É por ele que o drone recebe os comandos; solda ruim faz o rádio cair em voo.",
+    "pecas": ["receptor", "fc"],
+    "ferramentas": [
+      "ferro-de-solda",
+      "estanho",
+      "fluxo-de-solda",
+      "terceira-mao",
+      "tapete-silicone",
+      "oculos-protecao",
+      "exaustor-solda",
+      "alicate-corte-desencapador",
+      "termo-retratil",
+      "pincas"
+    ],
+    "tempo_min": [40, 90],
+    "dominios": {
+      "eletronica_solda": 2,
+      "radio_video": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "Solda brilhante e lisa; o LED do receptor acende ao ligar o USB da Pixhawk."
+    ],
+    "erros_comuns": [
+      "Ligar TX no TX e RX no RX (tem que cruzar).",
+      "Antena encostada na placa de carbono: o carbono bloqueia o sinal."
+    ],
+    "local": "em_casa",
+    "alertas": ["solda"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "ArduPilot (Copter): Crossfire and ELRS RC Systems",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/common-tbs-rc.html",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ExpressLRS: ArduPilot Setup",
+        "tipo": "documentacao_oficial",
+        "url": "https://www.expresslrs.org/quick-start/ardupilot-setup/",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "montar-video",
+    "titulo": "Montar câmera e transmissor de vídeo",
+    "objetivo": "Rosquear a antena no VTX, alimentar o VTX direto da bateria (saída da placa de energia), ligar a câmera ao VTX e prender tudo com abraçadeiras e dupla face.",
+    "por_que_importa": "É o que manda a imagem ao vivo para o celular; VTX sem antena queima.",
+    "pecas": ["camera_fpv", "vtx", "antena"],
+    "ferramentas": [
+      "ferro-de-solda",
+      "estanho",
+      "fluxo-de-solda",
+      "terceira-mao",
+      "tapete-silicone",
+      "oculos-protecao",
+      "exaustor-solda",
+      "alicate-corte-desencapador",
+      "termo-retratil",
+      "kit-fixacao"
+    ],
+    "tempo_min": [60, 120],
+    "dominios": {
+      "eletronica_solda": 2,
+      "radio_video": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "Antena rosqueada ANTES de qualquer teste com bateria.",
+      "Câmera presa e virada para a frente, sem tocar nas hélices."
+    ],
+    "erros_comuns": ["Ligar o VTX sem antena 'só para testar'."],
+    "local": "em_casa",
+    "alertas": ["vtx-sem-antena", "solda"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "BETAFPV: A03 400mW 5.8G VTX",
+        "tipo": "pagina_fabricante",
+        "url": "https://betafpv.com/products/a03-400mw-5-8g-vtx",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "organizar-cabos",
+    "titulo": "Organizar e prender os cabos",
+    "objetivo": "Prender todos os cabos com abraçadeiras, longe das hélices, e torcer os pares de fios de potência.",
+    "por_que_importa": "Cabo solto encosta na hélice; fio de potência perto do GPS engana a bússola.",
+    "pecas": [],
+    "ferramentas": ["kit-fixacao", "alicate-corte-desencapador"],
+    "tempo_min": [20, 40],
+    "dominios": {
+      "mecanica": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "Puxando de leve, nenhum cabo se mexe; nada chega perto do disco das hélices."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["bussola-interferencia"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "ArduPilot (Copter): GPS/Compass (montagem)",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/common-installing-3dr-ublox-gps-compass-module.html",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "instalar-qgc",
+    "titulo": "Instalar o QGroundControl",
+    "objetivo": "Instalar o QGroundControl no computador (Windows) e no celular Android.",
+    "por_que_importa": "É o programa que grava o firmware, calibra os sensores e mostra o mapa durante o voo.",
+    "pecas": [],
+    "ferramentas": [],
+    "tempo_min": [20, 40],
+    "dominios": {
+      "firmware_config": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": ["O QGroundControl abre no computador e no celular."],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["iphone"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "QGroundControl: Download and Install",
+        "tipo": "documentacao_oficial",
+        "url": "https://docs.qgroundcontrol.com/master/en/qgc-user-guide/getting_started/download_and_install.html",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "gravar-ardupilot",
+    "titulo": "Gravar o ArduCopter na controladora",
+    "objetivo": "Ligar a Pixhawk só pelo USB e gravar o ArduCopter (versão 4.7 ou mais nova) pelo QGroundControl.",
+    "por_que_importa": "A Pixhawk pode vir com outro firmware (PX4); sem o ArduCopter, nada do resto funciona.",
+    "pecas": ["fc"],
+    "ferramentas": ["cabo-usb-dados"],
+    "tempo_min": [20, 40],
+    "dominios": {
+      "firmware_config": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": ["O QGroundControl mostra ArduCopter 4.7.x conectado."],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["helices"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "QGroundControl: Firmware",
+        "tipo": "documentacao_oficial",
+        "url": "https://docs.qgroundcontrol.com/master/en/qgc-user-guide/setup_view/firmware.html",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ArduPilot (Copter): Loading Firmware",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/common-loading-firmware-onto-pixhawk.html",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "checkpoint": {
+      "bloqueante": true,
+      "itens": [
+        "As hélices NÃO estão nos motores.",
+        "A bateria está desconectada: só o cabo USB está ligado."
+      ]
+    }
+  },
+  {
+    "id": "parametros-basicos",
+    "titulo": "Carregar os parâmetros do projeto",
+    "objetivo": "Ajustar tipo de frame, portas seriais, bateria e failsafes com os valores calculados para o seu drone e reiniciar a Pixhawk.",
+    "por_que_importa": "São esses valores que fazem o drone voltar sozinho quando perde o rádio ou a bateria fica baixa.",
+    "pecas": ["fc"],
+    "ferramentas": ["cabo-usb-dados"],
+    "tempo_min": [30, 60],
+    "dominios": {
+      "firmware_config": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "Depois de reiniciar, os valores aparecem iguais na lista de parâmetros."
+    ],
+    "erros_comuns": [
+      "Usar nomes de parâmetro de versões antigas (no 4.7: RTL_ALT_M em metros e ARMING_SKIPCHK)."
+    ],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [
+      "FRAME_CLASS",
+      "FRAME_TYPE",
+      "SERIAL1_PROTOCOL",
+      "BATT_MONITOR",
+      "BATT_CAPACITY",
+      "BATT_LOW_VOLT",
+      "BATT_LOW_MAH",
+      "BATT_FS_LOW_ACT",
+      "FS_THR_ENABLE"
+    ],
+    "fontes": [
+      {
+        "titulo": "ArduPilot: ArduCopter Release Notes (4.7)",
+        "tipo": "documentacao_oficial",
+        "url": "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/ArduCopter/ReleaseNotes.txt",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "calibrar-acelerometro",
+    "titulo": "Calibrar o acelerômetro",
+    "objetivo": "Seguir a calibração do QGroundControl, deixando o drone parado em cada uma das 6 posições pedidas.",
+    "por_que_importa": "É assim que a controladora aprende o que é 'nivelado'; mal calibrada, o drone escorrega para um lado.",
+    "pecas": ["fc"],
+    "ferramentas": [],
+    "tempo_min": [15, 30],
+    "dominios": {
+      "firmware_config": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "O QGroundControl termina a calibração sem erro e o horizonte artificial fica reto com o drone na mesa."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "QGroundControl: Sensors (ArduPilot)",
+        "tipo": "documentacao_oficial",
+        "url": "https://docs.qgroundcontrol.com/master/en/qgc-user-guide/setup_view/sensors_ardupilot.html",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ArduPilot (Copter): Accelerometer Calibration",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/common-accelerometer-calibration.html",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "calibrar-bussola",
+    "titulo": "Calibrar a bússola",
+    "objetivo": "Girar o drone em todos os eixos durante a calibração, longe de carros, ferro e concreto armado.",
+    "por_que_importa": "Bússola errada faz o drone voar em círculos e errar o caminho de volta.",
+    "pecas": ["gps"],
+    "ferramentas": [],
+    "tempo_min": [15, 30],
+    "dominios": {
+      "firmware_config": 3
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "A calibração termina com sucesso e, no mapa, a seta do drone aponta para onde a frente dele está virada."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["bussola-interferencia"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "QGroundControl: Sensors (ArduPilot)",
+        "tipo": "documentacao_oficial",
+        "url": "https://docs.qgroundcontrol.com/master/en/qgc-user-guide/setup_view/sensors_ardupilot.html",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ArduPilot (Copter): Advanced Compass Setup",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/common-compass-setup-advanced.html",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "calibrar-escs",
+    "titulo": "Calibrar os ESCs",
+    "objetivo": "Fazer a calibração 'todos de uma vez' dos ESCs, SEM hélices, para todos os motores começarem a girar no mesmo ponto do acelerador.",
+    "por_que_importa": "ESCs descalibrados giram cada motor de um jeito, e o drone fica instável.",
+    "pecas": ["esc", "bateria"],
+    "ferramentas": ["smoke-stopper"],
+    "tempo_min": [15, 30],
+    "dominios": {
+      "firmware_config": 2,
+      "potencia_lipo": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": ["Os quatro motores começam a girar juntos ao subir o acelerador."],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["helices", "lipo"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "ArduPilot (Copter): Electronic Speed Controller (ESC) Calibration",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/esc-calibration.html",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "checkpoint": {
+      "bloqueante": true,
+      "itens": [
+        "As hélices NÃO estão nos motores.",
+        "O drone está preso ou apoiado de forma que não se mexa."
+      ]
+    }
+  },
+  {
+    "id": "bind-radio",
+    "titulo": "Parear o rádio com o receptor",
+    "objetivo": "Gravar a mesma frase de pareamento (bind phrase) no rádio e no receptor ELRS e conferir que conectam.",
+    "por_que_importa": "Sem o pareamento o drone não recebe nenhum comando.",
+    "pecas": ["radio_tx", "receptor"],
+    "ferramentas": [],
+    "tempo_min": [20, 60],
+    "dominios": {
+      "radio_video": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "O LED do receptor fica aceso fixo com o rádio ligado e o rádio mostra a conexão."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "ExpressLRS: Binding",
+        "tipo": "documentacao_oficial",
+        "url": "https://www.expresslrs.org/quick-start/binding/",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ExpressLRS: ArduPilot Setup",
+        "tipo": "documentacao_oficial",
+        "url": "https://www.expresslrs.org/quick-start/ardupilot-setup/",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "modo-mavlink-elrs",
+    "titulo": "Ativar o modo MAVLink do ELRS (telemetria no celular)",
+    "objetivo": "No script Lua do ELRS, trocar o Link Mode para MAVLink e ligar o Wi-Fi do Backpack para telemetria; conferir SERIAL1 em MAVLink a 460800 baud.",
+    "por_que_importa": "Assim o mapa, a bateria e o botão de retorno chegam ao celular pelo próprio rádio, em todo o alcance do voo.",
+    "pecas": ["radio_tx", "receptor"],
+    "ferramentas": [],
+    "tempo_min": [30, 60],
+    "dominios": {
+      "radio_video": 3,
+      "firmware_config": 3
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "O celular conecta na rede 'ExpressLRS TX Backpack' e o QGroundControl mostra o drone."
+    ],
+    "erros_comuns": [
+      "Ligar o Wi-Fi do Backpack pelo menu de atualização (vira modo de firmware, não telemetria).",
+      "Usar 115 no SERIAL1_BAUD (vale 460)."
+    ],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": ["SERIAL1_PROTOCOL", "SERIAL1_BAUD", "RSSI_TYPE"],
+    "fontes": [
+      {
+        "titulo": "ExpressLRS: MAVLink",
+        "tipo": "documentacao_oficial",
+        "url": "https://www.expresslrs.org/software/mavlink/",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ArduPilot (Copter): Crossfire and ELRS RC Systems",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/common-tbs-rc.html",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "condicao": {
+      "telemetria": ["elrs_mavlink"]
+    }
+  },
+  {
+    "id": "telemetria-wifi",
+    "titulo": "Instalar a telemetria Wi-Fi no drone",
+    "objetivo": "Gravar o DroneBridge no módulo ESP32, ligá-lo na TELEM2 e conectar o celular na rede Wi-Fi do drone.",
+    "por_que_importa": "É a alternativa quando o rádio não tem Backpack; o alcance do Wi-Fi é menor que o do rádio.",
+    "pecas": ["telemetria"],
+    "ferramentas": [
+      "ferro-de-solda",
+      "estanho",
+      "fluxo-de-solda",
+      "terceira-mao",
+      "tapete-silicone",
+      "oculos-protecao",
+      "exaustor-solda"
+    ],
+    "tempo_min": [40, 90],
+    "dominios": {
+      "radio_video": 3,
+      "firmware_config": 2,
+      "eletronica_solda": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": ["O QGroundControl no celular conecta sozinho (UDP 14550)."],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": ["SERIAL2_PROTOCOL", "SERIAL2_BAUD"],
+    "fontes": [
+      {
+        "titulo": "ArduPilot (Copter): DroneBridge for ESP32",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/common-esp32-telemetry.html",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "condicao": {
+      "telemetria": ["wifi_no_drone"]
+    }
+  },
+  {
+    "id": "calibrar-radio",
+    "titulo": "Calibrar o rádio e as chaves",
+    "objetivo": "Calibrar os sticks no QGroundControl e conferir que cada stick e chave mexe o canal certo.",
+    "por_que_importa": "Stick invertido faz o drone ir para o lado oposto ao que você comanda.",
+    "pecas": ["radio_tx"],
+    "ferramentas": [],
+    "tempo_min": [20, 40],
+    "dominios": {
+      "radio_video": 2,
+      "firmware_config": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": ["Mover cada stick mexe a barra certa, no sentido certo."],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "QGroundControl: Radio Setup",
+        "tipo": "documentacao_oficial",
+        "url": "https://docs.qgroundcontrol.com/master/en/qgc-user-guide/setup_view/radio.html",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ArduPilot (Copter): Radio Control Calibration",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/common-radio-control-calibration.html",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "modos-de-voo",
+    "titulo": "Configurar os modos de voo",
+    "objetivo": "Colocar numa chave do rádio: Loiter (segura posição com GPS), AltHold (segura só a altura) e RTL (volta para casa), e numa outra chave o Land.",
+    "por_que_importa": "Você precisa trocar de modo sem tirar os olhos do drone, principalmente para chamar o RTL.",
+    "pecas": ["radio_tx"],
+    "ferramentas": [],
+    "tempo_min": [20, 40],
+    "dominios": {
+      "firmware_config": 2,
+      "pilotagem_testes": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": ["Mexendo a chave, o QGroundControl mostra o modo certo."],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "QGroundControl: Flight Modes (ArduPilot)",
+        "tipo": "documentacao_oficial",
+        "url": "https://docs.qgroundcontrol.com/master/en/qgc-user-guide/setup_view/flight_modes_ardupilot.html",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ArduPilot (Copter): Flight Modes",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/flight-modes.html",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ArduPilot (Copter): Loiter Mode",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/loiter-mode.html",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ArduPilot (Copter): AltHold Mode",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/altholdmode.html",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ArduPilot (Copter): Land Mode",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/land-mode.html",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "failsafes-cerca",
+    "titulo": "Conferir failsafes, cerca e altura de retorno",
+    "objetivo": "Conferir failsafe de rádio, de bateria e do celular, ligar a cerca virtual e ajustar RTL_ALT_M para o seu local de voo.",
+    "por_que_importa": "É a rede de segurança: perdeu o sinal ou a bateria acabou, o drone volta sozinho e não sai da área permitida.",
+    "pecas": ["fc"],
+    "ferramentas": [],
+    "tempo_min": [20, 40],
+    "dominios": {
+      "firmware_config": 2,
+      "seguranca_regulamentacao": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "FS_THR_ENABLE, BATT_FS_LOW_ACT e FENCE_ENABLE com os valores do projeto.",
+      "RTL_ALT_M acima dos obstáculos do local e abaixo de FENCE_ALT_MAX."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["rtl-sem-desvio", "acima-250g"],
+    "variaveis": [
+      "FS_THR_ENABLE",
+      "FS_GCS_ENABLE",
+      "BATT_FS_LOW_ACT",
+      "FENCE_ENABLE",
+      "FENCE_ALT_MAX",
+      "FENCE_RADIUS",
+      "RTL_ALT_M"
+    ],
+    "fontes": [
+      {
+        "titulo": "ArduPilot (Copter): Radio Failsafe",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/radio-failsafe.html",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ArduPilot (Copter): Battery Failsafe",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/failsafe-battery.html",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ArduPilot (Copter): GCS Failsafe",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/gcs-failsafe.html",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ArduPilot (Copter): Cylindrical Fence",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/common-ac2_simple_geofence.html",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ArduPilot (Copter): RTL Mode",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/rtl-mode.html",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "video-no-celular",
+    "titulo": "Ver o vídeo no celular",
+    "objetivo": "Ligar o receptor OTG no celular Android, achar o canal do VTX e ajustar a potência do VTX para a menor que dê imagem boa.",
+    "por_que_importa": "É a câmera ao vivo; potência alta à toa esquenta o VTX e interfere em outros equipamentos.",
+    "pecas": ["receptor_video", "vtx", "camera_fpv"],
+    "ferramentas": [],
+    "tempo_min": [20, 60],
+    "dominios": {
+      "radio_video": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "A imagem da câmera aparece no celular (no QGroundControl ou no app do receptor)."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["vtx-anatel", "vtx-sem-antena"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "QGroundControl: Video settings",
+        "tipo": "documentacao_oficial",
+        "url": "https://docs.qgroundcontrol.com/master/en/qgc-user-guide/settings_view/video.html",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "direcao-motores",
+    "titulo": "Testar a direção dos motores (sem hélices)",
+    "objetivo": "Girar cada motor pelo teste de motores do QGroundControl e conferir posição e sentido; corrigir os que estiverem invertidos.",
+    "por_que_importa": "Um único motor girando ao contrário faz o drone capotar.",
+    "pecas": ["motor", "esc", "bateria"],
+    "ferramentas": ["smoke-stopper"],
+    "tempo_min": [20, 40],
+    "dominios": {
+      "firmware_config": 2,
+      "mecanica": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": ["Cada motor gira na posição e no sentido do diagrama Quad X."],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["helices"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "QGroundControl: Motors Setup",
+        "tipo": "documentacao_oficial",
+        "url": "https://docs.qgroundcontrol.com/master/en/qgc-user-guide/setup_view/motors.html",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ArduPilot (Copter): Connect ESCs and Motors (ordem dos motores)",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/connect-escs-and-motors.html",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "Holybro: Motor Direction Setup In PX4 and Ardupilot",
+        "tipo": "documentacao_oficial",
+        "url": "https://docs.holybro.com/esc/motor-direction-setup-in-px4-and-ardupilot",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "checkpoint": {
+      "bloqueante": true,
+      "itens": [
+        "As hélices NÃO estão nos motores.",
+        "Estou de óculos e com o drone apoiado na bancada.",
+        "Ninguém está com a mão perto dos motores."
+      ]
+    }
+  },
+  {
+    "id": "teste-failsafe-bancada",
+    "titulo": "Testar o failsafe na bancada (sem hélices)",
+    "objetivo": "Com o drone armado e SEM hélices, desligar o rádio e ver o QGroundControl acusar o failsafe e trocar para RTL (ou Land sem GPS).",
+    "por_que_importa": "Garante que, se o sinal cair em voo, o drone volta sozinho em vez de cair ou fugir.",
+    "pecas": ["radio_tx", "receptor", "fc"],
+    "ferramentas": [],
+    "tempo_min": [20, 40],
+    "dominios": {
+      "firmware_config": 2,
+      "seguranca_regulamentacao": 3
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "Ao desligar o rádio, o modo muda sozinho para RTL (ou Land) em cerca de 1 segundo."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["helices"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "ArduPilot (Copter): Radio Failsafe",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/radio-failsafe.html",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ExpressLRS: MAVLink",
+        "tipo": "documentacao_oficial",
+        "url": "https://www.expresslrs.org/software/mavlink/",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "checkpoint": {
+      "bloqueante": true,
+      "itens": [
+        "As hélices NÃO estão nos motores.",
+        "O drone está apoiado e ninguém está perto dos motores."
+      ]
+    }
+  },
+  {
+    "id": "checagens-pre-arme",
+    "titulo": "Resolver os avisos de pré-arme",
+    "objetivo": "Ler e corrigir todos os avisos 'PreArm' do QGroundControl até o drone aceitar armar (GPS travado, bússola, bateria).",
+    "por_que_importa": "Cada aviso é um problema real que pode derrubar o drone; nunca desligue as checagens.",
+    "pecas": ["fc", "gps"],
+    "ferramentas": [],
+    "tempo_min": [20, 90],
+    "dominios": {
+      "firmware_config": 3
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": ["Nenhum aviso PreArm aparece e o GPS mostra posição 3D."],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": ["ARMING_SKIPCHK", "ARMING_NEED_LOC"],
+    "fontes": [
+      {
+        "titulo": "ArduPilot (Copter): Pre-Arm Safety Checks",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/common-prearm-safety-checks.html",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "local-de-voo",
+    "titulo": "Escolher o local e preparar o voo",
+    "objetivo": "Escolher um campo aberto, longe de pessoas, prédios, fios e aeroportos; pedir o acesso no SARPAS e conferir o vento.",
+    "por_que_importa": "O primeiro voo pede espaço para errar sem atingir ninguém.",
+    "pecas": [],
+    "ferramentas": [],
+    "tempo_min": [30, 90],
+    "dominios": {
+      "seguranca_regulamentacao": 2
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "Área livre de pessoas e obstáculos; acesso no SARPAS solicitado; vento fraco."
+    ],
+    "erros_comuns": [],
+    "local": "espaco_aberto",
+    "alertas": ["regulamentacao", "acima-250g"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "DECEA: ICA 100-40/2026",
+        "tipo": "norma",
+        "url": "https://publicacoes.decea.mil.br/publicacao/ica-100-40",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "DECEA: portal Drone/RPAS (SARPAS)",
+        "tipo": "documentacao_oficial",
+        "url": "https://www.decea.mil.br/drone/",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "instalar-helices",
+    "titulo": "Instalar as hélices",
+    "objetivo": "Colocar cada hélice no motor certo (o sentido está marcado na hélice e na placa), com o retentor, no local de voo.",
+    "por_que_importa": "Hélice no motor errado não sustenta o drone; hélice solta voa longe.",
+    "pecas": ["helice", "motor"],
+    "ferramentas": ["toalha-grande"],
+    "tempo_min": [10, 20],
+    "dominios": {
+      "mecanica": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": ["Todas as hélices apertadas, no sentido certo, com o retentor."],
+    "erros_comuns": [],
+    "local": "espaco_aberto",
+    "alertas": ["helices"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "PX4: guia de montagem Holybro X500 V2 + Pixhawk 6C",
+        "tipo": "documentacao_oficial",
+        "url": "https://github.com/PX4/PX4-Autopilot/blob/9fda8a51a4952dd6964fb7e2c86e0a4f748f740b/docs/en/frames_multicopter/holybro_x500v2_pixhawk6c.md",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "checkpoint": {
+      "bloqueante": true,
+      "itens": [
+        "A bateria está DESCONECTADA.",
+        "Conferi o sentido de cada hélice com o motor dela.",
+        "A toalha está à mão."
+      ]
+    }
+  },
+  {
+    "id": "conferir-home",
+    "titulo": "Conferir o home antes de decolar",
+    "objetivo": "Ligar o drone no ponto de decolagem, esperar o GPS travar e conferir no mapa do celular onde ficou o ponto de retorno (home).",
+    "por_que_importa": "O RTL volta para o home; se ele ficar no lugar errado, o drone volta para o lugar errado.",
+    "pecas": ["gps"],
+    "ferramentas": [],
+    "tempo_min": [5, 15],
+    "dominios": {
+      "pilotagem_testes": 1,
+      "seguranca_regulamentacao": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": ["O ícone de home está exatamente onde o drone está."],
+    "erros_comuns": [],
+    "local": "espaco_aberto",
+    "alertas": ["rtl-sem-desvio"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "ArduPilot (Copter): RTL Mode",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/rtl-mode.html",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "primeiro-voo",
+    "titulo": "Primeiro voo: pairar baixo",
+    "objetivo": "Decolar em Loiter, subir 2 a 3 m, pairar por um minuto, fazer movimentos pequenos e pousar.",
+    "por_que_importa": "Mostra se o drone está estável antes de ir mais alto ou mais longe.",
+    "pecas": ["bateria"],
+    "ferramentas": ["toalha-grande", "extintor", "kit-primeiros-socorros"],
+    "tempo_min": [20, 40],
+    "dominios": {
+      "pilotagem_testes": 3
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "O drone fica parado no ar sem oscilar e pousa devagar; os motores voltam mornos, não quentes."
+    ],
+    "erros_comuns": [],
+    "local": "espaco_aberto",
+    "alertas": ["helices", "lipo"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "ArduPilot (Copter): First Flight",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/flying-arducopter.html",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ArduPilot (Copter): Loiter Mode",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/loiter-mode.html",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "checkpoint": {
+      "bloqueante": true,
+      "itens": [
+        "Área livre, sem pessoas a menos de 30 m.",
+        "Hélices conferidas e drone com GPS travado.",
+        "Sei qual chave aciona o RTL e o Land.",
+        "Estou vendo o drone o tempo todo."
+      ]
+    }
+  },
+  {
+    "id": "teste-rtl",
+    "titulo": "Testar o retorno automático (baixo e perto)",
+    "objetivo": "Afastar uns 20 m, a 10 m de altura, em local sem obstáculos, e acionar o RTL pela chave; estar pronto para voltar ao Loiter.",
+    "por_que_importa": "É a prova de que o drone sabe voltar sozinho antes de você precisar disso de verdade.",
+    "pecas": [],
+    "ferramentas": [],
+    "tempo_min": [20, 40],
+    "dominios": {
+      "pilotagem_testes": 3,
+      "seguranca_regulamentacao": 3
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "O drone sobe até RTL_ALT_M, volta em linha reta, desce e pousa no home."
+    ],
+    "erros_comuns": [],
+    "local": "espaco_aberto",
+    "alertas": ["rtl-sem-desvio"],
+    "variaveis": ["RTL_ALT_M"],
+    "fontes": [
+      {
+        "titulo": "ArduPilot (Copter): RTL Mode",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/rtl-mode.html",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "checkpoint": {
+      "bloqueante": true,
+      "itens": [
+        "O caminho entre o drone e o home está livre de árvores e fios.",
+        "RTL_ALT_M está baixo o bastante para o teste e acima dos obstáculos.",
+        "Sei voltar para Loiter na hora se algo der errado."
+      ]
+    }
+  },
+  {
+    "id": "vibracao-logs",
+    "titulo": "Conferir vibração e logs",
+    "objetivo": "Baixar o log do voo e conferir a vibração e os avisos.",
+    "por_que_importa": "Vibração alta engana a controladora e pode virar queda; o log mostra antes de virar problema.",
+    "pecas": [],
+    "ferramentas": ["cabo-usb-dados"],
+    "tempo_min": [30, 60],
+    "dominios": {
+      "firmware_config": 3
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "Vibração dentro do recomendado pelo ArduPilot e nenhum erro grave no log."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "ArduPilot (Copter): Measuring Vibration",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/common-measuring-vibration.html",
+        "acessado_em": "2026-10-04"
+      },
+      {
+        "titulo": "ArduPilot (Copter): Downloading and Analyzing Data Logs",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/common-downloading-and-analyzing-data-logs-in-mission-planner.html",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "autotune",
+    "titulo": "AutoTune (opcional)",
+    "objetivo": "Rodar o AutoTune em local aberto, sem vento, para o drone ajustar sozinho a resposta dos controles.",
+    "por_que_importa": "Deixa o voo mais firme e suave; é opcional para um drone de filmagem.",
+    "pecas": [],
+    "ferramentas": [],
+    "tempo_min": [30, 60],
+    "dominios": {
+      "firmware_config": 3,
+      "pilotagem_testes": 3
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": ["O AutoTune termina e o drone fica mais firme ao parar."],
+    "erros_comuns": [],
+    "local": "espaco_aberto",
+    "alertas": [],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "ArduPilot (Copter): AutoTune",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/autotune.html",
+        "acessado_em": "2026-10-04"
+      }
+    ]
+  },
+  {
+    "id": "guardar-e-revisar",
+    "titulo": "Depois de cada voo",
+    "objetivo": "Descarregar ou carregar a LiPo até a carga de armazenamento, guardar na bolsa, conferir hélices, parafusos e cabos.",
+    "por_que_importa": "Bateria guardada cheia ou vazia estraga e fica perigosa; hélice lascada quebra no voo seguinte.",
+    "pecas": ["bateria", "helice"],
+    "ferramentas": ["carregador-balanceador", "lipo-checker", "bolsa-anti-chamas"],
+    "tempo_min": [15, 30],
+    "dominios": {
+      "potencia_lipo": 2,
+      "mecanica": 1
+    },
+    "riscos": [],
+    "como_saber_que_deu_certo": [
+      "Bateria na bolsa com a carga de armazenamento; nenhuma hélice lascada; nenhum parafuso solto."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["lipo"],
+    "variaveis": [],
+    "fontes": []
+  }
+]

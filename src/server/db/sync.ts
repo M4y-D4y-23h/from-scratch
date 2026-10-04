@@ -104,9 +104,9 @@ export function syncDroneCatalog(db: Db, loaded: LoadedCatalog, agora = new Date
             nome: t.nome,
             tipo: t.tipo,
             prioridade: t.prioridade,
-            preco_min_brl: t.preco_estimado_brl.min,
-            preco_max_brl: t.preco_estimado_brl.max,
-            preco_data: t.preco_estimado_brl.data,
+            preco_min_brl: t.preco_estimado_brl?.min ?? null,
+            preco_max_brl: t.preco_estimado_brl?.max ?? null,
+            preco_data: t.preco_estimado_brl?.data ?? null,
             dados: t,
           })),
         )

@@ -1,0 +1,307 @@
+{
+  "id": "a1-gps-filmagem",
+  "nome": "Drone com GPS para filmar e aprender",
+  "descricao": "Quadricóptero de 500 mm com GPS, retorno automático (RTL), cerca virtual, vídeo ao vivo no celular Android e rádio RC. Estável, com espaço para montar e peças documentadas.",
+  "para_quem": "Quem vai montar o primeiro drone de verdade e quer filmar e aprender com segurança.",
+  "firmware": "ArduPilot",
+  "perfil_firmware": "arducopter-4.7",
+  "faixas": {
+    "helice_pol": [9, 11],
+    "celulas": [4, 4],
+    "massa_alvo_g": [1200, 2000],
+    "twr_alvo": [2, 4]
+  },
+  "slots": [
+    {
+      "slot": "frame",
+      "categorias": ["frame"],
+      "quantidade": 1,
+      "obrigatorio": true
+    },
+    {
+      "slot": "motores",
+      "categorias": ["motor"],
+      "quantidade": 4,
+      "obrigatorio": true
+    },
+    {
+      "slot": "escs",
+      "categorias": ["esc"],
+      "quantidade": 4,
+      "obrigatorio": true
+    },
+    {
+      "slot": "helices",
+      "categorias": ["helice"],
+      "quantidade": 4,
+      "obrigatorio": true
+    },
+    {
+      "slot": "distribuicao_energia",
+      "categorias": ["modulo_energia"],
+      "quantidade": 1,
+      "obrigatorio": true
+    },
+    {
+      "slot": "monitor_bateria",
+      "categorias": ["modulo_energia"],
+      "quantidade": 1,
+      "obrigatorio": true
+    },
+    {
+      "slot": "fc",
+      "categorias": ["fc"],
+      "quantidade": 1,
+      "obrigatorio": true
+    },
+    {
+      "slot": "gps",
+      "categorias": ["gps"],
+      "quantidade": 1,
+      "obrigatorio": true
+    },
+    {
+      "slot": "receptor",
+      "categorias": ["receptor"],
+      "quantidade": 1,
+      "obrigatorio": true
+    },
+    {
+      "slot": "radio",
+      "categorias": ["radio_tx"],
+      "quantidade": 1,
+      "obrigatorio": true
+    },
+    {
+      "slot": "bateria_radio",
+      "categorias": ["bateria_radio"],
+      "quantidade": 1,
+      "obrigatorio": true
+    },
+    {
+      "slot": "bateria",
+      "categorias": ["bateria"],
+      "quantidade": 1,
+      "obrigatorio": true
+    },
+    {
+      "slot": "camera",
+      "categorias": ["camera_fpv"],
+      "quantidade": 1,
+      "obrigatorio": true
+    },
+    {
+      "slot": "vtx",
+      "categorias": ["vtx"],
+      "quantidade": 1,
+      "obrigatorio": true
+    },
+    {
+      "slot": "antena_video",
+      "categorias": ["antena"],
+      "quantidade": 1,
+      "obrigatorio": true
+    },
+    {
+      "slot": "receptor_video",
+      "categorias": ["receptor_video"],
+      "quantidade": 1,
+      "obrigatorio": true
+    },
+    {
+      "slot": "telemetria",
+      "categorias": ["telemetria"],
+      "quantidade": 1,
+      "obrigatorio": false
+    }
+  ],
+  "alertas": [
+    {
+      "id": "rtl-sem-desvio",
+      "nivel": "perigo",
+      "titulo": "O retorno automático (RTL) não desvia de obstáculos",
+      "texto": "No RTL o drone sobe até RTL_ALT_M e volta em linha reta para o ponto onde foi armado. Ele não enxerga árvores, fios nem prédios no caminho.",
+      "acoes": [
+        "Ajuste RTL_ALT_M para ficar acima dos obstáculos do local (e abaixo do limite da cerca).",
+        "Decole de um ponto com o caminho de volta livre.",
+        "Confira no mapa onde ficou o home antes de decolar.",
+        "Teste o RTL primeiro baixo, perto e em local aberto."
+      ],
+      "fontes": [
+        {
+          "titulo": "ArduPilot (Copter): RTL Mode",
+          "tipo": "documentacao_oficial",
+          "url": "https://ardupilot.org/copter/docs/rtl-mode.html",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "verificado_em": "2026-10-04"
+    },
+    {
+      "id": "bussola-interferencia",
+      "nivel": "atencao",
+      "titulo": "Bússola perto de fios de potência deixa o voo errático",
+      "texto": "Os fios grossos da bateria e dos motores criam campo magnético. Com a bússola enganada, o drone pode voar em círculos e errar o caminho de volta.",
+      "acoes": [
+        "Monte o GPS no suporte alto, com a seta para a frente.",
+        "Passe os fios de potência longe do suporte do GPS e torça os pares + e −.",
+        "Calibre a bússola longe de carros, ferro e concreto armado."
+      ],
+      "fontes": [
+        {
+          "titulo": "ArduPilot (Copter): GPS/Compass (montagem)",
+          "tipo": "documentacao_oficial",
+          "url": "https://ardupilot.org/copter/docs/common-installing-3dr-ublox-gps-compass-module.html",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "ArduPilot (Copter): Magnetic Interference",
+          "tipo": "documentacao_oficial",
+          "url": "https://ardupilot.org/copter/docs/common-magnetic-interference.html",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "verificado_em": "2026-10-04"
+    },
+    {
+      "id": "vtx-sem-antena",
+      "nivel": "atencao",
+      "titulo": "Nunca ligue o transmissor de vídeo sem antena",
+      "texto": "Sem antena, a energia que deveria sair pelo ar volta para o transmissor de vídeo, que pode queimar em segundos.",
+      "acoes": [
+        "Rosqueie a antena antes de ligar a bateria, sempre.",
+        "Se a antena soltar, desligue a bateria antes de recolocar."
+      ],
+      "fontes": [
+        {
+          "titulo": "BETAFPV: A03 400mW 5.8G VTX",
+          "tipo": "pagina_fabricante",
+          "url": "https://betafpv.com/products/a03-400mw-5-8g-vtx",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "verificado_em": "2026-10-04"
+    },
+    {
+      "id": "vtx-anatel",
+      "nivel": "regulatorio",
+      "titulo": "Transmissor de vídeo de 5,8 GHz e a Anatel",
+      "texto": "Transmissores precisam de homologação da Anatel. Os transmissores de vídeo analógicos de 5,8 GHz costumam passar do limite dos equipamentos de radiação restrita (que dispensam licença), mesmo na menor potência. Informativo, não é aconselhamento jurídico: verifique as regras vigentes.",
+      "acoes": [
+        "Use a menor potência que dê imagem boa (25 mW perto de você).",
+        "Consulte a Anatel sobre homologação antes de usar.",
+        "Alternativas: vídeo digital homologado ou só gravar com câmera de ação."
+      ],
+      "fontes": [
+        {
+          "titulo": "Anatel: Ato nº 14.448/2017 (radiação restrita)",
+          "tipo": "norma",
+          "url": "https://informacoes.anatel.gov.br/legislacao/atos-de-certificacao-de-produtos/2017/1139-",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "Anatel: Homologar produtos de telecomunicações",
+          "tipo": "documentacao_oficial",
+          "url": "https://www.gov.br/pt-br/servicos/homologar-produtos-de-telecomunicacoes-anatel",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "verificado_em": "2026-10-04"
+    },
+    {
+      "id": "acima-250g",
+      "nivel": "regulatorio",
+      "titulo": "Drone acima de 250 g: cadastro e regras de voo",
+      "texto": "Este drone passa de 250 g. Para voo recreativo, a ANAC exige cadastro do drone (com a identificação colada nele) e distância de pessoas que não concordaram com o voo; o DECEA exige solicitação de acesso ao espaço aéreo no SARPAS e limita o voo recreativo a 60 m de altura e 300 m de distância, sempre vendo o drone. Informativo, não é aconselhamento jurídico: verifique as regras vigentes.",
+      "acoes": [
+        "Cadastre o drone na ANAC antes de voar.",
+        "Solicite o acesso no SARPAS do DECEA para cada voo.",
+        "Mantenha a cerca virtual dentro dos limites (FENCE_ALT_MAX e FENCE_RADIUS)."
+      ],
+      "fontes": [
+        {
+          "titulo": "ANAC: Resolução nº 806/2026 (UA até 250 g e aeromodelos)",
+          "tipo": "norma",
+          "url": "https://www.anac.gov.br/assuntos/legislacao/legislacao-1/resolucoes/2026/resolucao-806",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "DECEA: ICA 100-40/2026",
+          "tipo": "norma",
+          "url": "https://publicacoes.decea.mil.br/publicacao/ica-100-40",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "DECEA: portal Drone/RPAS (SARPAS)",
+          "tipo": "documentacao_oficial",
+          "url": "https://www.decea.mil.br/drone/",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "verificado_em": "2026-10-04"
+    },
+    {
+      "id": "celular-experimental",
+      "nivel": "perigo",
+      "titulo": "Controle só pelo celular é experimental",
+      "texto": "O joystick virtual do QGroundControl vai pelo Wi-Fi/telemetria: alcance curto, atraso e interferência. Se o celular travar ou a bateria dele acabar, você perde o controle. O rádio RC é o recomendado.",
+      "acoes": [
+        "Use o rádio RC como controle principal e o celular como tela.",
+        "Se for testar o joystick virtual, faça isso perto, baixo e com o rádio ligado para retomar."
+      ],
+      "fontes": [
+        {
+          "titulo": "QGroundControl: Virtual Joystick",
+          "tipo": "documentacao_oficial",
+          "url": "https://docs.qgroundcontrol.com/master/en/qgc-user-guide/settings_view/virtual_joystick.html",
+          "acessado_em": "2026-10-04"
+        },
+        {
+          "titulo": "ArduPilot (Copter): Operation Using Only a GCS",
+          "tipo": "documentacao_oficial",
+          "url": "https://ardupilot.org/copter/docs/common-gcs-only-operation.html",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "verificado_em": "2026-10-04"
+    },
+    {
+      "id": "iphone",
+      "nivel": "info",
+      "titulo": "iPhone: sem QGroundControl oficial",
+      "texto": "O QGroundControl tem versão oficial para Android 9 ou mais novo, mas não para iPhone. Os receptores de vídeo USB também costumam funcionar só no Android.",
+      "acoes": [
+        "Use um celular ou tablet Android barato como tela de solo, ou um notebook com o QGroundControl."
+      ],
+      "fontes": [
+        {
+          "titulo": "QGroundControl: Download and Install (plataformas)",
+          "tipo": "documentacao_oficial",
+          "url": "https://docs.qgroundcontrol.com/master/en/qgc-user-guide/getting_started/download_and_install.html",
+          "acessado_em": "2026-10-04"
+        }
+      ],
+      "verificado_em": "2026-10-04"
+    }
+  ],
+  "fontes": [
+    {
+      "titulo": "Holybro: X500 V2 Kits",
+      "tipo": "pagina_fabricante",
+      "url": "https://holybro.com/products/x500-v2-kits",
+      "acessado_em": "2026-10-04"
+    },
+    {
+      "titulo": "PX4: guia de montagem Holybro X500 V2 + Pixhawk 6C",
+      "tipo": "documentacao_oficial",
+      "url": "https://github.com/PX4/PX4-Autopilot/blob/9fda8a51a4952dd6964fb7e2c86e0a4f748f740b/docs/en/frames_multicopter/holybro_x500v2_pixhawk6c.md",
+      "acessado_em": "2026-10-04"
+    },
+    {
+      "titulo": "ArduPilot (Copter): Choosing a MultiCopter Frame",
+      "tipo": "documentacao_oficial",
+      "url": "https://ardupilot.org/copter/docs/choosing-a-frame.html",
+      "acessado_em": "2026-10-04"
+    }
+  ]
+}

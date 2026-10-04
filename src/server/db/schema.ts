@@ -91,9 +91,10 @@ export const ferramentas = sqliteTable("ferramentas", {
   nome: text("nome").notNull(),
   tipo: text("tipo").notNull(),
   prioridade: text("prioridade").notNull(),
-  preco_min_brl: real("preco_min_brl").notNull(),
-  preco_max_brl: real("preco_max_brl").notNull(),
-  preco_data: text("preco_data").notNull(),
+  /** Ausente = preço ainda não pesquisado. */
+  preco_min_brl: real("preco_min_brl"),
+  preco_max_brl: real("preco_max_brl"),
+  preco_data: text("preco_data"),
   dados: text("dados", { mode: "json" }).$type<Ferramenta>().notNull(),
 });
 

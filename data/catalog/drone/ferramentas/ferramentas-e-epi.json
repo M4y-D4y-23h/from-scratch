@@ -1,0 +1,742 @@
+[
+  {
+    "id": "ferro-de-solda",
+    "nome": "Ferro de solda com controle de temperatura",
+    "tipo": "ferramenta",
+    "prioridade": "essencial",
+    "para_que_serve": "Derrete o estanho para ligar fios e conectores.",
+    "por_que_necessaria": "Receptor, VTX e cabos de energia são ligados com solda.",
+    "cuidados": [
+      "A ponta passa de 300 °C: use o suporte, nunca deixe em cima da mesa.",
+      "Desligue da tomada ao terminar."
+    ],
+    "onde_comprar": [
+      {
+        "tipo_loja": "loja_ferramentas",
+        "termo_busca": "ferro de solda com controle de temperatura"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "estação de solda digital"
+      }
+    ],
+    "arquetipos": [],
+    "preco_estimado_brl": {
+      "min": 120,
+      "max": 450,
+      "data": "2026-10-01",
+      "status": "estimativa",
+      "fontes": [
+        {
+          "titulo": "From Scratch: SPEC B.6 (faixas de preço passadas pelo dono do projeto, out/2026, a verificar)",
+          "tipo": "comunidade"
+        }
+      ]
+    },
+    "alternativa_barata": "Ferro simples de 60 W serve no começo, mas sem controle de temperatura é mais fácil estragar a placa."
+  },
+  {
+    "id": "estanho",
+    "nome": "Estanho 0,6–0,8 mm com fluxo",
+    "tipo": "consumivel",
+    "prioridade": "essencial",
+    "para_que_serve": "O metal que forma a solda.",
+    "por_que_necessaria": "Sem estanho não há solda.",
+    "cuidados": ["Estanho com chumbo: lave as mãos depois e não coma na bancada."],
+    "onde_comprar": [
+      {
+        "tipo_loja": "loja_ferramentas",
+        "termo_busca": "estanho solda 0,8mm com fluxo"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "estanho para solda 0.8mm"
+      }
+    ],
+    "arquetipos": [],
+    "preco_estimado_brl": {
+      "min": 30,
+      "max": 70,
+      "data": "2026-10-01",
+      "status": "estimativa",
+      "fontes": [
+        {
+          "titulo": "From Scratch: SPEC B.6 (faixas de preço passadas pelo dono do projeto, out/2026, a verificar)",
+          "tipo": "comunidade"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fluxo-de-solda",
+    "nome": "Fluxo de solda",
+    "tipo": "consumivel",
+    "prioridade": "essencial",
+    "para_que_serve": "Limpa o metal na hora de soldar e faz o estanho escorrer.",
+    "por_que_necessaria": "Solda sem fluxo fica fosca e fraca (solda fria).",
+    "cuidados": [],
+    "onde_comprar": [
+      {
+        "tipo_loja": "loja_ferramentas",
+        "termo_busca": "fluxo de solda pastoso"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "fluxo para solda eletrônica"
+      }
+    ],
+    "arquetipos": [],
+    "preco_estimado_brl": {
+      "min": 20,
+      "max": 50,
+      "data": "2026-10-01",
+      "status": "estimativa",
+      "fontes": [
+        {
+          "titulo": "From Scratch: SPEC B.6 (faixas de preço passadas pelo dono do projeto, out/2026, a verificar)",
+          "tipo": "comunidade"
+        }
+      ]
+    }
+  },
+  {
+    "id": "terceira-mao",
+    "nome": "Terceira mão com lupa",
+    "tipo": "ferramenta",
+    "prioridade": "essencial",
+    "para_que_serve": "Segura fios e placas enquanto você solda.",
+    "por_que_necessaria": "Você precisa das duas mãos (ferro e estanho).",
+    "cuidados": [],
+    "onde_comprar": [
+      {
+        "tipo_loja": "loja_ferramentas",
+        "termo_busca": "terceira mão com lupa solda"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "suporte terceira mão lupa"
+      }
+    ],
+    "arquetipos": [],
+    "preco_estimado_brl": {
+      "min": 40,
+      "max": 120,
+      "data": "2026-10-01",
+      "status": "estimativa",
+      "fontes": [
+        {
+          "titulo": "From Scratch: SPEC B.6 (faixas de preço passadas pelo dono do projeto, out/2026, a verificar)",
+          "tipo": "comunidade"
+        }
+      ]
+    },
+    "alternativa_barata": "Fita crepe prendendo o fio na mesa."
+  },
+  {
+    "id": "tapete-silicone",
+    "nome": "Tapete de silicone para solda",
+    "tipo": "ferramenta",
+    "prioridade": "essencial",
+    "para_que_serve": "Protege a mesa do calor e segura as peças pequenas.",
+    "por_que_necessaria": "Evita queimar a mesa e perder parafusos.",
+    "cuidados": [],
+    "onde_comprar": [
+      {
+        "tipo_loja": "loja_ferramentas",
+        "termo_busca": "tapete silicone para solda"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "manta silicone bancada solda"
+      }
+    ],
+    "arquetipos": [],
+    "preco_estimado_brl": {
+      "min": 30,
+      "max": 70,
+      "data": "2026-10-01",
+      "status": "estimativa",
+      "fontes": [
+        {
+          "titulo": "From Scratch: SPEC B.6 (faixas de preço passadas pelo dono do projeto, out/2026, a verificar)",
+          "tipo": "comunidade"
+        }
+      ]
+    }
+  },
+  {
+    "id": "multimetro",
+    "nome": "Multímetro com teste de continuidade",
+    "tipo": "ferramenta",
+    "prioridade": "essencial",
+    "para_que_serve": "Mede tensão e apita quando há ligação elétrica (continuidade).",
+    "por_que_necessaria": "Antes de ligar a bateria pela primeira vez, você confere se não há curto-circuito.",
+    "cuidados": [],
+    "onde_comprar": [
+      {
+        "tipo_loja": "loja_ferramentas",
+        "termo_busca": "multímetro digital continuidade"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "multímetro digital"
+      }
+    ],
+    "arquetipos": [],
+    "preco_estimado_brl": {
+      "min": 50,
+      "max": 150,
+      "data": "2026-10-01",
+      "status": "estimativa",
+      "fontes": [
+        {
+          "titulo": "From Scratch: SPEC B.6 (faixas de preço passadas pelo dono do projeto, out/2026, a verificar)",
+          "tipo": "comunidade"
+        }
+      ]
+    }
+  },
+  {
+    "id": "smoke-stopper",
+    "nome": "Smoke stopper",
+    "tipo": "ferramenta",
+    "prioridade": "essencial",
+    "para_que_serve": "Fica entre a bateria e o drone e corta a corrente se houver curto.",
+    "por_que_necessaria": "No primeiro power-on, um curto queima a placa (ou pega fogo) sem ele.",
+    "cuidados": [],
+    "onde_comprar": [
+      {
+        "tipo_loja": "loja_hobby_robotica",
+        "termo_busca": "smoke stopper xt60"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "smoke stopper drone xt60"
+      }
+    ],
+    "arquetipos": [],
+    "preco_estimado_brl": {
+      "min": 30,
+      "max": 80,
+      "data": "2026-10-01",
+      "status": "estimativa",
+      "fontes": [
+        {
+          "titulo": "From Scratch: SPEC B.6 (faixas de preço passadas pelo dono do projeto, out/2026, a verificar)",
+          "tipo": "comunidade"
+        }
+      ]
+    }
+  },
+  {
+    "id": "carregador-balanceador",
+    "nome": "Carregador balanceador + fonte",
+    "tipo": "ferramenta",
+    "prioridade": "essencial",
+    "para_que_serve": "Carrega a bateria LiPo equilibrando a tensão de cada célula.",
+    "por_que_necessaria": "LiPo carregada sem balanceamento pode estufar e pegar fogo.",
+    "cuidados": [
+      "Carregue sobre superfície que não pega fogo, dentro da bolsa anti-chamas, sem sair de perto."
+    ],
+    "onde_comprar": [
+      {
+        "tipo_loja": "loja_hobby_robotica",
+        "termo_busca": "carregador balanceador lipo com fonte"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "carregador balanceador lipo 4s"
+      }
+    ],
+    "arquetipos": [],
+    "preco_estimado_brl": {
+      "min": 250,
+      "max": 600,
+      "data": "2026-10-01",
+      "status": "estimativa",
+      "fontes": [
+        {
+          "titulo": "From Scratch: SPEC B.6 (faixas de preço passadas pelo dono do projeto, out/2026, a verificar)",
+          "tipo": "comunidade"
+        }
+      ]
+    }
+  },
+  {
+    "id": "bolsa-anti-chamas",
+    "nome": "Bolsa anti-chamas para LiPo",
+    "tipo": "epi",
+    "prioridade": "essencial",
+    "para_que_serve": "Guarda a bateria durante a carga, o transporte e o armazenamento.",
+    "por_que_necessaria": "Se uma LiPo pegar fogo, a bolsa ajuda a conter as chamas.",
+    "cuidados": [],
+    "onde_comprar": [
+      {
+        "tipo_loja": "loja_hobby_robotica",
+        "termo_busca": "bolsa anti chamas lipo"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "lipo safe bag"
+      }
+    ],
+    "arquetipos": [],
+    "preco_estimado_brl": {
+      "min": 40,
+      "max": 100,
+      "data": "2026-10-01",
+      "status": "estimativa",
+      "fontes": [
+        {
+          "titulo": "From Scratch: SPEC B.6 (faixas de preço passadas pelo dono do projeto, out/2026, a verificar)",
+          "tipo": "comunidade"
+        }
+      ]
+    }
+  },
+  {
+    "id": "lipo-checker",
+    "nome": "Medidor de LiPo (LiPo checker)",
+    "tipo": "ferramenta",
+    "prioridade": "essencial",
+    "para_que_serve": "Mostra a tensão de cada célula da bateria.",
+    "por_que_necessaria": "Antes de voar e de guardar, você confere se a bateria está boa e na tensão certa.",
+    "cuidados": [],
+    "onde_comprar": [
+      {
+        "tipo_loja": "loja_hobby_robotica",
+        "termo_busca": "lipo checker bateria"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "medidor de bateria lipo"
+      }
+    ],
+    "arquetipos": [],
+    "preco_estimado_brl": {
+      "min": 15,
+      "max": 40,
+      "data": "2026-10-01",
+      "status": "estimativa",
+      "fontes": [
+        {
+          "titulo": "From Scratch: SPEC B.6 (faixas de preço passadas pelo dono do projeto, out/2026, a verificar)",
+          "tipo": "comunidade"
+        }
+      ]
+    }
+  },
+  {
+    "id": "chaves-hexagonais",
+    "nome": "Chaves hexagonais 1,5 / 2 / 2,5 / 3 mm",
+    "tipo": "ferramenta",
+    "prioridade": "essencial",
+    "para_que_serve": "Apertam os parafusos do frame e dos motores.",
+    "por_que_necessaria": "Quase todo parafuso de drone é sextavado interno (Allen).",
+    "cuidados": [],
+    "onde_comprar": [
+      {
+        "tipo_loja": "loja_ferramentas",
+        "termo_busca": "jogo chave allen 1,5 2 2,5 3mm"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "chave hexagonal drone"
+      }
+    ],
+    "arquetipos": [],
+    "preco_estimado_brl": {
+      "min": 40,
+      "max": 150,
+      "data": "2026-10-01",
+      "status": "estimativa",
+      "fontes": [
+        {
+          "titulo": "From Scratch: SPEC B.6 (faixas de preço passadas pelo dono do projeto, out/2026, a verificar)",
+          "tipo": "comunidade"
+        }
+      ]
+    },
+    "alternativa_barata": "Jogo de chaves L simples."
+  },
+  {
+    "id": "chave-porca-helice",
+    "nome": "Chave para porca de hélice",
+    "tipo": "ferramenta",
+    "prioridade": "essencial",
+    "para_que_serve": "Aperta a porca que prende a hélice no motor.",
+    "por_que_necessaria": "Porca solta faz a hélice voar longe.",
+    "cuidados": [],
+    "onde_comprar": [
+      {
+        "tipo_loja": "loja_hobby_robotica",
+        "termo_busca": "chave porca hélice m5"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "chave hélice drone m5"
+      }
+    ],
+    "arquetipos": ["a2-fpv-5pol"],
+    "preco_estimado_brl": {
+      "min": 20,
+      "max": 60,
+      "data": "2026-10-01",
+      "status": "estimativa",
+      "fontes": [
+        {
+          "titulo": "From Scratch: SPEC B.6 (faixas de preço passadas pelo dono do projeto, out/2026, a verificar)",
+          "tipo": "comunidade"
+        }
+      ]
+    }
+  },
+  {
+    "id": "alicate-corte-desencapador",
+    "nome": "Alicate de corte rente + desencapador",
+    "tipo": "ferramenta",
+    "prioridade": "essencial",
+    "para_que_serve": "Corta e desencapa fios.",
+    "por_que_necessaria": "Quase toda ligação começa cortando e desencapando um fio.",
+    "cuidados": [],
+    "onde_comprar": [
+      {
+        "tipo_loja": "loja_ferramentas",
+        "termo_busca": "alicate corte rente"
+      },
+      {
+        "tipo_loja": "loja_ferramentas",
+        "termo_busca": "alicate desencapador de fios"
+      }
+    ],
+    "arquetipos": [],
+    "preco_estimado_brl": {
+      "min": 40,
+      "max": 100,
+      "data": "2026-10-01",
+      "status": "estimativa",
+      "fontes": [
+        {
+          "titulo": "From Scratch: SPEC B.6 (faixas de preço passadas pelo dono do projeto, out/2026, a verificar)",
+          "tipo": "comunidade"
+        }
+      ]
+    }
+  },
+  {
+    "id": "termo-retratil",
+    "nome": "Termo-retrátil + isqueiro ou soprador",
+    "tipo": "consumivel",
+    "prioridade": "essencial",
+    "para_que_serve": "Tubinho que encolhe com o calor e isola as emendas.",
+    "por_que_necessaria": "Emenda sem isolamento pode encostar em outra e dar curto.",
+    "cuidados": [],
+    "onde_comprar": [
+      {
+        "tipo_loja": "loja_ferramentas",
+        "termo_busca": "kit termo retrátil"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "espaguete termo retrátil kit"
+      }
+    ],
+    "arquetipos": [],
+    "preco_estimado_brl": {
+      "min": 20,
+      "max": 60,
+      "data": "2026-10-01",
+      "status": "estimativa",
+      "fontes": [
+        {
+          "titulo": "From Scratch: SPEC B.6 (faixas de preço passadas pelo dono do projeto, out/2026, a verificar)",
+          "tipo": "comunidade"
+        }
+      ]
+    }
+  },
+  {
+    "id": "kit-fixacao",
+    "nome": "Kit de fixação (abraçadeiras, dupla face, strap, trava-rosca média, fita isolante)",
+    "tipo": "consumivel",
+    "prioridade": "essencial",
+    "para_que_serve": "Prende cabos, placas e a bateria.",
+    "por_que_necessaria": "Fio solto encosta na hélice; parafuso de motor sem trava-rosca afrouxa com a vibração.",
+    "cuidados": [],
+    "onde_comprar": [
+      {
+        "tipo_loja": "loja_ferramentas",
+        "termo_busca": "trava rosca média"
+      },
+      {
+        "tipo_loja": "loja_ferramentas",
+        "termo_busca": "abraçadeira nylon pequena"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "fita dupla face espuma"
+      }
+    ],
+    "arquetipos": [],
+    "preco_estimado_brl": {
+      "min": 50,
+      "max": 100,
+      "data": "2026-10-01",
+      "status": "estimativa",
+      "fontes": [
+        {
+          "titulo": "From Scratch: SPEC B.6 (faixas de preço passadas pelo dono do projeto, out/2026, a verificar)",
+          "tipo": "comunidade"
+        }
+      ]
+    }
+  },
+  {
+    "id": "oculos-protecao",
+    "nome": "Óculos de proteção",
+    "tipo": "epi",
+    "prioridade": "essencial",
+    "para_que_serve": "Protegem os olhos ao soldar, cortar fios e testar motores.",
+    "por_que_necessaria": "Respingo de estanho ou pedaço de hélice pode atingir os olhos.",
+    "cuidados": [],
+    "onde_comprar": [
+      {
+        "tipo_loja": "loja_ferramentas",
+        "termo_busca": "óculos de proteção incolor"
+      },
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "óculos de segurança epi"
+      }
+    ],
+    "arquetipos": [],
+    "preco_estimado_brl": {
+      "min": 15,
+      "max": 40,
+      "data": "2026-10-01",
+      "status": "estimativa",
+      "fontes": [
+        {
+          "titulo": "From Scratch: SPEC B.6 (faixas de preço passadas pelo dono do projeto, out/2026, a verificar)",
+          "tipo": "comunidade"
+        }
+      ]
+    }
+  },
+  {
+    "id": "cabo-usb-dados",
+    "nome": "Cabo USB de dados",
+    "tipo": "ferramenta",
+    "prioridade": "essencial",
+    "para_que_serve": "Liga a controladora ao computador para gravar o firmware e configurar.",
+    "por_que_necessaria": "Cabo só de carga não transmite dados.",
+    "cuidados": [],
+    "onde_comprar": [
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "cabo usb c dados"
+      }
+    ],
+    "arquetipos": [],
+    "preco_estimado_brl": {
+      "min": 20,
+      "max": 40,
+      "data": "2026-10-01",
+      "status": "estimativa",
+      "fontes": [
+        {
+          "titulo": "From Scratch: SPEC B.6 (faixas de preço passadas pelo dono do projeto, out/2026, a verificar)",
+          "tipo": "comunidade"
+        }
+      ]
+    }
+  },
+  {
+    "id": "exaustor-solda",
+    "nome": "Ventilação/exaustor para solda",
+    "tipo": "epi",
+    "prioridade": "recomendada",
+    "para_que_serve": "Puxa a fumaça da solda para longe do rosto.",
+    "por_que_necessaria": "A fumaça do fluxo irrita olhos e pulmões.",
+    "cuidados": [],
+    "onde_comprar": [
+      {
+        "tipo_loja": "loja_ferramentas",
+        "termo_busca": "exaustor de fumaça para solda"
+      }
+    ],
+    "arquetipos": [],
+    "preco_estimado_brl": {
+      "min": 50,
+      "max": 150,
+      "data": "2026-10-01",
+      "status": "estimativa",
+      "fontes": [
+        {
+          "titulo": "From Scratch: SPEC B.6 (faixas de preço passadas pelo dono do projeto, out/2026, a verificar)",
+          "tipo": "comunidade"
+        }
+      ]
+    },
+    "alternativa_barata": "Soldar perto de uma janela aberta, com ventilador soprando para fora."
+  },
+  {
+    "id": "pincas",
+    "nome": "Pinças",
+    "tipo": "ferramenta",
+    "prioridade": "recomendada",
+    "para_que_serve": "Seguram fios e peças pequenas.",
+    "por_que_necessaria": "Facilita posicionar fios finos na placa.",
+    "cuidados": [],
+    "onde_comprar": [
+      {
+        "tipo_loja": "loja_ferramentas",
+        "termo_busca": "pinça antiestática kit"
+      }
+    ],
+    "arquetipos": [],
+    "preco_estimado_brl": {
+      "min": 20,
+      "max": 40,
+      "data": "2026-10-01",
+      "status": "estimativa",
+      "fontes": [
+        {
+          "titulo": "From Scratch: SPEC B.6 (faixas de preço passadas pelo dono do projeto, out/2026, a verificar)",
+          "tipo": "comunidade"
+        }
+      ]
+    }
+  },
+  {
+    "id": "simulador-voo",
+    "nome": "Simulador de voo para PC",
+    "tipo": "ferramenta",
+    "prioridade": "recomendada",
+    "para_que_serve": "Treinar pilotagem no computador usando o próprio rádio como controle (joystick USB).",
+    "por_que_necessaria": "Errar no simulador é grátis; no drone real, quebra peças ou machuca.",
+    "cuidados": [],
+    "onde_comprar": [
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "simulador de drone pc"
+      }
+    ],
+    "arquetipos": [],
+    "preco_estimado_brl": {
+      "min": 30,
+      "max": 100,
+      "data": "2026-10-01",
+      "status": "estimativa",
+      "fontes": [
+        {
+          "titulo": "From Scratch: SPEC B.6 (faixas de preço passadas pelo dono do projeto, out/2026, a verificar)",
+          "tipo": "comunidade"
+        }
+      ]
+    }
+  },
+  {
+    "id": "organizador-parafusos",
+    "nome": "Organizador de parafusos",
+    "tipo": "ferramenta",
+    "prioridade": "recomendada",
+    "para_que_serve": "Separa parafusos e porcas por tamanho.",
+    "por_que_necessaria": "Parafuso perdido atrasa a montagem; parafuso errado pode furar uma placa.",
+    "cuidados": [],
+    "onde_comprar": [
+      {
+        "tipo_loja": "loja_ferramentas",
+        "termo_busca": "organizador de parafusos caixa"
+      }
+    ],
+    "arquetipos": [],
+    "preco_estimado_brl": {
+      "min": 20,
+      "max": 50,
+      "data": "2026-10-01",
+      "status": "estimativa",
+      "fontes": [
+        {
+          "titulo": "From Scratch: SPEC B.6 (faixas de preço passadas pelo dono do projeto, out/2026, a verificar)",
+          "tipo": "comunidade"
+        }
+      ]
+    }
+  },
+  {
+    "id": "toalha-grande",
+    "nome": "Toalha grande",
+    "tipo": "epi",
+    "prioridade": "essencial",
+    "para_que_serve": "Cobrir as hélices e segurar o drone se ele ligar sem querer.",
+    "por_que_necessaria": "A página de segurança do ArduPilot diz que é o equipamento de segurança mais importante.",
+    "cuidados": [],
+    "onde_comprar": [
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "toalha de banho grande"
+      }
+    ],
+    "arquetipos": [],
+    "fontes": [
+      {
+        "titulo": "ArduPilot (Copter): Multicopter Safety",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/safety-multicopter.html",
+        "acessado_em": "2026-10-04",
+        "observacao": "\"A toalha grande é o equipamento de segurança mais importante, seguida de extintor e kit de primeiros socorros.\""
+      }
+    ]
+  },
+  {
+    "id": "extintor",
+    "nome": "Extintor de incêndio",
+    "tipo": "epi",
+    "prioridade": "essencial",
+    "para_que_serve": "Apagar um princípio de incêndio (por exemplo, numa bateria).",
+    "por_que_necessaria": "Recomendado pela página de segurança do ArduPilot.",
+    "cuidados": ["Confira a validade e se o tipo serve para equipamentos elétricos."],
+    "onde_comprar": [
+      {
+        "tipo_loja": "loja_ferramentas",
+        "termo_busca": "extintor de incêndio residencial"
+      }
+    ],
+    "arquetipos": [],
+    "fontes": [
+      {
+        "titulo": "ArduPilot (Copter): Multicopter Safety",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/safety-multicopter.html",
+        "acessado_em": "2026-10-04",
+        "observacao": "\"A toalha grande é o equipamento de segurança mais importante, seguida de extintor e kit de primeiros socorros.\""
+      }
+    ]
+  },
+  {
+    "id": "kit-primeiros-socorros",
+    "nome": "Kit de primeiros socorros",
+    "tipo": "epi",
+    "prioridade": "essencial",
+    "para_que_serve": "Cuidar de cortes e queimaduras pequenos.",
+    "por_que_necessaria": "Hélice corta e ferro de solda queima; recomendado pela página de segurança do ArduPilot.",
+    "cuidados": [],
+    "onde_comprar": [
+      {
+        "tipo_loja": "marketplace_nacional",
+        "termo_busca": "kit primeiros socorros"
+      }
+    ],
+    "arquetipos": [],
+    "fontes": [
+      {
+        "titulo": "ArduPilot (Copter): Multicopter Safety",
+        "tipo": "documentacao_oficial",
+        "url": "https://ardupilot.org/copter/docs/safety-multicopter.html",
+        "acessado_em": "2026-10-04",
+        "observacao": "\"A toalha grande é o equipamento de segurança mais importante, seguida de extintor e kit de primeiros socorros.\""
+      }
+    ]
+  }
+]

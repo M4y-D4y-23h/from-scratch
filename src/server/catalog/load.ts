@@ -9,6 +9,7 @@ import {
   type CheckOptions,
   type DroneCatalog,
 } from "@/domain/categories/drone/catalog";
+import { GLOBAL_ALERT_IDS } from "@/domain/categories/drone/safety";
 import { importParamsSchema } from "@/domain/core/importacao";
 import {
   archetypeSchema,
@@ -181,6 +182,9 @@ export function parseCatalogFiles(
   return { catalog, hash: hashCatalog(files), arquivos: files.map((f) => f.caminho) };
 }
 
-export function loadDroneCatalog(root = CATALOG_ROOT, options: CheckOptions = {}): LoadedCatalog {
+export function loadDroneCatalog(
+  root = CATALOG_ROOT,
+  options: CheckOptions = { alertasGlobais: GLOBAL_ALERT_IDS },
+): LoadedCatalog {
   return parseCatalogFiles(readCatalogFiles(root), options);
 }
