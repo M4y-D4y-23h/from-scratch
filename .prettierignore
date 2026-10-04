@@ -1,0 +1,16 @@
+# A especificação é guardada exatamente como foi escrita (SPEC na íntegra).
+docs/SPEC.md
+
+# Gerados
+pnpm-lock.yaml
+next-env.d.ts
+.next/
+out/
+build/
+coverage/
+playwright-report/
+test-results/
+blob-report/
+
+# Bloco gerenciado pelo `next dev` (precisa ficar idêntico ao que o Next escreve).
+AGENTS.md

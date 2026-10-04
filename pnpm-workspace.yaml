@@ -1,0 +1,10 @@
+# Configurações do pnpm (pnpm 11+). Este repositório tem um único pacote;
+# o arquivo existe só para guardar as configurações abaixo.
+
+# pnpm 11 recusa a instalação quando uma dependência quer rodar scripts de
+# instalação que não foram decididos aqui (strictDepBuilds). Cada entrada diz
+# se o script pode rodar (true) ou não (false). Veja docs/DECISIONS.md (ADR-0003).
+allowBuilds:
+  # O postinstall só é um plano B para baixar o binário nativo; o binário
+  # certo para cada sistema (incluindo Windows) já vem como dependência opcional.
+  unrs-resolver: false
