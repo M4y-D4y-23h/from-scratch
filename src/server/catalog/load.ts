@@ -9,6 +9,7 @@ import {
   type CheckOptions,
   type DroneCatalog,
 } from "@/domain/categories/drone/catalog";
+import { importParamsSchema } from "@/domain/core/importacao";
 import {
   archetypeSchema,
   buildStepTemplateSchema,
@@ -28,6 +29,7 @@ import {
  *   arquetipos/*.json    um arquétipo por arquivo (sem os passos)
  *   passos/<id>.json     lista de passos do arquétipo <id>
  *   firmware/*.json      um perfil de parâmetros por arquivo
+ *   parametros/importacao.json   câmbio e tributos de importação (com data e fonte)
  */
 
 export const CATALOG_ROOT = path.resolve(process.cwd(), "data", "catalog", "drone");
@@ -140,6 +142,14 @@ export function parseCatalogFiles(
       case "passos": {
         const passos = parseFile(file, z.array(buildStepTemplateSchema), problemas);
         if (passos) passosPorArquetipo.set(baseName(file.caminho), passos);
+        break;
+      }
+      case "parametros": {
+        if (baseName(file.caminho) !== "importacao") {
+          problemas.push(`${file.caminho}: só existe parametros/importacao.json`);
+          break;
+        }
+        catalog.importacao = parseFile(file, importParamsSchema, problemas);
         break;
       }
       case "firmware": {

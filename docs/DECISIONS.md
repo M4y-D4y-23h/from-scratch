@@ -444,3 +444,29 @@ Datas no formato AAAA-MM-DD. "Verificado em" indica quando a informação extern
   rádios ELRS atuais tem); a taxa de telemetria fica fixa em 1:2 (metade dos pacotes vai para
   telemetria, irrelevante para um drone de filmagem); o Wi-Fi do backpack alcança só 5–10 m, mas
   o celular fica com o piloto, ao lado do rádio.
+
+## ADR-0018: preços em US$ da loja oficial + parâmetro de importação
+
+- **Data:** 2026-10-04 · **Status:** aceita · **Verificado em:** 2026-10-04
+- **Contexto:** a SPEC pede preços em R$ como estimativa com data, sem inventar, e trata
+  impostos de importação como **parâmetro editável com data** (B.6); preço em tempo real
+  (scraping) está fora da v1 (B.2). Ao pesquisar: Mercado Livre e Amazon Brasil respondem com
+  página de verificação de robô; a API de busca do Mercado Livre exige autenticação (403). Não há
+  como conferir preço de anúncio brasileiro de forma automática e honesta.
+- **Decisão:**
+  - Cada peça tem **`preco_referencia_usd`** (preço na loja oficial do fabricante ou em loja
+    internacional conhecida, com link e data, sem frete e sem tributos) e/ou
+    **`preco_estimado_brl`** (quando houver fonte brasileira). Pelo menos um dos dois é
+    obrigatório (`checkCatalog`).
+  - O custo em R$ das peças importadas é calculado com `data/catalog/drone/parametros/importacao.json`:
+    câmbio PTAX de venda do Banco Central (02/10/2026: R$ 5,2238) e a regra da Receita Federal
+    (página atualizada em 14/09/2026): em site do **Remessa Conforme**, imposto de importação
+    **0% até US$ 50** e **60% menos US$ 30** acima disso; fora do programa, 60%; **ICMS de 17% a
+    20%** conforme o estado, calculado "por dentro". Base legal: Lei nº 15.502/2026.
+  - A faixa em R$ vai do cenário barato (peça sozinha no pacote, ICMS 17%) ao caro (peça num
+    pacote grande ou site fora do programa: 60% sem desconto, ICMS 20%). Frete, IOF e spread do
+    cartão ficam fora e aparecem no aviso. Sempre ⚠️.
+  - Ferramentas usam as faixas em R$ da SPEC B.6 (passadas por você, out/2026, a verificar).
+- **Consequências:** quando a regra mudar, basta editar o JSON (com nova data e fonte) e todos
+  os custos são recalculados. O preço brasileiro de cada peça pode ser preenchido depois por
+  você na página `/catalogo` (Fase 3), e passa a ter prioridade sobre a conversão.

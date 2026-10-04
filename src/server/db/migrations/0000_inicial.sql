@@ -18,9 +18,10 @@ CREATE TABLE `componentes` (
 	`marca` text NOT NULL,
 	`modelo` text NOT NULL,
 	`massa_g` real,
-	`preco_min_brl` real NOT NULL,
-	`preco_max_brl` real NOT NULL,
-	`preco_data` text NOT NULL,
+	`preco_min_brl` real,
+	`preco_max_brl` real,
+	`preco_min_usd` real,
+	`preco_max_usd` real,
 	`status_verificacao` text NOT NULL,
 	`dados` text NOT NULL
 );

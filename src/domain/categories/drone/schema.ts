@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { difficultyDomainSchema, difficultyLevelSchema } from "@/domain/core/difficulty";
 import { locationKindSchema } from "@/domain/core/location";
-import { priceRangeSchema } from "@/domain/core/money";
+import { priceRangeSchema, usdPriceSchema } from "@/domain/core/money";
 import { safetyAlertSchema } from "@/domain/core/safety";
 import { isoDateSchema, sourceSchema } from "@/domain/core/source";
 import { verificationStatusSchema } from "@/domain/core/verification";
@@ -342,7 +342,11 @@ const componentBase = {
     .optional(),
   /** Quantas unidades vêm no item vendido (ex.: hélices em pacote com 4). */
   unidades_por_pacote: z.int().min(1).default(1),
-  preco_estimado_brl: priceRangeSchema,
+  /** Preço em lojas brasileiras, quando há fonte. Por item vendido (pacote). */
+  preco_estimado_brl: priceRangeSchema.optional(),
+  /** Preço em loja internacional (US$, sem frete e tributos). Por item vendido (pacote). Pelo
+   *  menos um dos dois preços é obrigatório (checkCatalog). */
+  preco_referencia_usd: usdPriceSchema.optional(),
   onde_comprar: z.array(whereToBuySchema).min(1),
   fontes: z.array(sourceSchema).default([]),
   status_verificacao: verificationStatusSchema.default("nao_verificado"),

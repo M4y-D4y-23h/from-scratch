@@ -1,0 +1,40 @@
+{
+  "verificado_em": "2026-10-04",
+  "cambio": {
+    "usd_brl": 5.2238,
+    "data": "2026-10-02",
+    "fonte": {
+      "titulo": "Banco Central do Brasil: PTAX (cotação de venda do dólar em 02/10/2026)",
+      "tipo": "documentacao_oficial",
+      "url": "https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoDolarDia(dataCotacao=@dataCotacao)?@dataCotacao='10-02-2026'&$format=json",
+      "acessado_em": "2026-10-04"
+    }
+  },
+  "icms_pct": [17, 20],
+  "faixas_ii": [
+    { "ate_usd": 50, "aliquota_pct": 0, "deducao_usd": 0 },
+    { "ate_usd": 3000, "aliquota_pct": 60, "deducao_usd": 30 }
+  ],
+  "fontes": [
+    {
+      "titulo": "Receita Federal: Quanto pagarei de imposto? (compras internacionais; atualizado em 14/09/2026)",
+      "tipo": "documentacao_oficial",
+      "url": "https://www.gov.br/receitafederal/pt-br/assuntos/aduana-e-comercio-exterior/manuais/remessas-postal-e-expressa/preciso-pagar-impostos-nas-compras-internacionais/quanto-pagarei-de-imposto",
+      "acessado_em": "2026-10-04",
+      "observacao": "Sites do Remessa Conforme: até US$ 50, II 0%; acima, 60% menos US$ 30. Sites fora do programa: 60%. ICMS por dentro, de 17% a 20% conforme o estado."
+    },
+    {
+      "titulo": "Lei nº 15.502, de 10/09/2026 (conversão da MP 1.357/2026; o Ministro da Fazenda fixa as alíquotas por portaria)",
+      "tipo": "norma",
+      "url": "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2026/lei/L15502.htm",
+      "acessado_em": "2026-10-04"
+    },
+    {
+      "titulo": "Fenacon: alíquota do ICMS sobre compras internacionais sobe de 17% para 20% (dez estados, desde 01/04/2025)",
+      "tipo": "comunidade",
+      "url": "https://fenacon.org.br/noticias/aliquota-do-icms-sobre-compras-internacionais-sobe-de-17-para-20/",
+      "acessado_em": "2026-10-04"
+    }
+  ],
+  "aviso": "Estimativa para pessoa física. A faixa vai do cenário mais barato (cada peça num pacote separado, em site do programa Remessa Conforme, ICMS de 17%) ao mais caro (peça dentro de um pacote grande ou site fora do programa: 60% de imposto, ICMS de 20%). Frete, IOF e spread do cartão não estão incluídos. As regras mudam: confira as vigentes na Receita Federal antes de comprar."
+}

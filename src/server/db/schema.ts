@@ -57,9 +57,12 @@ export const componentes = sqliteTable(
     marca: text("marca").notNull(),
     modelo: text("modelo").notNull(),
     massa_g: real("massa_g"),
-    preco_min_brl: real("preco_min_brl").notNull(),
-    preco_max_brl: real("preco_max_brl").notNull(),
-    preco_data: text("preco_data").notNull(),
+    /** Preço em lojas brasileiras (quando há fonte). */
+    preco_min_brl: real("preco_min_brl"),
+    preco_max_brl: real("preco_max_brl"),
+    /** Preço em loja internacional, sem frete e tributos. */
+    preco_min_usd: real("preco_min_usd"),
+    preco_max_usd: real("preco_max_usd"),
     status_verificacao: text("status_verificacao").notNull(),
     dados: text("dados", { mode: "json" }).$type<Componente>().notNull(),
   },

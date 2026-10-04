@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "a4b3e4d0-6d05-4cab-aa73-5e2caef646ae",
+  "id": "b670f0c5-52d2-4632-a92c-082559ebfb08",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "arquetipos": {
@@ -122,21 +122,28 @@
           "name": "preco_min_brl",
           "type": "real",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
         },
         "preco_max_brl": {
           "name": "preco_max_brl",
           "type": "real",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
         },
-        "preco_data": {
-          "name": "preco_data",
-          "type": "text",
+        "preco_min_usd": {
+          "name": "preco_min_usd",
+          "type": "real",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "preco_max_usd": {
+          "name": "preco_max_usd",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false,
           "autoincrement": false
         },
         "status_verificacao": {

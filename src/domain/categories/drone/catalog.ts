@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { importParamsSchema } from "@/domain/core/importacao";
 import type { Source } from "@/domain/core/source";
 
 import { TELEMETRY_OPTIONS } from "./build";
@@ -27,6 +28,8 @@ export const droneCatalogSchema = z.object({
   ferramentas: z.array(toolSchema),
   arquetipos: z.array(archetypeSchema),
   perfis_firmware: z.array(firmwareProfileSchema),
+  /** Parâmetros de importação (câmbio, tributos) para converter preços em US$. */
+  importacao: importParamsSchema.optional(),
 });
 export type DroneCatalog = z.infer<typeof droneCatalogSchema>;
 
@@ -135,14 +138,18 @@ export function checkCatalog(catalog: DroneCatalog, options: CheckOptions = {}):
     if (c.status_verificacao === "verificado" && !hasCheckableSource(c.fontes)) {
       problemas.push(`${onde}: marcado como verificado sem fonte com link e data`);
     }
-    if (
-      c.preco_estimado_brl.status === "verificado" &&
-      !hasCheckableSource(c.preco_estimado_brl.fontes)
-    ) {
+    const brl = c.preco_estimado_brl;
+    const usd = c.preco_referencia_usd;
+    if (!brl && !usd) problemas.push(`${onde}: sem preço (em R$ ou em US$)`);
+    if (brl?.status === "verificado" && !hasCheckableSource(brl.fontes)) {
       problemas.push(`${onde}: preço verificado sem fonte com link e data`);
     }
-    checkSources(onde, [...c.fontes, ...c.preco_estimado_brl.fontes], problemas);
+    checkSources(onde, [...c.fontes, ...(brl?.fontes ?? []), ...(usd?.fontes ?? [])], problemas);
     checkWhereToBuy(onde, c.onde_comprar, problemas);
+  }
+
+  if (!catalog.importacao && catalog.componentes.some((c) => c.preco_referencia_usd)) {
+    problemas.push("há preços em US$, mas falta parametros/importacao.json para converter em R$");
   }
 
   for (const t of catalog.empuxo) checkThrustTable(t, byId, problemas);

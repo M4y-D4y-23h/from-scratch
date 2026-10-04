@@ -19,6 +19,23 @@ export const priceRangeSchema = z
   .refine((p) => p.max >= p.min, { message: "max deve ser maior ou igual a min" });
 export type PriceRange = z.infer<typeof priceRangeSchema>;
 
+/**
+ * Preço de referência em dólares numa loja internacional (ex.: loja oficial do fabricante), sem
+ * frete e sem tributos. O custo em R$ sai do parâmetro de importação (src/domain/core/importacao.ts).
+ */
+export const usdPriceSchema = z
+  .object({
+    min: z.number().nonnegative(),
+    max: z.number().nonnegative(),
+    data: isoDateSchema,
+    /** Nome da loja (ex.: "Loja oficial da Holybro"). */
+    loja: z.string().min(1),
+    fontes: z.array(sourceSchema).min(1),
+    observacao: z.string().optional(),
+  })
+  .refine((p) => p.max >= p.min, { message: "max deve ser maior ou igual a min" });
+export type UsdPrice = z.infer<typeof usdPriceSchema>;
+
 /** Faixa em centavos, usada nos cálculos. */
 export type CentsRange = {
   min_centavos: number;
