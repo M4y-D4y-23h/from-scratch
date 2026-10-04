@@ -71,100 +71,150 @@ apenas os 7 verbetes de `docs/GLOSSARIO.md`.
 
 ---
 
-## Fase 1: Domínio (plano, aguardando sua revisão)
+## Fase 1: Domínio (concluída em 2026-10-04, aguardando revisão)
 
-**Objetivo (SPEC B.18):** tipos e schemas, banco + seed do catálogo, cálculos, compatibilidade,
-solver, dificuldade, custos, locais e alertas determinísticos, começando pelo Arquétipo 1.
-**Aceite:** testes geram os 3 builds de referência (3 faixas cada) com relatório completo; o
-Arquétipo 1 valida UARTs (RC + GPS + telemetria), alimentação do vídeo e failsafe → RTL; testes
-de falha cobrem TWR baixo, ESC subdimensionado, furação incompatível, hélice grande demais para
-o frame, bateria com C-rating insuficiente e FC sem UARTs suficientes.
+**Aceite (SPEC B.18):** testes geram os 3 builds de referência (3 faixas cada) com relatório
+completo; o Arquétipo 1 valida UARTs (RC + GPS + telemetria), alimentação do vídeo e
+failsafe → RTL; testes de falha cobrem TWR baixo, ESC subdimensionado, furação incompatível,
+hélice grande demais para o frame, bateria com C-rating insuficiente e FC sem UARTs suficientes.
+**Tudo atendido** (`tests/unit/reference-a1.test.ts`, `tests/unit/reference-a2-a3.test.ts` e o
+bloco "casos que devem falhar" de `src/domain/categories/drone/compatibility.test.ts`).
 
-### Decisões que dependem de você
+### Feito
 
-1. **Arquitetura do Arquétipo 1 (ADR-0013):** telemetria por Wi-Fi no drone como padrão e ELRS
-   em modo MAVLink como alternativa? FC só com 2 MB ou mais (H7), ou aceitar F4 de 1 MB com alerta?
-2. **Selo dos valores calculados:** proposta: todo número calculado (AUW, TWR, autonomia...) é no
-   máximo ⚠️ _Estimativa_, e vira ❓ _Não verificado_ se alguma entrada for ❓. Como o seed nasce
-   todo ❓ (SPEC B.6), os builds de referência sairão com cálculos ❓ até você verificar as peças.
-3. **Fonte da verdade do catálogo:** proposta: arquivos JSON em `data/catalog/drone/` (versionados
-   no git, cada verificação vira um diff revisável); o banco SQLite é reconstruído a partir deles
-   (`pnpm db:seed`); a página /catalogo (Fase 3) grava no JSON e ressincroniza o banco. Projetos,
-   versões, chat, uploads e uso ficam só no banco.
-4. **Nomes no código:** proposta: entidades com os nomes em inglês da SPEC (`Component`,
-   `ThrustData`, `BuildStepTemplate`...), campos em português `snake_case` como na SPEC
-   (`massa_g`, `preco_estimado_brl`, `status_verificacao`...), funções em inglês (`computeAuw`).
-5. **Pesquisa de datasheets e preços:** a rede da sessão de nuvem bloqueia muitos sites
-   (fabricantes, lojas, gov.br). Itens sem fonte que eu consiga abrir ficam com o campo vazio e ❓,
-   e o motor responde "sem dado" onde faltar (ex.: TWR sem tabela de empuxo). Opções: liberar
-   domínios na configuração de rede do ambiente, ou você verificar depois no /catalogo.
-6. **Textos regulatórios (ANAC, DECEA, Anatel):** a SPEC exige fonte oficial gov.br, que está
-   bloqueada aqui. Proposta: os alertas entram com o texto marcado "a verificar" e sem link até a
-   fonte ser aberta (por você ou com o domínio liberado).
-7. **EPI extra:** incluir toalha grande, extintor e kit de primeiros socorros (recomendação da
-   página de segurança do ArduPilot) além da lista da SPEC B.6?
-8. **Honestidade sobre "montar vs. comprar pronto":** incluir uma nota fixa (sem preço inventado)
-   de que drones prontos podem sair mais baratos e que o ganho de montar é aprender e
-   personalizar, como a própria documentação do ArduPilot reconhece?
+- **Núcleo (`src/domain/core/`):** selos, faixas de preço em centavos com data, fontes, resultado
+  de regra (passou / falhou / sem dado, bloqueante ou alerta, texto leigo e técnico, sugestão,
+  fonte), dificuldade (9 domínios, níveis 0–5), locais, alertas, glossário e o cálculo de
+  importação (câmbio + Remessa Conforme + ICMS "por dentro").
+- **Drone (`src/domain/categories/drone/`):** schemas zod de 32 categorias de peça com specs
+  tipadas; cálculos (peso com margem, empuxo pela tabela do fabricante, TWR, pairar, correntes,
+  autonomia em faixa por estilo de voo); **35 regras** de compatibilidade e viabilidade; solver
+  das três faixas com kits e explicação de cada escolha; custos; dificuldade (fórmula da SPEC
+  B.8); "onde fazer"; alertas; perfis de parâmetros de firmware; comparação 450 mm × 5"; montar ×
+  comprar pronto. Tudo puro (sem I/O), com as heurísticas em `config.ts` e a origem de cada uma.
+- **Catálogo real (`data/catalog/drone/`):** 44 peças, 4 tabelas de empuxo, 25 ferramentas/EPI, 3
+  arquétipos com 98 passos de montagem, 2 perfis de firmware (ArduCopter 4.7 e Betaflight 4.5) e
+  5 drones prontos de referência. Cada peça com página oficial lida em 04/10/2026, preço da loja
+  oficial em US$ e selo ❓ (ninguém conferiu ainda, SPEC B.6).
+- **Banco local:** SQLite + Drizzle espelhando catálogo e glossário (`pnpm db:sync`), migrações
+  `0000_inicial` e `0001_drones_prontos`.
+- **Regras oficiais pesquisadas e citadas:** ANAC (Resolução nº 806/2026), DECEA (ICA
+  100-40/2026), Anatel (Ato nº 14.448/2017), SAMU 192; ArduPilot, Betaflight e ExpressLRS
+  conferidos no código-fonte (commits citados nos ADRs).
+- **Docs:** ADR-0014 a ADR-0022, `docs/SPEC-ERRATA.md` (o que na SPEC estava desatualizado,
+  como `RTL_ALT` → `RTL_ALT_M`), glossário com 42 termos.
+- **`pnpm report`:** mostra os 9 builds no terminal (peças, números, custos, dificuldade, regras,
+  alertas, montar × pronto e a comparação de tamanho).
 
-### Entregas, na ordem (cada item = commits pequenos com testes)
+**Resultado com o catálogo atual** (custos só das peças, faixa do cenário barato ao caro, sem
+frete; ⚠️ estimativa):
 
-1. **Núcleo (`src/domain/core/`):** selo de verificação, faixa de preço em centavos com data,
-   fonte, valor medido (valor + unidade + selo + fonte), `RuleResult`/`ValidationReport` (passou /
-   falhou / sem dado; bloqueante; texto leigo; texto técnico; sugestão; fonte), tipos de
-   dificuldade (9 domínios, níveis 0–5), custos, locais (🛒 🏠 🏭 🌳) e alertas.
-2. **Schemas do drone (`categories/drone/schema.ts`, zod):** `Component` como união por categoria
-   com specs tipadas. Ex.: frame (distância entre eixos, hélice máxima, furação dos motores e da
-   stack); motor (estator, KV, células, furação, eixo); hélice (diâmetro, passo, pás, material);
-   ESC (corrente contínua/pico, células, 4 em 1 ou individual); FC (placa no ArduPilot/Betaflight,
-   flash, UARTs com DMA, saídas, BECs, furação); bateria (células, mAh, C, conector); rádio e
-   receptor (protocolo, frequência, Wi-Fi/backpack); VTX, câmera e receptor de vídeo (sistema,
-   tensão, corrente); GPS (bússola, conector); módulo de telemetria; módulo de energia. Mais
-   `ThrustData`, `Tool`, `Archetype`, `BuildStepTemplate` e parâmetros de firmware versionados
-   (nome, valor, unidade, versão mínima/máxima, fonte).
-3. **Banco:** Drizzle ORM + `better-sqlite3` 13 (o pacote já traz o binário pronto para Windows
-   x64/arm64, sem script de instalação e sem compilar; alternativa avaliada: `@libsql/client`).
-   Tabelas da SPEC B.5, migrações com `drizzle-kit`, seed que valida cada JSON com zod antes de
-   gravar, arquivo em `data/local/` (fora do git). Dependências novas, justificadas em ADR:
-   `zod`, `drizzle-orm`, `better-sqlite3`, `drizzle-kit` e `tsx` (rodar scripts TypeScript no
-   Windows). O CI no Windows prova a instalação.
-4. **Cálculos (`calculations.ts`) + `config.ts`:** AUW com margem; empuxo por interpolação linear
-   da curva (sem extrapolar: fora da tabela = "sem dado"); TWR com as faixas da SPEC; throttle de
-   hover (alvo ~50%, segundo a página de segurança do ArduPilot); correntes máxima e de hover; ESC
-   ≥ corrente × 1,2; bateria (Ah × C ≥ corrente × margem); tempo de voo como faixa. Toda constante
-   com origem comentada e teste próprio, inclusive casos que devem falhar.
-5. **Compatibilidade (`compatibility.ts`):** todas as regras da SPEC B.7, mais as do Arquétipo 1:
-   UARTs suficientes conforme a opção de telemetria; UART do RC com DMA em F4/F7; BEC × consumo de
-   VTX + câmera + GPS + receptor + telemetria (tensão e corrente com margem); bússola ≥ 100 mm de
-   fios de potência e mastro; flash da FC; parâmetros de failsafe presentes (rádio → RTL, bateria
-   → RTL, GCS); hélice de plástico para iniciante (aviso).
-6. **Solver (`solver.ts`):** filtra combinações compatíveis, pontua por arquétipo (Arquétipo 1:
-   facilidade e segurança > autonomia > custo) e gera econômica / equilibrada / premium, de forma
-   determinística e com a explicação de cada escolha em dados (o LLM só reescreve na Fase 4).
-   Inclui a comparação 450 mm × 5"–7" (TWR, hover, autonomia, espaço para montar, perigo da
-   hélice, custo). **Os pesos do critério "mais fácil e seguro" vêm para você aprovar.**
-7. **Dificuldade (`difficulty.ts`):** derivada dos passos e das peças; nota geral
-   `0,6 × nível máximo + 0,4 × média ponderada pelas horas`, rótulos e horas totais; testada.
-8. **Custos (`costs.ts`)**, **locais (`locations.ts`)** e **alertas (`safety.ts`)**: peças,
-   ferramentas ("já tenho" tira do total), consumíveis, EPI e importação (parâmetro editável com
-   data e aviso); 🛒 🏠 🏭 🌳 com requisitos; alertas obrigatórios da SPEC B.9 e os do Arquétipo 1
-   (> 250 g, VTX e Anatel, RTL sem desvio de obstáculos, controle só pelo celular experimental,
-   limitações do iPhone, simulador primeiro).
-9. **Dados do Arquétipo 1:** catálogo para 3 faixas, tabelas de empuxo com fonte quando houver,
-   ferramentas da SPEC B.6 (preços que você passou, ⚠️ out/2026) e 25–45 passos de montagem com
-   domínios, riscos e checkpoints (calibrações, geofence, `RTL_ALT_M`, failsafes, teste de RTL
-   baixo e em local aberto, conferir o home).
-10. **Arquétipos 2 (FPV 5", Betaflight) e 3 (Tiny Whoop sub-250 g):** catálogo, passos e regras
-    próprias (limite de 250 g, TWR alto no 5", alerta de simulador).
-11. **Builds de referência:** testes que geram 3 arquétipos × 3 faixas com o relatório completo,
-    mais os testes de falha do aceite.
+| Arquétipo                 | Faixa       | Peso    | TWR  | Pairar | Voo         | Peças (R$)     | Dificuldade          |
+| ------------------------- | ----------- | ------- | ---- | ------ | ----------- | -------------- | -------------------- |
+| 1. GPS para filmar (450)  | econômica   | 1.607 g | 3,3  | 47%    | 8,5–12 min  | 6.182 a 7.971  | Avançado (2,76)      |
+|                           | equilibrada | 1.613 g | 3,3  | 47%    | 8,4–11,9    | 8.240 a 10.337 | Avançado             |
+|                           | premium     | 1.639 g | 3,25 | 47%    | 8,3–11,7    | 8.644 a 10.838 | Avançado             |
+| 2. FPV 5" (Betaflight)    | econômica   | 730 g   | 9,2  | ≤ 50%  | 2,9–9,7 min | 4.213 a 6.101  | Avançado (2,8)       |
+|                           | equilibrada | 732 g   | 9,2  | ≤ 50%  | 2,9–9,6     | 5.466 a 7.592  | Avançado             |
+|                           | premium     | 732 g   | 9,2  | ≤ 50%  | 2,9–9,6     | 6.333 a 8.671  | Avançado             |
+| 3. Tiny Whoop (sub-250 g) | econômica   | 26 g    | 4,4  | 40%    | 2,3–3,8 min | 2.236 a 3.389  | Intermediário (1,79) |
+|                           | equilibrada | 34 g    | 5,6  | 33%    | 3,9–6,5     | 3.218 a 4.501  | Intermediário        |
+|                           | premium     | 34 g    | 5,6  | 33%    | 3,9–6,5     | 3.781 a 5.118  | Intermediário        |
 
-**Sugestão de pausa no meio:** parar para sua revisão ao fim do item 9 (Arquétipo 1 completo),
-antes de fazer os outros dois arquétipos.
+- **Comparação de tamanho (Arquétipo 1):** escolhe a classe 450 mm (nota 0,96 de 1). O 5" não
+  atende (sem GPS com bússola e sem ArduPilot) e tem 3,2× a potência dos motores, 20% menos
+  autonomia e metade do entre-eixos.
+- **Montar × pronto:** o DJI Mini 4K Fly More (R$ 4,3–4,7 mil) e o kit RTF Meteor75 Pro II
+  (R$ 1,9–2,2 mil) saem mais baratos que montar; no 5" e nos whoops BNF, com rádio, óculos e
+  baterias, o preço fica parecido.
 
-**Fora da Fase 1:** 3D (Fase 2), painéis e /catalogo (Fase 3), LLM (Fase 4), guia navegável
-(Fase 5), tutor e uploads (Fase 6), orçamento de API (Fase 7).
+### Como testar
 
-**Riscos conhecidos:** qualidade dos dados do seed (tudo nasce ❓); tabelas de empuxo podem faltar
-para alguns pares motor + hélice; diferenças de parâmetros entre versões de firmware; rede
-restrita para pesquisa.
+```powershell
+pnpm install
+pnpm check            # formatação, lint, tipos e os testes de unidade
+pnpm report           # os 9 builds no terminal
+pnpm report a1 --detalhes   # só o Arquétipo 1, com o motivo de cada escolha e as contas das regras
+pnpm catalog:check    # confere o catálogo e o glossário
+pnpm db:sync          # cria/atualiza o banco local em data/local/
+```
+
+Se você rodou `pnpm db:sync` antes desta fase, apague a pasta `data/local/` antes: a migração
+inicial mudou durante a fase (antes de qualquer uso real).
+
+Para mexer num número e ver o efeito: edite o JSON da peça em `data/catalog/drone/componentes/`
+(ou um parâmetro em `config.ts`) e rode `pnpm report` de novo.
+
+### Suas 8 decisões da revisão da Fase 0 (o que foi feito)
+
+1. **Arquitetura do Arquétipo 1:** telemetria padrão = **ExpressLRS em modo MAVLink**, Wi-Fi no
+   drone como alternativa (ADR-0017); FC só com **2 MB ou mais** (Pixhawk 6C / 6C Mini, H7).
+   _Por quê:_ (a) a telemetria alcança todo o voo legal (300 m), não só os ~150 m do Wi-Fi do
+   drone, e o mapa não congela no meio do voo; (b) menos peças e pontos de falha (sem placa ESP32
+   para gravar, alimentar e afastar do GPS, uma UART a menos); (c) nada a mais para comprar; (d) a
+   mesma segurança: conferi no código do ELRS e do ArduPilot que perder o link dispara o mesmo
+   failsafe de rádio → RTL em ~1 s. FC de 1 MB foi excluída (regra bloqueante) porque o firmware
+   reduzido pode não calibrar a bússola, e sem bússola não há retorno automático.
+2. **Selos de valores calculados (ADR-0016):** comparação direta entre peças verificadas pode ser
+   ✅; conta (TWR, autonomia, custo) nunca passa de ⚠️; qualquer entrada ❓ deixa o resultado ❓.
+   Assim o app nunca parece mais certo do que os dados permitem.
+3. **Catálogo (ADR-0015):** arquivos JSON versionados são a fonte da verdade; o banco é só um
+   espelho. Cada correção que você fizer vira um diff revisável no git.
+4. **Nomes e traduções (ADR-0022):** termos que você vai encontrar nos programas e lojas ficam em
+   inglês (Failsafe, Frame, Stack...), sempre explicados; o glossário tem 42 termos e um teste
+   impede jargão sem verbete.
+5. **Pesquisa com a rede liberada:** specs e preços das páginas oficiais dos fabricantes, com link
+   e data. Lojas brasileiras (Mercado Livre, Amazon) bloqueiam acesso automático, então o preço
+   em R$ sai da loja oficial em US$ + o parâmetro de importação (ADR-0018).
+6. **Regras oficiais:** ANAC, DECEA e Anatel lidas nos sites oficiais e citadas nos alertas. A
+   pesquisa corrigiu a SPEC: até 250 g dispensa o cadastro na ANAC, mas não as regras do DECEA ao
+   ar livre (`docs/SPEC-ERRATA.md`, item 1.3).
+7. **EPI extra e segurança (ADR-0021):** toalha, extintor e kit de primeiros socorros como EPI
+   essencial; três alertas novos em todo projeto (pessoas primeiro, ordem de ligar e desligar,
+   e o que fazer se algo der errado, com o SAMU 192).
+8. **Pronto pode sair mais barato (ADR-0021):** aviso fixo em todo projeto e comparação com 5
+   drones prontos reais, com preço estimado em R$.
+
+### Para você aprovar ou ajustar
+
+1. **Pesos da comparação de tamanho** (`config.ts`, `comparacao_tamanho`): facilidade 0,3,
+   segurança 0,3, autonomia 0,15, espaço para montar 0,1, custo 0,15.
+2. **Whoop "Intermediário" (1,79):** com os limites da SPEC B.8, nenhum projeto com passo de nível
+   2 chega a "Iniciante". Se você quiser o whoop como "Iniciante", o ajuste é nos limites dos
+   rótulos (`config.ts`, `limites_rotulo`), não nos passos.
+3. **Heurísticas sem fonte oficial** (em `config.ts`, conferidas com o tempo de voo publicado
+   pelos fabricantes): corrente média ÷ corrente de pairar por estilo de voo (estável 1,0–1,25;
+   freestyle 1,0–3,0; indoor 1,0–1,5) e horas de aprendizado por nível.
+
+### Ficou de fora (de propósito)
+
+- **Vídeo digital** (DJI O4, Walksnail, HDZero): é o padrão do mercado no 5", mas as lojas
+  oficiais não publicam em texto tensão, consumo e peso do VTX digital. O premium do 5" ficou
+  analógico, sem inventar números.
+- **Um 5"–7" com GPS no catálogo:** a comparação de tamanho usa o FPV 5" do Arquétipo 2 como
+  representante da classe (mesmo tamanho de hélice e motor).
+- **Preços brasileiros:** sem fonte automática confiável; ficam para você preencher na página
+  /catalogo (Fase 3). Sem preço pesquisado (fora dos totais, sempre listados): rabicho XT60,
+  toalha, extintor, kit de primeiros socorros e chaves de precisão.
+- **Outras stacks 20 x 20** para o 5": só a iFlight BLITZ Mini ATF435 tem ficha completa publicada
+  (BEC incluído).
+- 3D (Fase 2), painéis e /catalogo (Fase 3), LLM (Fase 4), guia navegável (Fase 5), tutor e
+  uploads (Fase 6), orçamento de API (Fase 7).
+
+### Problemas conhecidos / pontos de atenção
+
+- Tudo no catálogo é ❓ até você conferir; por isso os números saem ❓ (ADR-0016).
+- Disponibilidade muda: em 04/10/2026 os óculos BETAFPV VR04 estavam sem estoque na loja oficial.
+- O nome do alvo Betaflight da stack (IFLIGHT_BLITZ_F435) foi conferido no repositório oficial de
+  configurações; a iFlight chama a placa de "ATF435". Confira na hora de gravar o firmware.
+- A AIO BETAFPV Matrix 1S sai com giroscópios diferentes conforme o lote (a configuração oficial
+  lista ICM42688P, ICM42622P, BMI270 e LSM6DSK320X); todos são suportados pelo mesmo alvo.
+- Pico de corrente do Arquétipo 1 (~66 A com tudo no máximo) passa do limite contínuo do conector
+  do módulo de energia PM02 V3 (30 A): o app avisa (alerta, não bloqueia), porque pairando o
+  drone usa ~13 A.
+
+### Revisão adversarial da Fase 1 (SPEC B.19.7)
+
+_(em andamento)_
+
+**Dados do catálogo para você verificar:** _(em andamento)_
