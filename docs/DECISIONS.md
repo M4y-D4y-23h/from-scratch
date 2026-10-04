@@ -587,3 +587,41 @@ Datas no formato AAAA-MM-DD. "Verificado em" indica quando a informação extern
 - **Consequências:** com o catálogo atual, o DJI Mini 4K (R$ 4,3–4,7 mil) sai mais barato que as
   peças do Arquétipo 1 (R$ 6,2–8,0 mil); o kit RTF do whoop (R$ 1,9–2,2 mil) também; no 5", o BNF
   com rádio, óculos e baterias empata com montar.
+
+## ADR-0022: nomes no código e tradução de termos técnicos
+
+- **Data:** 2026-10-04 · **Status:** aceita (decisão 4 do dono do projeto)
+- **Contexto:** a SPEC pede toda a interface em PT-BR para leigos (B.1.5), mas os nomes das
+  entidades dela estão em inglês (`Component`, `ThrustData`, `Archetype`...) e os campos em
+  português (`massa_g`, `onde_comprar`). O dono pediu cuidado nas traduções, para nenhuma palavra
+  perder o sentido original, sem exigir tradução de 100% do inglês.
+- **Decisão (código):**
+  - **Entidades e tipos em inglês**, com os nomes da SPEC B.5 (`Component`, `ThrustData`, `Tool`,
+    `Archetype`, `BuildStepTemplate`, `GlossaryTerm`) e os novos no mesmo padrão (`ReadyMade`,
+    `FirmwareProfile`, `FlightStyle`).
+  - **Campos e valores de dados em português `snake_case`** (`massa_g`, `preco_referencia_usd`,
+    `status_verificacao`, `estilo_voo: "estavel"`): são o que o dono e o curador leem e editam nos
+    JSON do catálogo. Unidade no sufixo (`_g`, `_mm`, `_mah`, `_a`, `_usd`, `_pol`).
+  - **Funções em inglês** (`computeFlightTime`, `compareSizeClasses`, `checkCatalog`), como as
+    APIs das bibliotecas ao redor; o comentário que explica o porquê fica em português.
+  - **Ids de regra, de passo e de alerta em português** (`bateria_cabe_no_frame`,
+    `failsafe_configurado`, `pessoas-primeiro`): aparecem em relatórios e testes lidos pelo dono.
+  - **Nomes de parâmetros de firmware sempre como no firmware** (`RTL_ALT_M`,
+    `failsafe_procedure`): traduzir impediria encontrar o parâmetro no programa.
+- **Decisão (interface e glossário):**
+  - **Termo técnico em inglês fica em inglês quando é o nome que o leigo vai encontrar** nos
+    manuais, nos programas de configuração e nas lojas: Failsafe, Hover, Frame, Stack, Throttle,
+    KV, AIO, BNF, RTF, FPV, OSD, UART. Traduzir "failsafe" por "à prova de falhas" perde o sentido
+    técnico (no drone é a ação automática quando o sinal ou a bateria acabam); "stack" por "pilha"
+    confunde com pilha de bateria.
+  - **Na primeira menção e no glossário**, o termo vem com a explicação em português (e a
+    palavra portuguesa quando existe uma comum: "pairar (hover)", "acelerador (throttle)").
+    Todo jargão usado em alerta ou regra precisa ter verbete em `docs/GLOSSARIO.md` (teste
+    `tests/unit/glossary.test.ts`).
+  - **Traduz-se quando a palavra portuguesa é a usada no Brasil e não perde nada:** hélice,
+    bateria, célula, empuxo, bússola, antena, receptor, carregador.
+  - **Citações de fontes em inglês** entram traduzidas no texto, com o trecho original entre aspas
+    quando o sentido exato importa (ex.: ArduPilot "little cost advantage").
+- **Consequências:** o glossário passou de 7 para 42 termos. Um termo novo na interface sem
+  verbete faz o teste falhar. Quem lê o código encontra o vocabulário da SPEC; quem lê os dados
+  encontra português.
