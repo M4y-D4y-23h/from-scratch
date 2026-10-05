@@ -16,18 +16,21 @@
   "slots": [
     {
       "slot": "frame",
+      "rotulo": "Frame com dutos",
       "categorias": ["frame"],
       "quantidade": 1,
       "obrigatorio": true
     },
     {
       "slot": "motores",
+      "rotulo": "Motores",
       "categorias": ["motor"],
       "quantidade": 4,
       "obrigatorio": true
     },
     {
       "slot": "helices",
+      "rotulo": "Hélices",
       "categorias": ["helice"],
       "quantidade": 4,
       "obrigatorio": true,
@@ -39,18 +42,21 @@
     },
     {
       "slot": "fc",
+      "rotulo": "Placa AIO (FC, ESC, receptor e VTX)",
       "categorias": ["fc_aio"],
       "quantidade": 1,
       "obrigatorio": true
     },
     {
       "slot": "antena_video",
+      "rotulo": "Antena do vídeo",
       "categorias": ["antena"],
       "quantidade": 1,
       "obrigatorio": true
     },
     {
       "slot": "camera",
+      "rotulo": "Câmera FPV",
       "categorias": ["camera_fpv"],
       "quantidade": 1,
       "obrigatorio": true,
@@ -60,12 +66,14 @@
     },
     {
       "slot": "canopy",
+      "rotulo": "Canopy (cobertura que segura a câmera)",
       "categorias": ["acessorio"],
       "quantidade": 1,
       "obrigatorio": true
     },
     {
       "slot": "bateria",
+      "rotulo": "Baterias de voo",
       "categorias": ["bateria"],
       "quantidade": 1,
       "obrigatorio": true,
@@ -80,24 +88,28 @@
     },
     {
       "slot": "carregador",
+      "rotulo": "Carregador de bateria 1S",
       "categorias": ["carregador"],
       "quantidade": 1,
       "obrigatorio": true
     },
     {
       "slot": "radio",
+      "rotulo": "Rádio de controle",
       "categorias": ["radio_tx"],
       "quantidade": 1,
       "obrigatorio": true
     },
     {
       "slot": "bateria_radio",
+      "rotulo": "Baterias do rádio",
       "categorias": ["bateria_radio"],
       "quantidade": 1,
       "obrigatorio": true
     },
     {
       "slot": "oculos",
+      "rotulo": "Óculos FPV",
       "categorias": ["oculos_fpv"],
       "quantidade": 1,
       "obrigatorio": true

@@ -710,6 +710,8 @@ export type FirmwareProfile = z.infer<typeof firmwareProfileSchema>;
 /** Um "lugar" na lista de peças do arquétipo (ex.: 4 motores, 1 FC...). */
 export const archetypeSlotSchema = z.object({
   slot: z.string().min(1),
+  /** Nome do slot na interface, para leigos (ex.: "Controladora de voo (FC)"). */
+  rotulo: z.string().min(1).optional(),
   /** Categorias aceitas no slot (ex.: ESC individual ou 4 em 1, ou uma stack). */
   categorias: z.array(z.string()).min(1),
   quantidade: z.int().min(1),

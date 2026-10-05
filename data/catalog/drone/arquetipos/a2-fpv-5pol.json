@@ -15,18 +15,21 @@
   "slots": [
     {
       "slot": "frame",
+      "rotulo": "Frame (estrutura)",
       "categorias": ["frame"],
       "quantidade": 1,
       "obrigatorio": true
     },
     {
       "slot": "motores",
+      "rotulo": "Motores",
       "categorias": ["motor"],
       "quantidade": 4,
       "obrigatorio": true
     },
     {
       "slot": "helices",
+      "rotulo": "Hélices",
       "categorias": ["helice"],
       "quantidade": 4,
       "obrigatorio": true,
@@ -38,42 +41,49 @@
     },
     {
       "slot": "stack",
+      "rotulo": "Stack (FC + ESC)",
       "categorias": ["stack"],
       "quantidade": 1,
       "obrigatorio": true
     },
     {
       "slot": "conector_bateria",
+      "rotulo": "Conector da bateria",
       "categorias": ["conector"],
       "quantidade": 1,
       "obrigatorio": true
     },
     {
       "slot": "capacitor",
+      "rotulo": "Capacitor (protege a ESC)",
       "categorias": ["consumivel"],
       "quantidade": 1,
       "obrigatorio": true
     },
     {
       "slot": "receptor",
+      "rotulo": "Receptor do rádio",
       "categorias": ["receptor"],
       "quantidade": 1,
       "obrigatorio": true
     },
     {
       "slot": "radio",
+      "rotulo": "Rádio de controle",
       "categorias": ["radio_tx"],
       "quantidade": 1,
       "obrigatorio": true
     },
     {
       "slot": "bateria_radio",
+      "rotulo": "Baterias do rádio",
       "categorias": ["bateria_radio"],
       "quantidade": 1,
       "obrigatorio": true
     },
     {
       "slot": "bateria",
+      "rotulo": "Baterias de voo",
       "categorias": ["bateria"],
       "quantidade": 1,
       "obrigatorio": true,
@@ -88,6 +98,7 @@
     },
     {
       "slot": "camera",
+      "rotulo": "Câmera FPV",
       "categorias": ["camera_fpv"],
       "quantidade": 1,
       "obrigatorio": true,
@@ -97,18 +108,21 @@
     },
     {
       "slot": "vtx",
+      "rotulo": "Transmissor de vídeo (VTX)",
       "categorias": ["vtx"],
       "quantidade": 1,
       "obrigatorio": true
     },
     {
       "slot": "antena_video",
+      "rotulo": "Antena do vídeo",
       "categorias": ["antena"],
       "quantidade": 1,
       "obrigatorio": true
     },
     {
       "slot": "oculos",
+      "rotulo": "Óculos FPV",
       "categorias": ["oculos_fpv"],
       "quantidade": 1,
       "obrigatorio": true

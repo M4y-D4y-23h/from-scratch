@@ -14,30 +14,35 @@
   "slots": [
     {
       "slot": "frame",
+      "rotulo": "Frame (estrutura)",
       "categorias": ["frame"],
       "quantidade": 1,
       "obrigatorio": true
     },
     {
       "slot": "motores",
+      "rotulo": "Motores",
       "categorias": ["motor"],
       "quantidade": 4,
       "obrigatorio": true
     },
     {
       "slot": "escs",
+      "rotulo": "ESCs (um por motor)",
       "categorias": ["esc"],
       "quantidade": 4,
       "obrigatorio": true
     },
     {
       "slot": "helices",
+      "rotulo": "Hélices",
       "categorias": ["helice"],
       "quantidade": 4,
       "obrigatorio": true
     },
     {
       "slot": "distribuicao_energia",
+      "rotulo": "Placa de distribuição de energia (PDB)",
       "categorias": ["modulo_energia"],
       "quantidade": 1,
       "obrigatorio": true,
@@ -47,6 +52,7 @@
     },
     {
       "slot": "monitor_bateria",
+      "rotulo": "Módulo de energia (mede a bateria)",
       "categorias": ["modulo_energia"],
       "quantidade": 1,
       "obrigatorio": true,
@@ -56,36 +62,42 @@
     },
     {
       "slot": "fc",
+      "rotulo": "Controladora de voo (FC)",
       "categorias": ["fc"],
       "quantidade": 1,
       "obrigatorio": true
     },
     {
       "slot": "gps",
+      "rotulo": "GPS com bússola",
       "categorias": ["gps"],
       "quantidade": 1,
       "obrigatorio": true
     },
     {
       "slot": "receptor",
+      "rotulo": "Receptor do rádio",
       "categorias": ["receptor"],
       "quantidade": 1,
       "obrigatorio": true
     },
     {
       "slot": "radio",
+      "rotulo": "Rádio de controle",
       "categorias": ["radio_tx"],
       "quantidade": 1,
       "obrigatorio": true
     },
     {
       "slot": "bateria_radio",
+      "rotulo": "Baterias do rádio",
       "categorias": ["bateria_radio"],
       "quantidade": 1,
       "obrigatorio": true
     },
     {
       "slot": "bateria",
+      "rotulo": "Baterias de voo",
       "categorias": ["bateria"],
       "quantidade": 1,
       "obrigatorio": true,
@@ -97,6 +109,7 @@
     },
     {
       "slot": "camera",
+      "rotulo": "Câmera FPV",
       "categorias": ["camera_fpv"],
       "quantidade": 1,
       "obrigatorio": true,
@@ -106,24 +119,28 @@
     },
     {
       "slot": "vtx",
+      "rotulo": "Transmissor de vídeo (VTX)",
       "categorias": ["vtx"],
       "quantidade": 1,
       "obrigatorio": true
     },
     {
       "slot": "antena_video",
+      "rotulo": "Antena do vídeo",
       "categorias": ["antena"],
       "quantidade": 1,
       "obrigatorio": true
     },
     {
       "slot": "receptor_video",
+      "rotulo": "Receptor de vídeo para o celular",
       "categorias": ["receptor_video"],
       "quantidade": 1,
       "obrigatorio": true
     },
     {
       "slot": "telemetria",
+      "rotulo": "Telemetria Wi-Fi no drone",
       "categorias": ["telemetria"],
       "quantidade": 1,
       "obrigatorio": false
