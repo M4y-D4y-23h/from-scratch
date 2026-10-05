@@ -13,7 +13,13 @@ Formato de cada termo:
   aqui);
 - **Analogia:** comparação com algo do dia a dia;
 - **Relacionados:** outros termos do glossário, separados por vírgula (um teste exige que todo
-  termo relacionado tenha verbete).
+  termo relacionado tenha verbete);
+- **Não sublinhar antes de:** (opcional) palavras que, logo depois do termo, mostram que o texto
+  fala de outra coisa. Exemplo: em "receptor USB" o assunto é o receptor de vídeo, então o verbete
+  "Receptor" (o do rádio) não aparece ali.
+
+Na interface, o termo é reconhecido com ou sem maiúscula inicial e no plural ("hélices",
+"receptores de vídeo"). Siglas (ESC, FC) só contam em maiúsculas.
 
 ---
 
@@ -135,10 +141,12 @@ Formato de cada termo:
 
 ## Firmware
 
-- **Explicação:** o programa gravado na controladora de voo. ArduPilot e Betaflight são
-  firmwares: cada um tem jeitos diferentes de configurar e recursos diferentes.
+- **Explicação:** o programa gravado numa placa eletrônica do drone. Na controladora de voo,
+  ArduPilot e Betaflight são firmwares: cada um tem jeitos diferentes de configurar e recursos
+  diferentes. ESCs e receptores também têm o seu: nos ESCs do projeto, BLHeli_S ou Bluejay; no
+  receptor, ExpressLRS, que precisa estar na mesma versão do rádio.
 - **Analogia:** o sistema operacional de um celular.
-- **Relacionados:** FC, ArduPilot, Betaflight
+- **Relacionados:** FC, ArduPilot, Betaflight, ESC, Receptor, ExpressLRS
 
 ## Hélice
 
@@ -251,9 +259,20 @@ Formato de cada termo:
 ## Receptor
 
 - **Explicação:** a peça no drone que recebe os comandos do rádio. Rádio e receptor precisam ser
-  do mesmo sistema (no projeto, ExpressLRS de 2,4 GHz) e estar pareados.
+  do mesmo sistema (no projeto, ExpressLRS de 2,4 GHz) e estar pareados. Não confundir com o
+  receptor de vídeo, que recebe a imagem da câmera.
 - **Analogia:** o sensor da TV que recebe os comandos do controle remoto.
-- **Relacionados:** ExpressLRS, UART, Antena
+- **Relacionados:** ExpressLRS, UART, Antena, Receptor de vídeo
+- **Não sublinhar antes de:** OTG, USB, UVC
+
+## Receptor de vídeo
+
+- **Explicação:** a peça que recebe a imagem enviada pelo transmissor de vídeo (VTX) do drone e a
+  mostra numa tela: um aparelho que liga no celular Android pela entrada USB, ou o receptor que já
+  vem dentro dos óculos FPV. Precisa ser do mesmo sistema do VTX (no projeto, vídeo analógico de
+  5,8 GHz). Não confundir com o receptor do rádio, que recebe os comandos.
+- **Analogia:** a TV sintonizando um canal: o VTX é a emissora e o receptor de vídeo é a TV.
+- **Relacionados:** VTX, 5,8 GHz, FPV, Receptor
 
 ## AIO
 

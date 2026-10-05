@@ -25,6 +25,8 @@ const SAMPLE = [
   "",
   "- **Explicação:** gira e empurra o ar.",
   "- **Relacionados:** KV",
+  "- **Não sublinhar antes de:** de passo,",
+  "  Gemfan",
 ].join("\r\n");
 
 describe("parseGlossary", () => {
@@ -39,6 +41,8 @@ describe("parseGlossary", () => {
       relacionados: ["Hélice", "Célula", "5,8 GHz"],
     });
     expect(termos[1]?.analogia).toBeUndefined();
+    expect(termos[0]).not.toHaveProperty("nao_sublinhar_antes_de");
+    expect(termos[1]?.nao_sublinhar_antes_de).toEqual(["de passo", "Gemfan"]);
   });
 
   it("aponta termo sem explicação e termo repetido", () => {
@@ -55,19 +59,20 @@ describe("parseGlossary", () => {
 });
 
 describe("termos do glossário no texto da interface", () => {
-  const matcher = compileGlossary(
-    [
+  const matcher = compileGlossary([
+    ...[
       "ESC",
       "FC",
       "LiPo",
       "Hélice",
       "Câmera FPV",
       "FPV",
-      "Receptor",
       "Receptor de vídeo",
       "Armar",
+      "Carregador balanceador",
     ].map((termo) => ({ termo })),
-  );
+    { termo: "Receptor", nao_sublinhar_antes_de: ["OTG", "USB", "UVC"] },
+  ]);
   const marcados = (texto: string) =>
     splitGlossary(texto, matcher)
       .filter((s) => s.termo)
@@ -102,6 +107,29 @@ describe("termos do glossário no texto da interface", () => {
       "receptor de vídeo→Receptor de vídeo",
       "receptor→Receptor",
     ]);
+  });
+
+  it("termo composto no plural: o plural vai na primeira palavra (ou em todas)", () => {
+    expect(marcados("Os receptores de vídeo USB")).toEqual([
+      "receptores de vídeo→Receptor de vídeo",
+    ]);
+    expect(marcados("duas câmeras FPV")).toEqual(["câmeras FPV→Câmera FPV"]);
+    expect(marcados("carregadores balanceadores")).toEqual([
+      "carregadores balanceadores→Carregador balanceador",
+    ]);
+    // "de" não vira "des": "receptor des vídeo" não é o termo composto.
+    expect(marcados("receptor des vídeo")).toEqual(["receptor→Receptor"]);
+  });
+
+  it("não sublinha o termo antes das palavras de exceção (outra peça com o mesmo nome)", () => {
+    expect(marcados("Ligar o receptor OTG no celular")).toEqual([]);
+    expect(marcados("Receptor OTG UVC 5,8 GHz")).toEqual([]);
+    expect(marcados("O vídeo do receptor USB depende do celular")).toEqual([]);
+    expect(marcados("receptores usb")).toEqual([]);
+    expect(marcados("Inclua câmera e receptor (USB ou óculos)")).toEqual([]);
+    // A exceção é a palavra inteira, e o termo continua valendo no resto do texto.
+    expect(marcados("receptor USBX")).toEqual(["receptor→Receptor"]);
+    expect(marcados("o receptor USB e o receptor ELRS")).toEqual(["receptor→Receptor"]);
   });
 
   it("acentos contam como letra na fronteira da palavra", () => {

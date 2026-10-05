@@ -8,9 +8,22 @@ export type GlossaryTerm = {
   explicacao: string;
   analogia?: string;
   relacionados: string[];
+  /**
+   * Palavras que, logo depois do termo, mostram que o texto fala de outra coisa: "receptor USB" é
+   * o receptor de vídeo, não o do rádio. Nesses casos o termo não é sublinhado.
+   */
+  nao_sublinhar_antes_de?: string[];
 };
 
-const FIELD = /^- \*\*(Explicação|Analogia|Relacionados):\*\*\s*(.*)$/;
+const FIELD = /^- \*\*(Explicação|Analogia|Relacionados|Não sublinhar antes de):\*\*\s*(.*)$/;
+
+/** Lista separada por vírgula. Vírgula seguida de número é decimal ("5,8 GHz"), não separador. */
+function commaList(texto: string | undefined): string[] {
+  return (texto ?? "")
+    .split(/,(?!\d)/)
+    .map((t) => t.trim().replace(/\.$/, ""))
+    .filter((t) => t.length > 0);
+}
 
 type Draft = { termo: string; campos: Partial<Record<string, string>> };
 
@@ -20,23 +33,21 @@ function finish(draft: Draft, problemas: string[]): GlossaryTerm | undefined {
     problemas.push(`"${draft.termo}" está sem **Explicação:**`);
     return undefined;
   }
-  const relacionados = (draft.campos["Relacionados"] ?? "")
-    // Vírgula seguida de número é decimal ("5,8 GHz"), não separador.
-    .split(/,(?!\d)/)
-    .map((t) => t.trim().replace(/\.$/, ""))
-    .filter((t) => t.length > 0);
+  const excecoes = commaList(draft.campos["Não sublinhar antes de"]);
   return {
     termo: draft.termo,
     explicacao,
     analogia: draft.campos["Analogia"],
-    relacionados,
+    relacionados: commaList(draft.campos["Relacionados"]),
+    ...(excecoes.length > 0 && { nao_sublinhar_antes_de: excecoes }),
   };
 }
 
 /**
  * Lê o Markdown do glossário. Formato: título "## Termo" seguido dos itens
- * "- **Explicação:**", "- **Analogia:**" e "- **Relacionados:**" (linhas seguintes com recuo
- * continuam o item). O que vem antes do primeiro "## " é a introdução e é ignorado.
+ * "- **Explicação:**", "- **Analogia:**", "- **Relacionados:**" e, se precisar,
+ * "- **Não sublinhar antes de:**" (linhas seguintes com recuo continuam o item). O que vem antes
+ * do primeiro "## " é a introdução e é ignorado.
  */
 export function parseGlossary(markdown: string): { termos: GlossaryTerm[]; problemas: string[] } {
   const termos: GlossaryTerm[] = [];
@@ -116,37 +127,63 @@ function caseless(texto: string): string {
     .join("");
 }
 
+/** Palavras de ligação não vão para o plural: "receptores de vídeo". */
+const LIGACAO = new Set(["de", "do", "da", "e"]);
+
+/** Sigla (ESC) ou nome com maiúscula no meio (LiPo, GHz): plural só com "s". */
+function pluralOf(palavra: string): string {
+  if (!/\p{L}$/u.test(palavra) || LIGACAO.has(palavra.toLocaleLowerCase("pt-BR"))) return "";
+  const letras = palavra.replace(/[^\p{L}]/gu, "");
+  const soS = letras === letras.toLocaleUpperCase("pt-BR") || /\p{Lu}/u.test(letras.slice(1));
+  return soS ? "s?" : "(?:es|s)?";
+}
+
 /**
  * Padrão de um termo:
  * - sigla toda em maiúsculas (ESC, TWR, GPS): exatamente assim, com plural "s" (ESCs, UARTs);
  * - nome com maiúscula no meio (LiPo, ArduPilot, Câmera FPV): a primeira letra em qualquer caixa,
- *   o resto exato, com plural "s";
- * - palavra comum (Hélice, Célula, Frame): sem diferenciar maiúsculas, com plural "s" ou "es".
- * Espaços do termo aceitam qualquer espaço no texto.
+ *   o resto exato;
+ * - palavra comum (Hélice, Célula, Frame): sem diferenciar maiúsculas.
+ * Cada palavra aceita o plural (em português ele vai na primeira: "receptores de vídeo", "câmeras
+ * FPV"), menos as de ligação. Espaços do termo aceitam qualquer espaço no texto.
  */
 function termPattern(termo: string): string {
-  const partes = termo.split(/\s+/);
   const letras = termo.replace(/[^\p{L}]/gu, "");
   const sigla = letras.length > 0 && letras === letras.toLocaleUpperCase("pt-BR");
   const misto = !sigla && /\p{Lu}/u.test(termo.slice(1));
-  const corpo = partes
+  return termo
+    .split(/\s+/)
     .map((p, i) => {
-      if (sigla) return escapeRegex(p);
-      if (misto) return i === 0 ? caseless(p.charAt(0)) + escapeRegex(p.slice(1)) : escapeRegex(p);
-      return caseless(p);
+      const corpo = sigla
+        ? escapeRegex(p)
+        : misto
+          ? i === 0
+            ? caseless(p.charAt(0)) + escapeRegex(p.slice(1))
+            : escapeRegex(p)
+          : caseless(p);
+      return corpo + pluralOf(p);
     })
     .join("\\s+");
-  const plural = /\p{L}$/u.test(termo) ? (sigla || misto ? "s?" : "(?:es|s)?") : "";
-  return `${corpo}${plural}`;
+}
+
+/** "receptor USB", "receptor (USB ou óculos)": o termo seguido de uma das exceções não conta. */
+function exceptionsPattern(excecoes: readonly string[] | undefined): string {
+  if (!excecoes || excecoes.length === 0) return "";
+  const alternativas = excecoes.map((e) => e.split(/\s+/).map(caseless).join("\\s+")).join("|");
+  return `(?![\\s(]+(?:${alternativas})(?![\\p{L}\\p{N}]))`;
 }
 
 /** Compila os termos uma vez (o mais longo primeiro: "Câmera FPV" antes de "FPV"). */
-export function compileGlossary(termos: readonly Pick<GlossaryTerm, "termo">[]): GlossaryMatcher {
-  const lista = [...termos.map((t) => t.termo)].sort((a, b) => b.length - a.length);
-  const grupos = lista.map((t) => `(${termPattern(t)})`).join("|");
+export function compileGlossary(
+  termos: readonly Pick<GlossaryTerm, "termo" | "nao_sublinhar_antes_de">[],
+): GlossaryMatcher {
+  const lista = [...termos].sort((a, b) => b.termo.length - a.termo.length);
+  const grupos = lista
+    .map((t) => `(${termPattern(t.termo)}${exceptionsPattern(t.nao_sublinhar_antes_de)})`)
+    .join("|");
   // Fronteira de palavra que entende acentos: nem letra nem número colado antes ou depois.
   const regex = new RegExp(`(?<![\\p{L}\\p{N}])(?:${grupos})(?![\\p{L}\\p{N}])`, "gu");
-  return { regex, termos: lista };
+  return { regex, termos: lista.map((t) => t.termo) };
 }
 
 /**
