@@ -38,11 +38,7 @@ import type { VersionSnapshot } from "@/server/projects/repository";
  * formata. Nenhum número nasce aqui.
  */
 
-export const TIER_LABEL: Record<Tier, string> = {
-  economica: "Econômica",
-  equilibrada: "Equilibrada",
-  premium: "Premium",
-};
+export { TIER_LABEL } from "@/domain/categories/drone/build";
 
 export type ProjectStatusKind = "compativel" | "incompleto" | "bloqueado";
 
