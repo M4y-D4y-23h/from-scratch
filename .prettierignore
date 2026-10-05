@@ -5,6 +5,7 @@ docs/SPEC.md
 pnpm-lock.yaml
 next-env.d.ts
 .next/
+.next-e2e/
 out/
 build/
 coverage/

@@ -1,7 +1,9 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const PORT = 3000;
-const BASE_URL = `http://localhost:${PORT}`;
+// Servidor próprio dos testes (scripts/e2e-server.mjs): porta 3100, cópia temporária do catálogo e
+// banco temporário. Os testes editam o catálogo e criam projetos sem tocar nos seus dados.
+const PORT = 3100;
+const BASE_URL = `http://127.0.0.1:${PORT}`;
 const isCI = Boolean(process.env.CI);
 
 // Opcional: caminho de um Chromium já instalado. Normalmente fica vazio e o
@@ -34,12 +36,13 @@ export default defineConfig({
       },
     },
   ],
-  // Sobe o app sozinho antes dos testes. Se você já estiver com `pnpm dev`
-  // aberto na porta 3000, ele reaproveita (fora do CI).
+  // Sobe o app isolado antes dos testes. Nunca reaproveita um servidor aberto: um `pnpm dev` seu
+  // usaria o catálogo e o banco de verdade.
   webServer: {
-    command: "pnpm dev",
+    command: "node scripts/e2e-server.mjs",
     url: BASE_URL,
-    reuseExistingServer: !isCI,
-    timeout: 120_000,
+    reuseExistingServer: false,
+    timeout: 180_000,
+    env: { E2E_PORT: String(PORT) },
   },
 });

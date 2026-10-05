@@ -1,0 +1,12 @@
+{
+  "//": "Usado só pelo servidor dos testes no navegador (scripts/e2e-server.mjs), que compila em .next-e2e. Sem este arquivo, o Next acrescentaria .next-e2e ao tsconfig.json a cada teste.",
+  "extends": "./tsconfig.json",
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.mts",
+    ".next-e2e/types/**/*.ts",
+    ".next-e2e/dev/types/**/*.ts"
+  ]
+}

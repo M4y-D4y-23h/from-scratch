@@ -72,12 +72,13 @@ jobs:
       - name: Testes no navegador (Playwright)
         run: pnpm test:e2e
 
-      # Screenshots do visualizador 3D (aceite da Fase 2): baixe em Actions → esta execução.
-      - name: Guardar os screenshots do 3D
+      # Screenshots do 3D (aceite da Fase 2) e das abas do projeto (Fase 3): baixe em Actions →
+      # esta execução.
+      - name: Guardar os screenshots
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: screenshots-3d-${{ matrix.os }}
+          name: screenshots-${{ matrix.os }}
           path: test-results/**/*.png
           if-no-files-found: warn
 
