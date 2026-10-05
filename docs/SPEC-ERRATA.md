@@ -94,6 +94,14 @@ A SPEC pede "refine e documente". Mudanças:
 
 Os nomes de entidades (inglês) e de campos (português) seguem o **ADR-0022**.
 
+### 2.3 Simulador de voo conta no custo
+
+- **SPEC B.6:** lista o simulador de voo para PC como ferramenta **recomendada** (R$ 30–100), e as
+  recomendadas não entram no total.
+- **Escolha:** **essencial**. A própria SPEC manda voar primeiro no simulador (B.9) e põe "treinar
+  no simulador" entre os passos (B.13); nos três guias esse passo é obrigatório. Deixar o custo de
+  fora faria o total prometer menos do que o usuário vai gastar.
+
 ---
 
 ## 3. Divergências em documentação oficial de terceiros

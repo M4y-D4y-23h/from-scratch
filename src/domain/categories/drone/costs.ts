@@ -1,7 +1,7 @@
 import { importedPriceRange } from "@/domain/core/importacao";
 import { type CentsRange, priceToCents, sumRanges, ZERO_RANGE } from "@/domain/core/money";
 
-import type { Build } from "./build";
+import type { Build, BuildItem } from "./build";
 import type { DroneCatalog } from "./catalog";
 import { conditionMatches } from "./firmware";
 import type { Archetype, Component, Tool } from "./schema";
@@ -22,7 +22,8 @@ export type CostLine = {
   quantidade: number;
   faixa?: CentsRange;
   origem: CostOrigin;
-  /** Produto em cuja caixa a peça já vem (origem "incluido"). */
+  /** Produto em cuja caixa a peça já vem (origem "incluido"); com outra origem, a linha é só das
+   *  reservas compradas à parte, além das que vêm na caixa. */
   incluido_em?: string;
   prioridade?: Tool["prioridade"];
 };
@@ -77,6 +78,15 @@ function componentLine(
   return { id: componente.id, nome, quantidade: pacotes, origem: "sem_preco" };
 }
 
+/** Quantas unidades da peça vêm na caixa do produto que a fornece (sem o dado: todas). */
+function quantityInBox(build: Build, catalog: DroneCatalog, item: BuildItem): number {
+  const dono =
+    build.itens.find((i) => i.componente.id === item.fornecido_por)?.componente ??
+    catalog.componentes.find((c) => c.id === item.fornecido_por);
+  const naCaixa = dono?.inclui.find((inc) => inc.componente_id === item.componente.id);
+  return naCaixa?.quantidade ?? item.quantidade_compra;
+}
+
 /** Ferramentas usadas pelos passos que valem para este build, mais o EPI essencial. */
 export function toolsForBuild(build: Build, archetype: Archetype, catalog: DroneCatalog): Tool[] {
   const ids = new Set<string>();
@@ -97,9 +107,15 @@ export function computeCosts(
   catalog: DroneCatalog,
   ferramentasQueTenho: ReadonlySet<string> = new Set(),
 ): CostReport {
-  const pecas = build.itens.map((item) =>
-    componentLine(item.componente, item.quantidade_compra, catalog, item.fornecido_por),
-  );
+  const pecas = build.itens.map((item) => {
+    if (!item.fornecido_por) return componentLine(item.componente, item.quantidade_compra, catalog);
+    // Reservas além do que vem na caixa (ex.: 8 hélices, o kit traz 6) são compradas à parte.
+    const extra = item.quantidade_compra - quantityInBox(build, catalog, item);
+    if (extra <= 0) {
+      return componentLine(item.componente, item.quantidade_compra, catalog, item.fornecido_por);
+    }
+    return { ...componentLine(item.componente, extra, catalog), incluido_em: item.fornecido_por };
+  });
   const ferramentas: CostLine[] = [];
   const jaTenho: string[] = [];
   for (const t of toolsForBuild(build, archetype, catalog)) {

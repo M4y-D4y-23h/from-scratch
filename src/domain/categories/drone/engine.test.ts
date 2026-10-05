@@ -148,6 +148,34 @@ describe("custos", () => {
     expect(c.total_pecas.min_centavos).toBe(0);
   });
 
+  it("reservas além do que vem no kit são compradas à parte (o kit traz 6, o projeto pede 10)", () => {
+    const helice = tweak(parts.prop(), {}, { unidades_por_pacote: 4 });
+    const kit = makeComponent({
+      categoria: "kit",
+      id: "kit-x",
+      specs: {},
+      inclui: [{ componente_id: helice.id, quantidade: 6 }],
+    });
+    const build: Build = {
+      ...baseBuild(),
+      itens: [
+        { ...item("helices", helice, 4, 10), fornecido_por: "kit-x" },
+        { ...item("kit:kit-x", kit, 0, 1) },
+      ],
+    };
+    const c = computeCosts(build, ARCHETYPE, catalogWith());
+    // 10 − 6 = 4 hélices a mais = 1 pacote de 4 (R$ 10–20), mais o kit (R$ 10–20).
+    expect(c.pecas[0]).toMatchObject({ quantidade: 1, origem: "brl", incluido_em: "kit-x" });
+    expect(c.total_pecas).toMatchObject({ min_centavos: 2000, max_centavos: 4000 });
+
+    const semReserva = computeCosts(
+      { ...build, itens: [{ ...item("helices", helice, 4, 6), fornecido_por: "kit-x" }] },
+      ARCHETYPE,
+      catalogWith(),
+    );
+    expect(semReserva.pecas[0]).toMatchObject({ origem: "incluido", quantidade: 0 });
+  });
+
   it("ferramentas: só as dos passos que valem + EPI essencial; 'já tenho' sai do total", () => {
     const c = computeCosts(baseBuild(), ARCHETYPE, catalogWith());
     // Build Wi-Fi: o passo "wifi" (chave) não vale; entram ferro e o EPI.

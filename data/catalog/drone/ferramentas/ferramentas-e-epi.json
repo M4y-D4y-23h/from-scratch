@@ -612,9 +612,9 @@
     "id": "simulador-voo",
     "nome": "Simulador de voo para PC",
     "tipo": "ferramenta",
-    "prioridade": "recomendada",
+    "prioridade": "essencial",
     "para_que_serve": "Treinar pilotagem no computador usando o próprio rádio como controle (joystick USB).",
-    "por_que_necessaria": "Errar no simulador é grátis; no drone real, quebra peças ou machuca.",
+    "por_que_necessaria": "Errar no simulador é grátis; no drone real, quebra peças ou machuca. Todos os guias têm o passo \"treinar no simulador\" antes do primeiro voo (a SPEC lista o simulador como recomendado; ver docs/SPEC-ERRATA.md).",
     "cuidados": [],
     "onde_comprar": [
       {
