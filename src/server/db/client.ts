@@ -15,7 +15,8 @@ export type Db = BetterSQLite3Database<typeof schema>;
 
 export function resolveDbPath(env: string | undefined = process.env.FROM_SCRATCH_DB): string {
   if (!env) return DEFAULT_DB_PATH;
-  return env === ":memory:" ? env : path.resolve(process.cwd(), env);
+  // turbopackIgnore: caminho escolhido por variável de ambiente (testes), não um arquivo do projeto.
+  return env === ":memory:" ? env : path.resolve(/*turbopackIgnore: true*/ process.cwd(), env);
 }
 
 /** Abre o banco e aplica as migrações pendentes. ":memory:" cria um banco temporário (testes). */

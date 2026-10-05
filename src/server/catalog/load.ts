@@ -42,8 +42,10 @@ import {
 export function catalogRoot(
   env: string | undefined = process.env.FROM_SCRATCH_CATALOG_DIR,
 ): string {
+  // turbopackIgnore: a pasta vem de variável de ambiente (só nos testes); sem o comentário o
+  // build rastrearia o projeto inteiro achando que o servidor lê qualquer arquivo.
   return env
-    ? path.resolve(process.cwd(), env)
+    ? path.resolve(/*turbopackIgnore: true*/ process.cwd(), env)
     : path.resolve(process.cwd(), "data", "catalog", "drone");
 }
 
