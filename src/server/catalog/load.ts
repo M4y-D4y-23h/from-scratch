@@ -35,7 +35,19 @@ import {
  *   parametros/importacao.json   câmbio e tributos de importação (com data e fonte)
  */
 
-export const CATALOG_ROOT = path.resolve(process.cwd(), "data", "catalog", "drone");
+/**
+ * Pasta do catálogo. Dá para trocar com a variável FROM_SCRATCH_CATALOG_DIR: os testes no
+ * navegador usam uma cópia temporária, para editar sem mexer nos arquivos versionados.
+ */
+export function catalogRoot(
+  env: string | undefined = process.env.FROM_SCRATCH_CATALOG_DIR,
+): string {
+  return env
+    ? path.resolve(process.cwd(), env)
+    : path.resolve(process.cwd(), "data", "catalog", "drone");
+}
+
+export const CATALOG_ROOT = catalogRoot();
 
 export type CatalogFile = {
   /** Caminho relativo com "/" (igual no Windows e no Linux). */ caminho: string;

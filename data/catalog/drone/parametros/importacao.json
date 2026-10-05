@@ -12,8 +12,16 @@
   },
   "icms_pct": [17, 20],
   "faixas_ii": [
-    { "ate_usd": 50, "aliquota_pct": 0, "deducao_usd": 0 },
-    { "ate_usd": 3000, "aliquota_pct": 60, "deducao_usd": 30 }
+    {
+      "ate_usd": 50,
+      "aliquota_pct": 0,
+      "deducao_usd": 0
+    },
+    {
+      "ate_usd": 3000,
+      "aliquota_pct": 60,
+      "deducao_usd": 30
+    }
   ],
   "fontes": [
     {

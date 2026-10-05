@@ -76,7 +76,7 @@
     "marca": "BETAFPV",
     "modelo": "Air75 II (frame de whoop 75 mm)",
     "descricao_leiga": "Estrutura de whoop um pouco maior (75 mm): mais estável, aguenta bateria maior e voa mais tempo.",
-    "massa_g": 4.0,
+    "massa_g": 4,
     "dimensoes_mm": {
       "comprimento": 99.1,
       "largura": 99.1,
