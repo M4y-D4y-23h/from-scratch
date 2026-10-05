@@ -17,9 +17,13 @@ decisões importantes de forma breve. Ele autorizou corrigir a SPEC quando ela e
 
 ## Estado atual
 
-- **Fase 0 (fundação): concluída.** **Fase 1 (domínio): concluída em 2026-10-04, aguardando a
-  revisão do dono** (resumo, pendências e itens para aprovar em `docs/PROGRESS.md`). Próxima:
-  **Fase 2 (3D)**, só depois da revisão.
+- **Fases 0 (fundação) e 1 (domínio): concluídas** (o dono liberou a Fase 2 em 2026-10-05; os
+  itens "para aprovar" da Fase 1 seguem com os valores propostos). **Fase 2 (visualizador 3D):
+  concluída em 2026-10-05, aguardando a revisão do dono** (resumo em `docs/PROGRESS.md`).
+  Próxima: **Fase 3 (painéis e /catalogo)**, só depois da revisão.
+- 3D: `scene.ts` (domínio) monta o scene graph em JSON; `src/components/viewer3d` só desenha
+  (three.js + @react-three/fiber + drei, ADR-0023). Páginas `/3d/[arquetipo]/[faixa]`. Rótulos
+  são sprites desenhados em canvas (não use o `<Html>` do drei: erro no console do React 19).
 - Motor de cálculo em `src/domain/categories/drone/` (35 regras, solver das 3 faixas, custos,
   dificuldade, locais, alertas, comparação de tamanho, montar × pronto); catálogo real dos 3
   arquétipos em `data/catalog/drone/` (tudo ❓ até o dono conferir). `pnpm report` mostra os 9

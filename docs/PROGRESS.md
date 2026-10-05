@@ -262,3 +262,80 @@ BETAFPV 0702/0802 1S), massa e C das baterias (CNHL 4S 3300 30C, MiniStar 6S 150
 de 30 A do conector do PM02 V3, encaixe da bateria e da hélice nos frames Air65 II/Air75 II, altura
 do suporte de GPS do X500 (108 mm, medida no CAD) e os preços de 04/10/2026 com o câmbio de
 02/10/2026.
+
+---
+
+## Fase 2: Visualizador 3D (concluída em 2026-10-05, aguardando revisão)
+
+**Aceite (SPEC B.18):** trocar a hélice de 5" para 3" ou o frame altera o modelo; o Playwright
+tira screenshots dos 3 arquétipos. **Atendido:** `src/domain/categories/drone/scene.test.ts`
+(hélice 5" → 3" e troca de frame mudam disco, braços, motores e medidas) e
+`tests/e2e/viewer3d.spec.ts` (screenshot de cada arquétipo; trocar a hélice no "experimentar"
+muda os pixels do desenho). No CI, os screenshots ficam no artefato `screenshots-3d-<sistema>`.
+
+### Feito
+
+- **Scene graph no domínio (`scene.ts`, ADR-0023):** o build vira um JSON em milímetros reais:
+  frame pela geometria e entre-eixos (placas, braços, dutos do whoop, trem de pouso do X500),
+  motores, hélices com diâmetro e número de pás, stack com os espaçadores na furação real, FC,
+  bateria com strap, câmera, VTX, receptor e antenas, GPS no mastro, PDB, módulo de energia, XT60 e
+  capacitor; fiação simplificada; vista explodida; medidas; frente. Número e sentido de giro dos
+  motores conferidos no código do ArduPilot e na documentação do Betaflight.
+- **Visualizador (`src/components/viewer3d`):** girar e aproximar; vista explodida; clique numa
+  peça (ou na lista, pelo teclado) abre o painel com função, selo, quantidade, preço com data, massa
+  e termos de busca; medidas; fiação; setas de giro numeradas; seta da frente; legenda; destaque
+  das peças de um passo do guia; "experimentar" hélice e frame (só o desenho, com aviso).
+- **Páginas:** `/3d/[arquetipo]/[faixa]` (as 9 geradas no build), `/3d` e links na página inicial.
+- **Dados:** medidas oficiais da bateria CNHL 4S (136 x 44 x 30 mm); campos de desenho do frame
+  (placa central, espaço entre placas, trem de pouso, espessura da placa, straps que vêm na caixa);
+  2 termos novos no glossário (Entre-eixos, DeadCat).
+- **Testes:** 19 de unidade da cena (13 com peças sintéticas, 6 com o catálogo real) e 6 no
+  navegador.
+
+### Como testar
+
+```powershell
+pnpm dev        # depois abra http://localhost:3000 e clique num dos "Drones de referência em 3D"
+pnpm test:e2e   # os screenshots ficam em test-results\...\3d-<arquétipo>.png
+```
+
+No 3D: arraste para girar, use a roda do mouse para aproximar, mova a "Vista explodida", clique
+numa peça, escolha um passo em "Destacar as peças do passo" e, em "Experimentar", troque a hélice
+para 3".
+
+### Ficou de fora (de propósito)
+
+- Modelos GLB de peças reais, exportar STL/DXF e a "ilustração artística" por API (a SPEC B.11 põe
+  como futuro ou opcional).
+- Posição real dos motores em frames DeadCat e stretch-X: o fabricante não publica as
+  coordenadas; o 3D desenha como X a partir do entre-eixos e avisa.
+- Troca de peça com revalidação, peso e custos: Fase 3. O "experimentar" só redesenha.
+- Girar o 3D pelo teclado: a lista de peças e o painel dão o mesmo conteúdo pelo teclado.
+
+### Problemas conhecidos
+
+- O console mostra "THREE.Clock: This module has been deprecated", vindo de dentro do
+  @react-three/fiber 9.8 com o three 0.186. É só aviso; some quando sair uma versão nova.
+- Formas aproximadas (sino do motor, placas, antenas, canopy, PM02, XT60, capacitor) dizem por
+  quê no painel da peça.
+
+### Revisão adversarial da Fase 2 (SPEC B.19.7)
+
+- _O que machucaria um leigo?_
+  - **Corrigido:** as pás eram desenhadas com uma inclinação decorativa, e alguém poderia usá-la
+    para decidir o lado de montar a hélice. Agora as pás são planas; o sentido de giro fica nas
+    setas e no rótulo, e o guia manda conferir a marcação da própria hélice.
+  - Conferido: número e sentido dos motores iguais aos do firmware (código-fonte do ArduPilot e
+    documentação do Betaflight, padrão "props in", que é o dos guias). O "experimentar" avisa que
+    nada foi revalidado. O strap da bateria diz se vem com o frame ou se é preciso conferir.
+- _O que faria o drone não voar?_ Nada: nenhum cálculo usa a cena, e o motor de cálculo não mudou.
+- _O que estouraria o orçamento?_ Nada muda nos custos. O strap que não está na lista de peças é
+  avisado no painel ("confira se o frame ou a bateria trazem").
+- _O que quebraria no Windows?_ Nenhuma dependência nativa nova (nada em `allowBuilds`); o CI no
+  Windows roda os testes do 3D com WebGL por software (SwiftShader).
+- _Desempenho:_ o 3D só desenha quando algo muda; cerca de 50 objetos simples por drone; nada é
+  baixado da internet.
+
+**Dados do catálogo para você verificar:** placa central de 144 mm, espaço de 28 mm entre placas e
+trem de pouso de 215 mm do X500 V2 (das notas da Holybro); bateria CNHL 4S 3300 de 136 x 44 x 30
+mm; Nazgul Evoque F5 V3 com placas de 3 mm e 2 straps; motor XING2 2207 de 29,08 x 32,6 mm.

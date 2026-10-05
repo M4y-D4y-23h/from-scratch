@@ -625,3 +625,49 @@ Datas no formato AAAA-MM-DD. "Verificado em" indica quando a informação extern
 - **Consequências:** o glossário passou de 7 para 42 termos. Um termo novo na interface sem
   verbete faz o teste falhar. Quem lê o código encontra o vocabulário da SPEC; quem lê os dados
   encontra português.
+
+## ADR-0023: visualizador 3D (scene graph no domínio, three.js na interface)
+
+- **Data:** 2026-10-05 · **Status:** aceita (Fase 2)
+- **Contexto:** a SPEC B.11 pede o drone em 3D, em escala real, com vista explodida, clique nas
+  peças, medidas, fiação, sentido dos motores e destaque das peças do passo do guia, rodando bem
+  num notebook comum. O aceite da Fase 2 pede que trocar a hélice ou o frame mude o modelo e que o
+  Playwright tire screenshots dos 3 arquétipos.
+- **Decisão (domínio, `scene.ts`):**
+  - O domínio monta um **scene graph em JSON** (milímetros; X para a direita, Y para cima, frente
+    em −Z) a partir do build: placas, braços, dutos e trem de pouso pelo entre-eixos e pela
+    geometria; motores; hélices com o diâmetro e o número de pás; stack com os espaçadores na
+    furação real; bateria com strap; câmera, VTX, receptor, antenas, GPS no mastro, PDB, módulo de
+    energia, XT60 e capacitor; fiação; vista explodida; medidas; frente.
+  - **Ordem e sentido dos motores conferidos no código-fonte:** ArduPilot `AP_MotorsMatrix.cpp`
+    (commit `e204ca7`): 1 frente-direita e 2 trás-esquerda anti-horário, 3 frente-esquerda e 4
+    trás-direita horário; Betaflight (documentação, commit `57c42a8`, padrão "props in"): 1
+    trás-direita, 2 frente-direita, 3 trás-esquerda, 4 frente-esquerda. Por canto, giram igual nos
+    dois.
+  - **Medida que o fabricante não publica** (sino do motor, placas da stack, antenas, posição dos
+    motores num DeadCat) é desenhada a partir de outra informação e o nó leva `aproximado` com o
+    motivo, que o painel da peça mostra. As heurísticas ficam em `DESENHO` (scene.ts). Nenhum
+    cálculo de engenharia usa a cena.
+  - Campos novos e opcionais no frame, só para desenhar (com os dados que já estavam nas notas do
+    fabricante): placa central, espessura da placa, espaço entre placas, altura do trem de pouso e
+    quantos straps vêm na caixa.
+- **Decisão (interface, `src/components/viewer3d`):**
+  - three.js + @react-three/fiber + drei (OrbitControls e Line), carregados só no navegador
+    (`next/dynamic` com `ssr: false`).
+  - **Rótulos desenhados num canvas 2D (sprites)**, não o `<Html>` do drei: ele cria uma raiz React
+    por rótulo e gerava erros no console do React 19; os sprites também não dependem de fonte
+    baixada (usam a do sistema).
+  - **Desempenho:** `frameloop="demand"` (só desenha quando algo muda), formas simples, nada
+    baixado da internet (sem texturas, fontes ou mapas de ambiente).
+  - **Hélices com pás planas:** o lado da borda de ataque não está no catálogo; uma inclinação
+    desenhada poderia ensinar a montar a hélice ao contrário. O sentido fica nas setas e no rótulo.
+  - As 9 páginas (`/3d/[arquetipo]/[faixa]`) são geradas no build; combinação inexistente é 404.
+  - Como o domínio é TypeScript puro, a cena também é montada no navegador: o "experimentar"
+    troca o diâmetro da hélice ou o frame e redesenha na hora, com aviso de que regras, peso e
+    custos não foram refeitos (a troca de peça com revalidação é da Fase 3).
+- **Decisão (testes):** o Playwright abre os 3 arquétipos, espera o primeiro quadro, confere que o
+  desenho não está em branco e guarda o screenshot (artefato `screenshots-3d-<sistema>` no CI).
+  Sem placa de vídeo, o Chromium usa o SwiftShader com `--enable-unsafe-swiftshader` (só nos
+  testes). O canvas usa `preserveDrawingBuffer` para os testes lerem os pixels.
+- **Consequências:** o aviso "THREE.Clock deprecated" no console vem de dentro do
+  @react-three/fiber 9.8 com o three 0.186 (sem versão nova que o resolva); é só aviso.

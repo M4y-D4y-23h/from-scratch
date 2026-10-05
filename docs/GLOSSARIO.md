@@ -324,3 +324,19 @@ Formato de cada termo:
   ele corta a corrente antes de queimar as placas.
 - **Analogia:** o disjuntor da casa, que desarma antes do fio pegar fogo.
 - **Relacionados:** Corrente, LiPo, ESC
+
+## Entre-eixos
+
+- **Explicação:** a distância, em milímetros, entre os centros de dois motores em diagonal. É o
+  número que define o "tamanho" do drone: 450 mm, 236 mm (5"), 65 mm (whoop). Ele limita a hélice
+  máxima que cabe sem as pás se baterem.
+- **Analogia:** como o aro de uma bicicleta: diz o tamanho da roda que cabe no quadro.
+- **Relacionados:** Frame, Hélice
+
+## DeadCat
+
+- **Explicação:** formato de frame de FPV em que os braços da frente ficam mais abertos que os de
+  trás, para as hélices não aparecerem na imagem da câmera. No 3D, o From Scratch desenha esse
+  formato como um X a partir do entre-eixos (posição dos motores aproximada).
+- **Analogia:** como abrir os braços para enxergar melhor o que está à sua frente.
+- **Relacionados:** Frame, Entre-eixos, Câmera FPV
