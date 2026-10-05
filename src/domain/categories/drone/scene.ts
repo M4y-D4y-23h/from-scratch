@@ -230,7 +230,7 @@ function mountSpacing(patterns: readonly string[] | undefined): number | undefin
 // Cena
 // ---------------------------------------------------------------------------
 
-export function buildDroneScene(build: Build, archetype: Archetype): DroneScene {
+export function buildDroneScene(build: Build, archetype: Pick<Archetype, "firmware">): DroneScene {
   const nos: SceneNode[] = [];
   const fios: SceneWire[] = [];
   const avisos: string[] = [];
@@ -566,6 +566,7 @@ export function buildDroneScene(build: Build, archetype: Archetype): DroneScene 
   // Convenção de desenho: whoop, no encaixe; drone com trem de pouso, embaixo; FPV, em cima.
   const bat = firstOf(build, "bateria")?.componente;
   let batConector: Vec3 | undefined;
+  let topoBateria: number | undefined;
   const bateriaEmCima =
     bat !== undefined && fs?.slot_bateria_mm === undefined && fs?.trem_de_pouso !== true;
   if (bat) {
@@ -578,6 +579,7 @@ export function buildDroneScene(build: Build, archetype: Archetype): DroneScene 
     const y = embaixo ? -(alt / 2) - (noSlot ? 0.5 : 4) : yCimaTopo + alt / 2;
     const pos: Vec3 = [0, y, 0];
     batConector = [0, y, comp / 2];
+    if (!embaixo) topoBateria = y + alt / 2;
     nos.push({
       id: "bateria",
       componente_id: bat.id,
@@ -607,23 +609,41 @@ export function buildDroneScene(build: Build, archetype: Archetype): DroneScene 
     }
   }
 
-  // ---- Trem de pouso ----
+  // ---- Trem de pouso: duas pernas e um esqui de cada lado ----
   if (frame && fs?.trem_de_pouso) {
     const alturaTotal = fs.altura_trem_de_pouso_mm ?? entreEixos * 0.4;
     const perna = Math.max(alturaTotal - (espaco + 2 * tPlaca), 20);
+    const aprox = fs.altura_trem_de_pouso_mm
+      ? `Formato simplificado; altura total de ${fmt(alturaTotal)} mm (fabricante).`
+      : "Trem de pouso ilustrativo.";
     for (const sx of [1, -1]) {
+      const lado = sx > 0 ? "direita" : "esquerda";
+      const x = (sx * placa.largura) / 2 - sx * 8;
+      const explosao: Vec3 = [sx * 0.8 * u, -0.8 * u, 0];
+      for (const sz of [1, -1]) {
+        nos.push({
+          id: `frame-trem-${lado}-${sz > 0 ? "tras" : "frente"}`,
+          componente_id: frameId,
+          categoria: "frame",
+          rotulo: `${name(frame)}: perna do trem de pouso (${lado})`,
+          forma: { tipo: "cilindro", raio: 4, altura: perna },
+          material: frameMaterial(frame),
+          posicao: [x, -perna / 2, sz * placa.comprimento * 0.3],
+          explosao,
+          aproximado: aprox,
+        });
+      }
       nos.push({
-        id: `frame-trem-${sx > 0 ? "direita" : "esquerda"}`,
+        id: `frame-trem-${lado}-esqui`,
         componente_id: frameId,
         categoria: "frame",
-        rotulo: `${name(frame)}: trem de pouso (${sx > 0 ? "direita" : "esquerda"})`,
-        forma: { tipo: "caixa", tamanho: [6, perna, placa.comprimento * 0.9] },
+        rotulo: `${name(frame)}: esqui do trem de pouso (${lado})`,
+        forma: { tipo: "cilindro", raio: 4, altura: placa.comprimento * 1.3 },
         material: frameMaterial(frame),
-        posicao: [(sx * placa.largura) / 2 - sx * 8, -perna / 2, 0],
-        explosao: [sx * 0.8 * u, -0.8 * u, 0],
-        aproximado: fs.altura_trem_de_pouso_mm
-          ? `Formato simplificado; altura total de ${fmt(alturaTotal)} mm (fabricante).`
-          : "Trem de pouso ilustrativo.",
+        posicao: [x, -perna, 0],
+        rotacao: [Math.PI / 2, 0, 0],
+        explosao,
+        aproximado: aprox,
       });
     }
   }
@@ -977,8 +997,13 @@ export function buildDroneScene(build: Build, archetype: Archetype): DroneScene 
   }
 
   // ---- Frente e limites ----
+  // A seta da frente passa por cima da bateria quando ela vai em cima (FPV).
   const frente = {
-    origem: [0, yCimaTopo + 4, -placa.comprimento / 2 - 6] as Vec3,
+    origem: [
+      0,
+      Math.max(yCimaTopo, topoBateria ?? -Infinity) + 4,
+      -placa.comprimento / 2 - 6,
+    ] as Vec3,
     direcao: [0, 0, -1] as Vec3,
     comprimento: Math.max(entreEixos * 0.18, 20),
   };

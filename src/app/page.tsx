@@ -10,8 +10,11 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
+import Link from "next/link";
+
 import { ModeToggle } from "@/components/mode-toggle";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { referenceArchetypes } from "@/server/viewer/reference";
 
 type Feature = {
   title: string;
@@ -74,6 +77,7 @@ const TRUST_SEALS = [
 ] as const;
 
 export default function HomePage() {
+  const arquetipos = referenceArchetypes();
   return (
     <>
       <a
@@ -110,10 +114,34 @@ export default function HomePage() {
           >
             <Construction aria-hidden="true" className="mt-0.5 size-5 shrink-0" />
             <p>
-              <strong>Em construção (Fase 0: fundação).</strong> Ainda não é possível criar
-              projetos. O catálogo de peças e o motor de cálculo chegam na Fase 1.
+              <strong>Em construção (Fase 2: visualizador 3D).</strong> Ainda não é possível criar
+              um projeto a partir de um pedido (isso chega na Fase 4), mas o catálogo, o motor de
+              cálculo e os três drones de referência em 3D já funcionam.
             </p>
           </div>
+        </section>
+
+        <section aria-labelledby="titulo-3d" className="mt-12 space-y-4">
+          <h2 id="titulo-3d" className="text-2xl font-semibold tracking-tight">
+            Drones de referência em 3D
+          </h2>
+          <p className="max-w-2xl text-muted-foreground">
+            Montados pelo motor de cálculo com peças reais do catálogo, em escala real. Gire, separe
+            as peças e clique em cada uma para ver para que serve e quanto custa.
+          </p>
+          <ul className="grid gap-4 sm:grid-cols-3">
+            {arquetipos.map((a) => (
+              <li key={a.id}>
+                <Link
+                  href={`/3d/${a.id}/economica`}
+                  className="flex h-full items-center gap-3 rounded-lg border p-4 font-medium hover:bg-accent"
+                >
+                  <Box aria-hidden="true" className="size-5 shrink-0 text-muted-foreground" />
+                  {a.nome}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </section>
 
         <section aria-labelledby="titulo-recursos" className="mt-12">
