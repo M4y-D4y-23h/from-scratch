@@ -1,8 +1,8 @@
-import { cpSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { cpSync, mkdtempSync, readdirSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { CATALOG_ROOT, loadDroneCatalog, readCatalogFiles } from "./load";
 import {
@@ -18,9 +18,27 @@ import {
  * real numa pasta temporária: nada aqui mexe nos arquivos do repositório.
  */
 
+/** Renomear falha `vezes` seguidas com `codigo` (simula o Windows com o arquivo preso). */
+const renomear = vi.hoisted(() => ({ vezes: 0, codigo: "EPERM" }));
+
+vi.mock("node:fs", async (importOriginal) => {
+  const real = await importOriginal<typeof import("node:fs")>();
+  return {
+    ...real,
+    renameSync: (...args: Parameters<typeof real.renameSync>) => {
+      if (renomear.vezes > 0) {
+        renomear.vezes--;
+        throw Object.assign(new Error("arquivo ocupado (simulado)"), { code: renomear.codigo });
+      }
+      real.renameSync(...args);
+    },
+  };
+});
+
 let root: string;
 
 beforeEach(() => {
+  renomear.vezes = 0;
   root = mkdtempSync(path.join(tmpdir(), "from-scratch-catalogo-"));
   cpSync(CATALOG_ROOT, root, { recursive: true });
 });
@@ -138,6 +156,45 @@ describe("editar um item do catálogo", () => {
   it("item inexistente vira problema, não exceção", async () => {
     const r = await updateCatalogItem({ kind: "ferramenta", id: "nao-existe", novo: {}, root });
     expect(r).toEqual({ ok: false, problemas: ['Item "nao-existe" não encontrado no catálogo.'] });
+  });
+});
+
+describe("gravação no Windows (arquivo preso por antivírus ou outro programa)", () => {
+  const ID = "conector-xt60-rabicho";
+  const temporarios = () =>
+    readdirSync(path.join(root, "componentes")).filter((f) => f.endsWith(".tmp"));
+
+  it("arquivo ocupado por instantes: tenta de novo e grava", async () => {
+    const atual = readCatalogItem("componente", ID, root)!;
+    renomear.codigo = "EPERM";
+    renomear.vezes = 2;
+    const r = await updateCatalogItem({
+      kind: "componente",
+      id: ID,
+      novo: { ...atual.item, massa_g: 9 },
+      root,
+    });
+    expect(r.ok).toBe(true);
+    expect(renomear.vezes).toBe(0); // as duas falhas aconteceram e a terceira tentativa gravou
+    expect(readCatalogItem("componente", ID, root)!.item.massa_g).toBe(9);
+    expect(temporarios()).toEqual([]);
+  });
+
+  it("erro que não passa sozinho: não grava, não deixa temporário e explica", async () => {
+    const atual = readCatalogItem("componente", ID, root)!;
+    const conteudo = ler(atual.arquivo);
+    renomear.codigo = "EXDEV";
+    renomear.vezes = 1;
+    const r = await updateCatalogItem({
+      kind: "componente",
+      id: ID,
+      novo: { ...atual.item, massa_g: 9 },
+      root,
+    });
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.problemas.join(" ")).toMatch(/Não consegui gravar .*\(EXDEV\)/);
+    expect(ler(atual.arquivo)).toBe(conteudo);
+    expect(temporarios()).toEqual([]);
   });
 });
 

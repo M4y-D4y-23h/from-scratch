@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { renameSync, writeFileSync } from "node:fs";
+import { renameSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
 import { z } from "zod";
@@ -127,11 +127,42 @@ function validateWith(files: readonly CatalogFile[], caminho: string, conteudo: 
   }
 }
 
-function writeAtomic(root: string, caminho: string, conteudo: string) {
+/** Erros de "arquivo ocupado" que somem sozinhos em instantes (antivírus, indexador do Windows). */
+const BUSY_CODES = new Set(["EPERM", "EACCES", "EBUSY"]);
+const RENAME_ATTEMPTS = 10;
+
+/**
+ * Escrita atômica: grava num temporário e renomeia por cima, para nunca sobrar um arquivo pela
+ * metade. No Windows, antivírus, indexador ou outro programa podem segurar o arquivo por instantes
+ * e o renomear falha com EPERM/EACCES/EBUSY: tenta de novo por até ~3 s (como faz o graceful-fs).
+ * Se não der, apaga o temporário e devolve o problema, com o arquivo original intacto.
+ */
+async function writeAtomic(root: string, caminho: string, conteudo: string): Promise<WriteResult> {
   const destino = path.join(root, ...caminho.split("/"));
   const temporario = `${destino}.${process.pid}.tmp`;
-  writeFileSync(temporario, conteudo, "utf8");
-  renameSync(temporario, destino);
+  let codigo = "";
+  try {
+    writeFileSync(temporario, conteudo, "utf8");
+    for (let tentativa = 1; tentativa <= RENAME_ATTEMPTS; tentativa++) {
+      try {
+        renameSync(temporario, destino);
+        return { ok: true, arquivo: caminho };
+      } catch (error) {
+        codigo = (error as NodeJS.ErrnoException).code ?? "";
+        if (!BUSY_CODES.has(codigo) || tentativa === RENAME_ATTEMPTS) throw error;
+        await new Promise((resolve) => setTimeout(resolve, 60 * tentativa));
+      }
+    }
+  } catch (error) {
+    codigo ||= (error as NodeJS.ErrnoException).code ?? "";
+  }
+  rmSync(temporario, { force: true });
+  return {
+    ok: false,
+    problemas: [
+      `Não consegui gravar ${caminho}${codigo ? ` (${codigo})` : ""}. Se o arquivo estiver aberto em outro programa, feche-o e tente de novo. O catálogo não foi alterado.`,
+    ],
+  };
 }
 
 /**
@@ -176,8 +207,7 @@ export async function updateCatalogItem(opcoes: {
   const conteudo = await formatCatalogJson(lista);
   const problemas = validateWith(files, achado.arquivo, conteudo);
   if (problemas.length > 0) return { ok: false, problemas };
-  writeAtomic(root, achado.arquivo, conteudo);
-  return { ok: true, arquivo: achado.arquivo };
+  return writeAtomic(root, achado.arquivo, conteudo);
 }
 
 /** Os parâmetros de importação como estão no arquivo, com a versão. */
@@ -213,6 +243,5 @@ export async function updateImportParams(opcoes: {
   const conteudo = await formatCatalogJson(opcoes.novo);
   const problemas = validateWith(files, IMPORT_PARAMS_FILE, conteudo);
   if (problemas.length > 0) return { ok: false, problemas };
-  writeAtomic(root, IMPORT_PARAMS_FILE, conteudo);
-  return { ok: true, arquivo: IMPORT_PARAMS_FILE };
+  return writeAtomic(root, IMPORT_PARAMS_FILE, conteudo);
 }
