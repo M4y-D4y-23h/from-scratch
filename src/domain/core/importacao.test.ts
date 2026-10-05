@@ -47,6 +47,19 @@ describe("faixa em R$ de uma peça importada", () => {
     expect(r.regra_aplicada).toBe(true);
   });
 
+  it("separa a parte que é imposto (II + ICMS) em cada cenário", () => {
+    const r = importedPriceRange({ min: 40, max: 40, data: "2026-10-04" }, PARAMS);
+    const semTributos = Math.round(40 * 5.2238 * 100);
+    // Barato: só o ICMS de 17% por dentro (sem II até US$ 50).
+    expect(r.tributos.min_centavos).toBe(r.min_centavos - semTributos);
+    expect(r.tributos.min_centavos).toBe(
+      Math.round((40 / 0.83) * 5.2238 * 100) - Math.round(40 * 5.2238 * 100),
+    );
+    // Caro: 60% de II e ICMS de 20%.
+    expect(r.tributos.max_centavos).toBe(r.max_centavos - semTributos);
+    expect(r.tributos.max_centavos).toBeGreaterThan(r.tributos.min_centavos);
+  });
+
   it("peça de US$ 100 sozinha no pacote: 60% − US$ 30", () => {
     const r = importedPriceRange({ min: 100, max: 100, data: "2026-10-04" }, PARAMS);
     expect(r.min_centavos).toBe(Math.round((130 / 0.83) * 5.2238 * 100));

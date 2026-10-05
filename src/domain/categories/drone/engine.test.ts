@@ -186,6 +186,62 @@ describe("custos", () => {
     expect(jaTenho.total_ferramentas.min_centavos).toBe(1000);
   });
 
+  it("totais separados por tipo (ferramentas, consumíveis, EPI) somam o total de ferramentas", () => {
+    const c = computeCosts(baseBuild(), ARCHETYPE, catalogWith());
+    expect(c.totais_por_tipo.ferramenta).toMatchObject({
+      min_centavos: 10000,
+      max_centavos: 20000,
+    });
+    expect(c.totais_por_tipo.epi).toMatchObject({ min_centavos: 1000, max_centavos: 2000 });
+    expect(c.totais_por_tipo.consumivel).toMatchObject({ min_centavos: 0, max_centavos: 0 });
+    const soma =
+      c.totais_por_tipo.ferramenta.min_centavos +
+      c.totais_por_tipo.consumivel.min_centavos +
+      c.totais_por_tipo.epi.min_centavos;
+    expect(soma).toBe(c.total_ferramentas.min_centavos);
+    // A recomendada (pinça) não entra em nenhum total por tipo.
+    expect(c.ferramentas.find((f) => f.id === "pinca")).toBeUndefined();
+  });
+
+  it("'já tenho' continua listado (para desmarcar), mas fora dos totais", () => {
+    const c = computeCosts(baseBuild(), ARCHETYPE, catalogWith(), new Set(["ferro"]));
+    expect(c.ferramentas_que_ja_tem.map((f) => f.id)).toEqual(["ferro"]);
+    expect(c.ferramentas.some((f) => f.id === "ferro")).toBe(false);
+    expect(c.totais_por_tipo.ferramenta).toMatchObject({ min_centavos: 0, max_centavos: 0 });
+  });
+
+  it("importação estimada: a parte de imposto já incluída no total das peças", () => {
+    const usd = tweak(
+      parts.esc(),
+      {},
+      {
+        preco_estimado_brl: undefined,
+        preco_referencia_usd: {
+          min: 40,
+          max: 40,
+          data: "2026-10-04",
+          loja: "Loja",
+          fontes: [{ titulo: "x", tipo: "loja" }],
+        },
+      },
+    );
+    const build: Build = {
+      ...baseBuild(),
+      itens: [item("escs", usd, 1), item("frame", parts.frame(), 1)],
+    };
+    const c = computeCosts(build, ARCHETYPE, catalogWith());
+    const semTributos = 40 * 5 * 100;
+    expect(c.importacao_estimada.min_centavos).toBe(
+      Math.round((40 / 0.83) * 5 * 100) - semTributos,
+    );
+    expect(c.importacao_estimada.max_centavos).toBe(
+      Math.round(((40 * 1.6) / 0.8) * 5 * 100) - semTributos,
+    );
+    // Peça com preço em R$ não tem imposto separado (já está no preço brasileiro).
+    expect(c.pecas.find((p) => p.id === parts.frame().id)?.tributos).toBeUndefined();
+    expect(c.importacao_estimada.max_centavos).toBeLessThan(c.total_pecas.max_centavos);
+  });
+
   it("ferramenta sem preço pesquisado aparece à parte e não soma", () => {
     const build = baseBuild();
     const mavlink = { ...build, opcoes: { ...build.opcoes, telemetria: "elrs_mavlink" as const } };

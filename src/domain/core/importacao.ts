@@ -61,24 +61,37 @@ function maxRate(params: ImportParams): number {
  * - mínimo: a peça sozinha num pacote (menor imposto possível), ICMS mais baixo;
  * - máximo: a peça dentro de um pacote grande (alíquota cheia, sem dedução), ICMS mais alto.
  * Sempre ⚠️ estimativa.
+ *
+ * `tributos` é a parte da faixa que é imposto (II + ICMS) em cada cenário: o total menos o preço
+ * convertido sem tributos. A SPEC B.12 pede a "importação estimada" separada nos totais.
  */
 export function importedPriceRange(
   usd: { min: number; max: number; data: string },
   params: ImportParams,
   quantidade = 1,
-): CentsRange & { regra_aplicada: boolean } {
+): CentsRange & {
+  regra_aplicada: boolean;
+  tributos: { min_centavos: number; max_centavos: number };
+} {
   const [icmsMin, icmsMax] = params.icms_pct;
   const valorMin = usd.min * quantidade;
+  const valorMax = usd.max * quantidade;
   const iiMin = importTaxUsd(valorMin, params);
   const minUsd = withIcms(valorMin + (iiMin ?? (valorMin * maxRate(params)) / 100), icmsMin);
-  const maxUsd = withIcms(usd.max * quantidade * (1 + maxRate(params) / 100), icmsMax);
+  const maxUsd = withIcms(valorMax * (1 + maxRate(params) / 100), icmsMax);
   const toCentsBrl = (v: number) => Math.round(v * params.cambio.usd_brl * 100);
+  const min = toCentsBrl(minUsd);
+  const max = toCentsBrl(maxUsd);
   return {
-    min_centavos: toCentsBrl(minUsd),
-    max_centavos: toCentsBrl(maxUsd),
+    min_centavos: min,
+    max_centavos: max,
     status: "estimativa",
     // O total é tão antigo quanto o dado mais velho: preço em US$ ou câmbio.
     data_mais_antiga: usd.data < params.cambio.data ? usd.data : params.cambio.data,
     regra_aplicada: iiMin !== undefined,
+    tributos: {
+      min_centavos: Math.max(0, min - toCentsBrl(valorMin)),
+      max_centavos: Math.max(0, max - toCentsBrl(valorMax)),
+    },
   };
 }
