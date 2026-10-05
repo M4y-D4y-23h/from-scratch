@@ -34,10 +34,7 @@ const ler = (caminho: string) => readFileSync(path.join(root, ...caminho.split("
 describe("formato canônico dos arquivos do catálogo", () => {
   it("todo arquivo do repositório já está no formato que a página grava (pnpm catalog:format)", async () => {
     for (const f of readCatalogFiles(CATALOG_ROOT)) {
-      const canonico = await formatCatalogJson(
-        JSON.parse(f.conteudo),
-        path.join(CATALOG_ROOT, f.caminho),
-      );
+      const canonico = await formatCatalogJson(JSON.parse(f.conteudo));
       expect(canonico, `${f.caminho} fora do formato canônico: rode pnpm catalog:format`).toBe(
         f.conteudo,
       );
@@ -51,16 +48,20 @@ describe("editar um item do catálogo", () => {
   it("grava só o item editado (o resto do arquivo e os outros arquivos não mudam)", async () => {
     const antes = readCatalogFiles(root);
     const atual = readCatalogItem("componente", ID, root)!;
-    const novo = {
-      ...atual.item,
-      preco_estimado_brl: {
-        min: 110,
-        max: 150,
-        data: "2026-10-05",
-        status: "estimativa",
-        fontes: [],
-      },
-    };
+    // O preço entra antes do preço em US$ (como a página faz), para não mexer em outras linhas.
+    const novo = Object.fromEntries(
+      Object.entries(atual.item).flatMap(([k, v]) =>
+        k === "preco_referencia_usd"
+          ? [
+              [
+                "preco_estimado_brl",
+                { min: 110, max: 150, data: "2026-10-05", status: "estimativa", fontes: [] },
+              ],
+              [k, v],
+            ]
+          : [[k, v]],
+      ),
+    );
     const r = await updateCatalogItem({
       kind: "componente",
       id: ID,
@@ -79,8 +80,10 @@ describe("editar um item do catálogo", () => {
     const linhasAntes = antes.find((x) => x.caminho === atual.arquivo)!.conteudo.split("\n");
     const linhasDepois = ler(atual.arquivo).split("\n");
     expect(linhasDepois.length).toBeGreaterThan(linhasAntes.length);
-    const sumiram = linhasAntes.filter((l) => !linhasDepois.includes(l));
-    expect(sumiram.length).toBeLessThanOrEqual(1);
+    // Nenhuma linha antiga mudou (a pasta temporária fica fora do projeto: a formatação tem de
+    // seguir a configuração da raiz mesmo assim).
+    expect(linhasAntes.filter((l) => !linhasDepois.includes(l))).toEqual([]);
+    expect(linhasDepois.length - linhasAntes.length).toBe(7);
     // O motor de cálculo já usa o preço novo.
     const { catalog } = loadDroneCatalog(root);
     expect(catalog.componentes.find((c) => c.id === ID)?.preco_estimado_brl?.min).toBe(110);

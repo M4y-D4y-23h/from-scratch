@@ -13,7 +13,7 @@ async function main() {
   let mudou = 0;
   for (const f of readCatalogFiles()) {
     const destino = path.join(CATALOG_ROOT, ...f.caminho.split("/"));
-    const canonico = await formatCatalogJson(JSON.parse(f.conteudo), destino);
+    const canonico = await formatCatalogJson(JSON.parse(f.conteudo));
     if (canonico === f.conteudo) continue;
     writeFileSync(destino, canonico, "utf8");
     mudou++;

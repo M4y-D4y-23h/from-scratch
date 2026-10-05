@@ -52,13 +52,18 @@ export const IMPORT_PARAMS_FILE = "parametros/importacao.json";
 
 export type WriteResult = { ok: true; arquivo: string } | { ok: false; problemas: string[] };
 
-/** Formato canônico dos JSON do catálogo: 2 espaços + o Prettier do projeto (só JSON, sem plugins). */
-export async function formatCatalogJson(data: unknown, filepath: string): Promise<string> {
+/**
+ * Formato canônico dos JSON do catálogo: 2 espaços + o Prettier do projeto (só JSON, sem plugins).
+ * A configuração vem sempre da raiz do projeto (.prettierrc.json), mesmo quando o catálogo está
+ * em outra pasta (FROM_SCRATCH_CATALOG_DIR): o arquivo precisa sair igual ao que `pnpm format`
+ * produziria no repositório.
+ */
+export async function formatCatalogJson(data: unknown): Promise<string> {
   const texto = `${JSON.stringify(data, null, 2)}\n`;
   try {
     const prettier = await import("prettier");
-    const options = (await prettier.resolveConfig(filepath)) ?? {};
-    return await prettier.format(texto, { ...options, filepath, parser: "json", plugins: [] });
+    const options = (await prettier.resolveConfig(path.join(process.cwd(), "catalogo.json"))) ?? {};
+    return await prettier.format(texto, { ...options, parser: "json", plugins: [] });
   } catch {
     // Sem o Prettier o conteúdo continua válido; só a formatação pode diferir.
     return texto;
@@ -168,7 +173,7 @@ export async function updateCatalogItem(opcoes: {
   if (!arquivo) return { ok: false, problemas: [`Arquivo ${achado.arquivo} sumiu.`] };
   const lista = JSON.parse(arquivo.conteudo) as unknown[];
   lista[achado.indice] = opcoes.novo;
-  const conteudo = await formatCatalogJson(lista, path.join(root, achado.arquivo));
+  const conteudo = await formatCatalogJson(lista);
   const problemas = validateWith(files, achado.arquivo, conteudo);
   if (problemas.length > 0) return { ok: false, problemas };
   writeAtomic(root, achado.arquivo, conteudo);
@@ -205,7 +210,7 @@ export async function updateImportParams(opcoes: {
   }
   const validado = importParamsSchema.safeParse(opcoes.novo);
   if (!validado.success) return { ok: false, problemas: zodProblems(validado.error) };
-  const conteudo = await formatCatalogJson(opcoes.novo, path.join(root, IMPORT_PARAMS_FILE));
+  const conteudo = await formatCatalogJson(opcoes.novo);
   const problemas = validateWith(files, IMPORT_PARAMS_FILE, conteudo);
   if (problemas.length > 0) return { ok: false, problemas };
   writeAtomic(root, IMPORT_PARAMS_FILE, conteudo);
