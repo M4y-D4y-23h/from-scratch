@@ -27,7 +27,8 @@ export type DomainDifficulty = {
   horas_aprendizado: [number, number];
   /** Horas dos passos que usam o domínio (montagem, configuração, testes). */
   horas_passos: [number, number];
-  passos: Array<{ id: string; titulo: string; nivel: DifficultyLevel }>;
+  /** Passos que usam o domínio; o objetivo de cada um é o que se aprende fazendo. */
+  passos: Array<{ id: string; titulo: string; nivel: DifficultyLevel; objetivo: string }>;
   riscos: string[];
 };
 
@@ -73,6 +74,7 @@ export function computeDifficulty(
         id: p.id,
         titulo: p.titulo,
         nivel: (p.dominios[dominio] ?? 0) as DifficultyLevel,
+        objetivo: p.objetivo,
       })),
       riscos: [...new Set(usados.flatMap((p) => p.riscos))],
     });

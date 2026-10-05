@@ -93,3 +93,84 @@ export function missingRelatedTerms(termos: readonly GlossaryTerm[]): string[] {
   }
   return [...faltando].sort((a, b) => a.localeCompare(b, "pt-BR"));
 }
+
+// ---------------------------------------------------------------------------
+// Termos no texto da interface (SPEC B.12: "termos técnicos sublinhados em toda a UI")
+// ---------------------------------------------------------------------------
+
+/** Pedaço de texto: comum, ou um termo do glossário (com o nome do verbete). */
+export type GlossarySegment = { texto: string; termo?: string };
+
+export type GlossaryMatcher = { regex: RegExp; termos: string[] };
+
+const escapeRegex = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+/** "é" → "[éÉ]": comparação sem diferenciar maiúsculas, inclusive com acento. */
+function caseless(texto: string): string {
+  return [...texto]
+    .map((ch) => {
+      const lo = ch.toLocaleLowerCase("pt-BR");
+      const up = ch.toLocaleUpperCase("pt-BR");
+      return lo === up ? escapeRegex(ch) : `[${lo}${up}]`;
+    })
+    .join("");
+}
+
+/**
+ * Padrão de um termo:
+ * - sigla toda em maiúsculas (ESC, TWR, GPS): exatamente assim, com plural "s" (ESCs, UARTs);
+ * - nome com maiúscula no meio (LiPo, ArduPilot, Câmera FPV): a primeira letra em qualquer caixa,
+ *   o resto exato, com plural "s";
+ * - palavra comum (Hélice, Célula, Frame): sem diferenciar maiúsculas, com plural "s" ou "es".
+ * Espaços do termo aceitam qualquer espaço no texto.
+ */
+function termPattern(termo: string): string {
+  const partes = termo.split(/\s+/);
+  const letras = termo.replace(/[^\p{L}]/gu, "");
+  const sigla = letras.length > 0 && letras === letras.toLocaleUpperCase("pt-BR");
+  const misto = !sigla && /\p{Lu}/u.test(termo.slice(1));
+  const corpo = partes
+    .map((p, i) => {
+      if (sigla) return escapeRegex(p);
+      if (misto) return i === 0 ? caseless(p.charAt(0)) + escapeRegex(p.slice(1)) : escapeRegex(p);
+      return caseless(p);
+    })
+    .join("\\s+");
+  const plural = /\p{L}$/u.test(termo) ? (sigla || misto ? "s?" : "(?:es|s)?") : "";
+  return `${corpo}${plural}`;
+}
+
+/** Compila os termos uma vez (o mais longo primeiro: "Câmera FPV" antes de "FPV"). */
+export function compileGlossary(termos: readonly Pick<GlossaryTerm, "termo">[]): GlossaryMatcher {
+  const lista = [...termos.map((t) => t.termo)].sort((a, b) => b.length - a.length);
+  const grupos = lista.map((t) => `(${termPattern(t)})`).join("|");
+  // Fronteira de palavra que entende acentos: nem letra nem número colado antes ou depois.
+  const regex = new RegExp(`(?<![\\p{L}\\p{N}])(?:${grupos})(?![\\p{L}\\p{N}])`, "gu");
+  return { regex, termos: lista };
+}
+
+/**
+ * Divide o texto em pedaços, marcando a primeira ocorrência de cada termo (sublinhar toda vez
+ * cansaria a leitura). `jaMarcados` permite continuar a contagem entre trechos do mesmo bloco.
+ */
+export function splitGlossary(
+  texto: string,
+  matcher: GlossaryMatcher,
+  jaMarcados: Set<string> = new Set(),
+): GlossarySegment[] {
+  if (matcher.termos.length === 0 || texto.length === 0) return [{ texto }];
+  const out: GlossarySegment[] = [];
+  let ultimo = 0;
+  const regex = new RegExp(matcher.regex.source, matcher.regex.flags);
+  for (let m = regex.exec(texto); m !== null; m = regex.exec(texto)) {
+    const indice = m.slice(1).findIndex((g) => g !== undefined);
+    const termo = matcher.termos[indice];
+    if (!termo || jaMarcados.has(termo)) continue;
+    jaMarcados.add(termo);
+    if (m.index > ultimo) out.push({ texto: texto.slice(ultimo, m.index) });
+    out.push({ texto: m[0], termo });
+    ultimo = m.index + m[0].length;
+  }
+  if (ultimo < texto.length) out.push({ texto: texto.slice(ultimo) });
+  return out;
+}
