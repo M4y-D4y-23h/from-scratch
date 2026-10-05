@@ -267,9 +267,11 @@ function Propeller({
           depthWrite={false}
         />
       </mesh>
+      {/* Pás planas de propósito: o lado da borda de ataque não sai do catálogo, e uma inclinação
+          desenhada poderia ensinar a montar a hélice ao contrário. O sentido fica nas setas. */}
       {Array.from({ length: pas }, (_, i) => (
         <group key={i} rotation={[0, (i * 2 * Math.PI) / pas, 0]}>
-          <mesh position={[raio * 0.5, 0, 0]} rotation={[sentido * 0.25, 0, 0]}>
+          <mesh position={[raio * 0.5, 0, 0]}>
             <boxGeometry args={[raio * 0.95, espessura, largura]} />
             {material}
           </mesh>
