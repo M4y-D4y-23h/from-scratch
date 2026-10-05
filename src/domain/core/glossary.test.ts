@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 
-import { compileGlossary, missingRelatedTerms, parseGlossary, splitGlossary } from "./glossary";
+import {
+  compileGlossary,
+  glossarySlug,
+  missingRelatedTerms,
+  parseGlossary,
+  splitGlossary,
+} from "./glossary";
 
 const SAMPLE = [
   "# Glossário",
@@ -106,5 +112,13 @@ describe("termos do glossário no texto da interface", () => {
     const vistos = new Set<string>();
     splitGlossary("O ESC esquenta.", matcher, vistos);
     expect(splitGlossary("Troque o ESC.", matcher, vistos).some((s) => s.termo)).toBe(false);
+  });
+});
+
+describe("âncora do termo no glossário", () => {
+  it("sem acento, minúsculas e hífens", () => {
+    expect(glossarySlug("Câmera FPV")).toBe("camera-fpv");
+    expect(glossarySlug("5,8 GHz")).toBe("5-8-ghz");
+    expect(glossarySlug("C-rating")).toBe("c-rating");
   });
 });

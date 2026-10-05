@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 
+import { GlossaryProvider } from "@/components/glossary/glossary";
 import { ThemeProvider } from "@/components/theme-provider";
+import { loadGlossary } from "@/server/glossary/load";
 
 import "./globals.css";
 
@@ -14,6 +16,8 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
+  // Termos do glossário (docs/GLOSSARIO.md) para os balões de explicação em toda a interface.
+  const { termos } = loadGlossary();
   return (
     // suppressHydrationWarning: o next-themes troca a classe do <html> antes do
     // React hidratar (evita "piscar" o tema errado); o aviso seria falso alarme.
@@ -25,7 +29,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <GlossaryProvider termos={termos}>{children}</GlossaryProvider>
         </ThemeProvider>
       </body>
     </html>

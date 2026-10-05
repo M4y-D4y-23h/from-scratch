@@ -16,6 +16,13 @@ export type PhoneOs = "android" | "ios" | "desconhecido";
 export type UsageKind = "recreativo" | "nao_recreativo";
 export type Tier = "economica" | "equilibrada" | "premium";
 
+/** Nome da faixa de preço na interface. */
+export const TIER_LABEL: Record<Tier, string> = {
+  economica: "Econômica",
+  equilibrada: "Equilibrada",
+  premium: "Premium",
+};
+
 export type BuildOptions = {
   telemetria: TelemetryOption;
   controle: ControlMode;

@@ -174,3 +174,13 @@ export function splitGlossary(
   if (ultimo < texto.length) out.push({ texto: texto.slice(ultimo) });
   return out;
 }
+
+/** Âncora do termo na página do glossário: "Câmera FPV" → "camera-fpv". */
+export function glossarySlug(termo: string): string {
+  return termo
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
