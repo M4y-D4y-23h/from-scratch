@@ -339,3 +339,147 @@ para 3".
 **Dados do catálogo para você verificar:** placa central de 144 mm, espaço de 28 mm entre placas e
 trem de pouso de 215 mm do X500 V2 (das notas da Holybro); bateria CNHL 4S 3300 de 136 x 44 x 30
 mm; Nazgul Evoque F5 V3 com placas de 3 mm e 2 straps; motor XING2 2207 de 29,08 x 32,6 mm.
+
+---
+
+## Fase 3: Painéis e catálogo (concluída em 2026-10-05, aguardando revisão)
+
+**Aceite (SPEC B.18):** "consigo abrir um build de referência e ver custos, dificuldade, locais,
+alertas e cálculos, e trocar uma peça com revalidação", sem LLM. **Atendido:**
+`tests/e2e/project.spec.ts` (as 6 abas, com screenshot de cada uma; trocar a FC cria o projeto
+com a versão 2 recalculada; histórico e "voltar para esta versão"; a troca combinada do whoop) e
+`tests/unit/swap-reference.test.ts` (com o catálogo real: os 9 builds voltam iguais a partir da
+escolha, troca compatível e incompatível, sugestão combinada). A página /catalogo (SPEC B.6) está
+em `tests/e2e/catalog.spec.ts`. No CI, os screenshots ficam no artefato `screenshots-<sistema>`.
+
+### Feito
+
+- **Página do projeto** (`/referencia/[arquetipo]/[faixa]` e `/projetos/[id]`), no layout da SPEC
+  B.12: resumo à esquerda (status, peso, TWR, pairar, tempo de voo, custo, dificuldade e horas), 3D
+  no centro (fixo ao rolar) e abas à direita; no celular, resumo → 3D → abas. A aba aberta fica no
+  endereço (`?aba=calculos`).
+- **As 6 abas:**
+  - _Peças e Custos:_ totais de peças, ferramentas, consumíveis e EPI, importação estimada e total
+    geral (com quantos itens ficaram sem preço); lista agrupada com selo, preço com data, links de
+    **busca** (Mercado Livre e AliExpress), "Trocar" e "Ver no 3D"; ferramentas com "já tenho";
+    montar × comprar pronto.
+  - _Dificuldade:_ nota geral, barra por área, o que se aprende fazendo e os riscos de cada área.
+  - _Onde fazer:_ comprar pronto, em casa, serviço externo e espaço aberto, com requisitos, tempo,
+    ferramentas e o que comprar onde.
+  - _Montagem:_ prévia do passo a passo (objetivo, por que importa, como saber que deu certo, erros
+    comuns) e os parâmetros do firmware. O guia interativo é a Fase 5.
+  - _Segurança:_ todos os alertas, do perigo às boas práticas, com o que fazer e as fontes.
+  - _Cálculos:_ massa, TWR (com régua), pairar, autonomia, alimentação, as regras com a explicação
+    leiga e a técnica, e a comparação 450 mm × 5" (Arquétipo 1).
+- **Trocar peça com revalidação (ADR-0024):** só aparecem as alternativas que passam nas regras, com
+  a diferença de custo, peso, TWR, pairar e autonomia. As que não servem aparecem com o motivo e,
+  quando dá, com a troca combinada que resolve (no whoop: frame + hélices + motores). Num build de
+  referência, a troca cria o seu projeto; num projeto, vira uma versão nova.
+- **Projetos com versões:** histórico com "ver" e "voltar para esta versão" (que vira uma versão
+  nova), renomear e apagar. Aviso quando o catálogo mudou desde a versão.
+- **Glossário em toda a interface:** termos sublinhados com balão (mouse, toque e teclado) e a
+  página `/glossario`. Verbete novo "Receptor de vídeo" (agora são 45).
+- **Catálogo (`/catalogo`, ADR-0025):** busca e filtros (tipo, categoria, selo e drone); página de
+  cada item com "usado em" (quais builds usam); marcar como verificado com fonte; preço em R$ ou
+  US$ com data; editor de JSON com validação do catálogo inteiro; `/catalogo/importacao` (câmbio e
+  impostos, com data). As mudanças vão para os JSON em `data/catalog/drone/`, no formato canônico
+  (`pnpm catalog:format`).
+- **Página inicial:** os três drones de referência (números da faixa econômica) e os seus projetos.
+- **Segurança local:** `pnpm dev` e `pnpm start` só em 127.0.0.1; gravações só do próprio
+  computador.
+- **Testes:** 346 de unidade (eram 284) e 20 no navegador (eram 6), num servidor isolado, com cópia
+  do catálogo e banco temporário: os testes não mexem nos seus arquivos nem nos seus projetos.
+
+### Como testar
+
+```powershell
+git pull
+pnpm install
+pnpm dev        # abra http://localhost:3000 (ou http://127.0.0.1:3000)
+pnpm check      # formatação, lint, tipos e testes de unidade
+pnpm test:e2e   # testes no navegador, num servidor separado (porta 3100)
+```
+
+Roteiro no navegador:
+
+1. Na página inicial, abra "Drone com GPS para filmar e aprender" → **Econômica** e passe por todas
+   as abas. Passe o mouse num termo sublinhado (por exemplo, "LiPo" na aba Segurança).
+2. Em **Peças e Custos**, clique em "Trocar" na Controladora de voo (FC) e escolha outra: o app cria
+   "Meu projeto: ...", com a versão 2 e tudo recalculado. Em "Versões" (abaixo do resumo), veja a
+   versão 1 e volte para ela.
+3. No **Tiny Whoop** (Econômica), clique em "Trocar" no frame: nenhuma peça serve sozinha, e o app
+   sugere a troca combinada.
+4. Marque "Já tenho" numa ferramenta e veja o total de ferramentas cair (vale para todos os
+   projetos; desmarque depois).
+5. Em **Catálogo**, busque "pixhawk"; abra o "Rabicho XT60", salve um preço com data e veja o FPV
+   5" passar a incluí-lo no total.
+
+**Atenção:** o que você salva em /catalogo muda os arquivos de verdade em `data/catalog/drone/`.
+Veja a mudança com `git diff`; se foi só um teste, desfaça com `git checkout -- data/catalog`.
+
+### Para você decidir
+
+1. **Lojas dos links de busca:** hoje Mercado Livre (loja nacional e ferramentas) e AliExpress
+   (importação). Quer outras (Amazon, lojas brasileiras de FPV)? O formato da busca de cada uma
+   precisa ser conferido antes.
+2. **"Já tenho" vale para todos os projetos** (é a sua bancada). Se preferir por projeto, é uma
+   mudança pequena.
+
+### Ficou de fora (de propósito)
+
+- Pedido em linguagem natural e LLM (Fase 4), guia interativo com checkpoints (Fase 5) e tutor
+  (Fase 6). A aba Montagem é uma prévia.
+- Criar item novo no catálogo pela página: é pelo JSON no editor de texto, validado com
+  `pnpm catalog:check`.
+- Mudar as opções do projeto pela página (Android ou iPhone, tipo de uso, óculos): os projetos usam
+  as opções do drone de referência.
+- Links da Amazon: a busca não pôde ser conferida daqui (verificação de robô).
+- Gravar a partir de outro aparelho da rede: bloqueado de propósito.
+- Versão "congelada": uma versão antiga é recalculada com o catálogo atual (a página avisa quando
+  o catálogo mudou).
+
+### Problemas conhecidos
+
+- O console mostra "THREE.Clock: This module has been deprecated" (Fase 2) e, só no `pnpm dev`,
+  "Encountered a script tag while rendering React component" (do next-themes, que põe o script do
+  tema claro/escuro na página). São só avisos.
+- Montar a página revalida as alternativas de todos os slots: de 0,1 a 0,5 s no servidor por
+  build (o Arquétipo 1 é o mais lento).
+
+### Revisão adversarial da Fase 3 (SPEC B.19.7)
+
+- _O que machucaria um leigo?_
+  - **Corrigido:** o balão de "Receptor" (o do rádio) aparecia também em "receptor de vídeo" e
+    "receptor USB/OTG", com a explicação errada. Agora há o verbete "Receptor de vídeo", e um
+    verbete pode dizer antes de que palavras não ser sublinhado.
+  - Conferido: os links abrem uma busca, nunca um anúncio, com o aviso "confira se o anúncio é do
+    modelo exato"; peça que só vem dentro de outra não aparece como opção de compra; a cada troca,
+    os alertas são refeitos, e o diálogo mostra antes o "novo aviso" e o aviso que some.
+- _O que faria o drone não voar?_
+  - Toda troca passa por todas as regras do motor de cálculo no servidor, e troca que deixa falha
+    bloqueante é recusada, mesmo se alguém chamar o servidor direto. Regra bloqueante sem dado aparece com ❓ ("sem dado
+    para confirmar").
+  - "Voltar para esta versão" não é recusado: se o catálogo mudou e a versão antiga agora falha numa
+    regra, o projeto aparece "Bloqueado", com o motivo (mostrar em vez de esconder).
+  - O editor de JSON valida o catálogo inteiro, mas não sabe se o número digitado é verdadeiro: um
+    valor errado num item ✅ continua ✅. Revise o `git diff` antes do commit.
+- _O que estouraria o orçamento?_
+  - **Corrigido:** o total não dizia que itens sem preço ficaram de fora (extintor, kit de
+    primeiros socorros e toalha; no FPV 5" também o rabicho XT60 e o capacitor). Agora o total
+    geral, o resumo e os cartões da página inicial mostram "+ N itens sem preço".
+  - O imposto de importação aparece estimado à parte (II + ICMS, do cenário mais barato ao mais
+    caro), com o aviso de que frete, IOF e spread do cartão não estão incluídos.
+  - "Já tenho" só tira do custo o que você marcou.
+- _O que quebraria no Windows?_
+  - **Corrigido:** gravar no catálogo com o arquivo preso pelo antivírus ou pelo indexador falhava
+    de primeira; agora tenta de novo por até ~3 s e, se não der, explica sem deixar arquivo
+    temporário.
+  - Scripts novos em `.mjs`/`.ts` com `path`; `-H 127.0.0.1` funciona igual no Windows; o CI roda
+    os testes de unidade e de navegador no Windows.
+- _Segurança do app:_ gravações só do próprio computador (cabeçalho Host), servidor só em
+  127.0.0.1 e entradas validadas com zod no servidor. Nenhum segredo novo.
+
+**Dados do catálogo para você verificar:** preços dos itens ainda sem preço (toalha, extintor de
+incêndio, kit de primeiros socorros, rabicho XT60 e capacitor), que dá para salvar em /catalogo; o
+câmbio de 02/10/2026 e as regras do imposto de importação em /catalogo/importacao; e os nomes de
+cada slot ("rotulo" nos arquétipos), que agora aparecem na lista de peças.

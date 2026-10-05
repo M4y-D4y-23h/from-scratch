@@ -671,3 +671,104 @@ Datas no formato AAAA-MM-DD. "Verificado em" indica quando a informação extern
   testes). O canvas usa `preserveDrawingBuffer` para os testes lerem os pixels.
 - **Consequências:** o aviso "THREE.Clock deprecated" no console vem de dentro do
   @react-three/fiber 9.8 com o three 0.186 (sem versão nova que o resolva); é só aviso.
+
+## ADR-0024: painéis do projeto, troca de peça com revalidação e projetos com versões
+
+- **Data:** 2026-10-05 · **Status:** aceita (Fase 3)
+- **Contexto:** a SPEC B.12 pede a página do projeto em três colunas (resumo, 3D e abas) com seis
+  abas (Peças e Custos, Dificuldade, Onde fazer, Montagem, Segurança e Cálculos), termos técnicos
+  sublinhados em toda a interface e "trocar peça" com revalidação. A B.5 diz que toda alteração
+  gera uma versão nova. O aceite da Fase 3 (B.18) pede, sem LLM: abrir um build de referência, ver
+  custos, dificuldade, locais, alertas e cálculos, e trocar uma peça com revalidação.
+- **Decisão (o que o projeto guarda):**
+  - A versão guarda a **escolha** (slot → peça e quantidade, faixa e opções), não o build
+    derivado. Kits, peças que vêm na caixa de outras (`fornecido_por`) e a telemetria padrão
+    (ADR-0017) são recalculados pelas mesmas funções do solver (`finalizeBuild`), então uma troca
+    nunca deixa um kit "fantasma" no projeto.
+  - A versão também guarda a cópia das peças usadas e o hash do catálogo. Se uma peça sair do
+    catálogo, a cópia guardada é usada e a página avisa. Se o catálogo mudou desde que a versão foi
+    salva, os números são refeitos com o catálogo atual e a página também avisa.
+  - Abrir um build de referência não grava nada. A primeira troca cria "Meu projeto: <nome>", com a
+    versão 1 = referência e a versão 2 = troca. Voltar para uma versão antiga cria uma versão nova:
+    o histórico não se perde.
+- **Decisão (trocar peça):**
+  - As alternativas de um slot são todas as peças do catálogo que cabem nele (de qualquer faixa),
+    cada uma validada com todas as regras do motor de cálculo, no projeto inteiro. Só aparecem para escolher as que não
+    falham em regra bloqueante, com a diferença de custo, massa, TWR, pairar e autonomia; regra
+    bloqueante sem dado aparece com ❓. As que não servem ficam à parte, com o motivo.
+  - **Troca combinada:** para a peça que não serve sozinha, o app procura UMA troca a mais nos
+    slots das peças citadas nas regras bloqueantes que falharam. Se o resultado ficar sem dado,
+    tenta mais uma nos slots das regras sem dado. Exemplo no whoop: o frame de 65 mm pede a hélice
+    de 31 mm, que pede o motor que tem tabela de empuxo com ela. É uma busca pequena e guiada pelas
+    regras, para caber no tempo da página, não uma otimização.
+  - O servidor confere de novo que a peça cabe no slot e recusa troca que deixe o projeto com
+    falha bloqueante (não confia no navegador).
+- **Decisão (interface):**
+  - Resumo à esquerda, 3D no centro (fixo ao rolar) e abas à direita; no celular, resumo → 3D →
+    abas. A aba aberta fica no endereço (`?aba=`). "Ver no 3D" e "destacar" ligam a lista de peças,
+    os passos e as regras ao modelo.
+  - Custos separados em peças, ferramentas, consumíveis e EPI. O imposto de importação (II + ICMS)
+    aparece à parte, como estimativa ⚠️ já incluída nas peças. O total diz quantos itens ficaram de
+    fora por não ter preço. "Já tenho esta ferramenta" vale para todos os projetos e tira a
+    ferramenta do custo.
+  - **Links de compra são links de busca** (SPEC B.1.2): Mercado Livre
+    (`https://lista.mercadolivre.com.br/<termos-com-hífen>`) para loja nacional e de ferramentas, e
+    AliExpress (`https://pt.aliexpress.com/wholesale?SearchText=<termos>`) para importação. Os dois
+    formatos foram conferidos em 2026-10-05. A Amazon ficou de fora porque a busca dela não pôde ser
+    conferida daqui (verificação de robô, ADR-0018).
+  - **Glossário:** o termo é sublinhado na primeira vez que aparece em cada bloco de texto, com um
+    balão que abre ao passar o mouse, tocar ou pelo teclado, e link para `/glossario#termo`. Sigla
+    só conta em maiúsculas (ESC, FC); nome com maiúscula no meio aceita a primeira letra minúscula
+    (câmera FPV); palavra comum não diferencia maiúsculas; cada palavra aceita o plural, menos as
+    de ligação ("receptores de vídeo"); o termo mais longo vence. O verbete pode dizer antes de que
+    palavras não sublinhar ("receptor USB" é o de vídeo, não o do rádio).
+  - `/3d/...` (Fase 2) redireciona para `/referencia/...`.
+- **Consequências:** as páginas são dinâmicas, porque leem projetos e o "já tenho" do banco a cada
+  visita. Montar a página revalida as alternativas de todos os slots: medido em 2026-10-05, de 0,1 a
+  0,5 s no servidor por build (o Arquétipo 1, com mais slots e peças, é o mais lento). Se ficar
+  lento com o catálogo maior, dá para guardar o resultado por hash do catálogo.
+
+## ADR-0025: catálogo editável pela interface, escrita só do próprio computador e testes isolados
+
+- **Data:** 2026-10-05 · **Status:** aceita (Fase 3)
+- **Contexto:** a SPEC B.6 pede a página /catalogo para listar, filtrar, editar, marcar como
+  verificado com fonte e atualizar preço com data. O ADR-0015 decidiu que os arquivos JSON
+  versionados são a fonte da verdade e o banco é só um espelho. Editar pela página não pode quebrar
+  o motor de cálculo nem gerar diffs enormes. E um app local que grava arquivos precisa aceitar
+  escrita só de quem está no próprio computador.
+- **Decisão (gravação no catálogo):**
+  - A página grava nos próprios JSON: troca só o item no arquivo dele, valida o catálogo INTEIRO
+    com a mudança (schema zod + `checkCatalog`) antes de gravar, escreve de forma atômica
+    (temporário + renomear) e formata com o Prettier do projeto (configuração da raiz). O
+    `git diff` mostra só o que mudou. Depois, re-sincroniza o espelho no banco.
+  - No Windows, se o arquivo estiver preso por instantes (antivírus, indexador), renomear tenta de
+    novo por até ~3 s. Se não der, o temporário é apagado e a página explica o problema.
+  - Cada formulário leva a versão (hash) do item: se o arquivo mudou por fora depois que a página
+    foi aberta, a gravação é recusada.
+  - "Marcar como verificado" exige fonte com título, link https e a confirmação "conferi nesta
+    fonte"; só então o selo vira ✅. Preço em R$ ou US$ sempre com data. Câmbio e regras de
+    importação também com a data da conferência. Para o resto, há um editor de JSON com a mesma
+    validação.
+  - `pnpm catalog:format` deixa os JSON no formato canônico (um teste confere). O Prettier passou
+    de `devDependencies` para `dependencies`, porque o servidor o usa ao gravar.
+- **Decisão (escrita só do próprio computador):**
+  - As server actions que gravam conferem o cabeçalho Host: só `localhost`, `127.0.0.1` ou
+    `[::1]`. O Next já recusa ações vindas de outro site (compara Origin com Host); conferir o Host
+    protege também contra "DNS rebinding" (um site que faz o navegador chamar o seu computador por
+    outro nome) e contra outro aparelho da rede.
+  - `pnpm dev` e `pnpm start` escutam só em 127.0.0.1 (`-H 127.0.0.1`): o app não fica visível na
+    rede local.
+  - Toda entrada das ações é validada com zod no servidor.
+- **Decisão (testes no navegador isolados):**
+  - `pnpm test:e2e` sobe um servidor próprio (`scripts/e2e-server.mjs`, porta 3100) com uma cópia
+    do catálogo e um banco temporário (`FROM_SCRATCH_CATALOG_DIR` e `FROM_SCRATCH_DB`) e com a pasta
+    de build `.next-e2e`, para rodar junto com o seu `pnpm dev`. Tudo é apagado no fim. Os testes
+    editam preços e selos sem tocar no repositório nem nos seus projetos.
+  - O `next dev` reescreveria o `tsconfig.json` por causa da pasta `.next-e2e`; o servidor dos
+    testes usa o `tsconfig.e2e.json` (`typescript.tsconfigPath` no `next.config.ts`).
+  - Caminhos vindos de variável de ambiente levam `/*turbopackIgnore: true*/`; sem isso, o build
+    rastreia o projeto inteiro e avisa.
+- **Consequências:** o dono edita o catálogo pela página e versiona com git como sempre (revise o
+  `git diff` antes do commit). Criar item novo pela página ficou de fora: é pelo JSON no editor de
+  texto, validado com `pnpm catalog:check`. Gravar a partir de outro aparelho da rede é recusado de
+  propósito.

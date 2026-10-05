@@ -17,13 +17,24 @@ decisões importantes de forma breve. Ele autorizou corrigir a SPEC quando ela e
 
 ## Estado atual
 
-- **Fases 0 (fundação) e 1 (domínio): concluídas** (o dono liberou a Fase 2 em 2026-10-05; os
-  itens "para aprovar" da Fase 1 seguem com os valores propostos). **Fase 2 (visualizador 3D):
-  concluída em 2026-10-05, aguardando a revisão do dono** (resumo em `docs/PROGRESS.md`).
-  Próxima: **Fase 3 (painéis e /catalogo)**, só depois da revisão.
+- **Fases 0 (fundação), 1 (domínio) e 2 (3D): concluídas** (o dono liberou a Fase 3 em
+  2026-10-05). **Fase 3 (painéis e /catalogo): concluída em 2026-10-05, aguardando a revisão do
+  dono** (resumo, decisões pendentes e revisão adversarial em `docs/PROGRESS.md`). Próxima:
+  **Fase 4 (pipeline com LLM, SPEC B.10)**, só depois da revisão.
+- Páginas: `/` (drones de referência e projetos), `/referencia/[arquetipo]/[faixa]` e
+  `/projetos/[id]` (resumo, 3D e as 6 abas; `?aba=`), `/catalogo` (+ `/catalogo/[tipo]/[id]` e
+  `/catalogo/importacao`) e `/glossario`. `/3d/...` redireciona para `/referencia/...`.
+- Projeto = escolha (slot → peça) guardada em versões no SQLite; kits e itens "fornecido_por" são
+  recalculados (`swap.ts`, ADR-0024). Toda troca é revalidada no servidor; troca que deixa falha
+  bloqueante é recusada.
+- /catalogo grava nos JSON de `data/catalog/drone/` (validação do catálogo inteiro, escrita
+  atômica, formato do Prettier; ADR-0025). Server actions que gravam chamam `assertLocalRequest`
+  (só Host local) e validam a entrada com zod. `pnpm dev`/`start` escutam só em 127.0.0.1.
+- Glossário: `docs/GLOSSARIO.md` alimenta os balões da interface (`<Glossed text=...>`). Verbete
+  pode ter "Não sublinhar antes de:" para palavras que mudam o sentido ("receptor USB").
 - 3D: `scene.ts` (domínio) monta o scene graph em JSON; `src/components/viewer3d` só desenha
-  (three.js + @react-three/fiber + drei, ADR-0023). Páginas `/3d/[arquetipo]/[faixa]`. Rótulos
-  são sprites desenhados em canvas (não use o `<Html>` do drei: erro no console do React 19).
+  (three.js + @react-three/fiber + drei, ADR-0023). Rótulos são sprites desenhados em canvas (não
+  use o `<Html>` do drei: erro no console do React 19).
 - Motor de cálculo em `src/domain/categories/drone/` (35 regras, solver das 3 faixas, custos,
   dificuldade, locais, alertas, comparação de tamanho, montar × pronto); catálogo real dos 3
   arquétipos em `data/catalog/drone/` (tudo ❓ até o dono conferir). `pnpm report` mostra os 9
@@ -38,22 +49,23 @@ decisões importantes de forma breve. Ele autorizou corrigir a SPEC quando ela e
 
 ## Comandos
 
-| Comando                         | Uso                                                                      |
-| ------------------------------- | ------------------------------------------------------------------------ |
-| `pnpm install`                  | Instala dependências (pnpm 11, versão fixada em `packageManager`).       |
-| `pnpm dev`                      | App em http://localhost:3000.                                            |
-| `pnpm check`                    | **Antes de cada commit**: formatação + lint + tipos + testes de unidade. |
-| `pnpm test`                     | Vitest (unidade).                                                        |
-| `pnpm test:e2e`                 | Playwright (sobe o `pnpm dev` sozinho). Rode quando mexer em UI.         |
-| `pnpm build`                    | Build de produção (também faz type-check).                               |
-| `pnpm lint` / `lint:fix`        | ESLint (`--max-warnings=0`).                                             |
-| `pnpm typecheck`                | `next typegen && tsc --noEmit`.                                          |
-| `pnpm format`                   | Prettier.                                                                |
-| `pnpm shadcn add <nome>`        | Novo componente do shadcn/ui (estilo `new-york`, Radix).                 |
-| `pnpm report [a1] [--detalhes]` | Builds de referência no terminal (peças, números, custos, regras).       |
-| `pnpm catalog:check`            | Valida o catálogo (`data/catalog/drone/`) e o glossário.                 |
-| `pnpm db:sync`                  | Cria/atualiza o banco local (`data/local/`) a partir do catálogo.        |
-| `pnpm db:generate`              | Gera migração do Drizzle (use `--name <nome>`).                          |
+| Comando                         | Uso                                                                        |
+| ------------------------------- | -------------------------------------------------------------------------- |
+| `pnpm install`                  | Instala dependências (pnpm 11, versão fixada em `packageManager`).         |
+| `pnpm dev`                      | App em http://localhost:3000 (escuta só em 127.0.0.1).                     |
+| `pnpm check`                    | **Antes de cada commit**: formatação + lint + tipos + testes de unidade.   |
+| `pnpm test`                     | Vitest (unidade).                                                          |
+| `pnpm test:e2e`                 | Playwright num servidor isolado (porta 3100, cópia do catálogo, ADR-0025). |
+| `pnpm build`                    | Build de produção (também faz type-check).                                 |
+| `pnpm lint` / `lint:fix`        | ESLint (`--max-warnings=0`).                                               |
+| `pnpm typecheck`                | `next typegen && tsc --noEmit`.                                            |
+| `pnpm format`                   | Prettier.                                                                  |
+| `pnpm shadcn add <nome>`        | Novo componente do shadcn/ui (estilo `new-york`, Radix).                   |
+| `pnpm report [a1] [--detalhes]` | Builds de referência no terminal (peças, números, custos, regras).         |
+| `pnpm catalog:check`            | Valida o catálogo (`data/catalog/drone/`) e o glossário.                   |
+| `pnpm catalog:format`           | Deixa os JSON do catálogo no formato que a página /catalogo grava.         |
+| `pnpm db:sync`                  | Cria/atualiza o banco local (`data/local/`) a partir do catálogo.          |
+| `pnpm db:generate`              | Gera migração do Drizzle (use `--name <nome>`).                            |
 
 ## Regras inegociáveis (resumo da SPEC B.1 e B.19)
 
@@ -94,8 +106,9 @@ docs/                 SPEC (íntegra, não formatar), DECISIONS, PROGRESS, GLOSS
 data/catalog/drone/   catálogo curado versionado (Fase 1)
 src/domain/core/      tipos genéricos (Fase 1)
 src/domain/categories/drone/  schema, compatibilidade, cálculos, solver, dificuldade, custos,
-                      locais, segurança, cena 3D (Fases 1-2)
-src/server/           llm, pipeline, tutor, uploads, budget, db (Fases 1, 4, 6, 7)
+                      locais, segurança, cena 3D, lista de peças, troca (Fases 1-3)
+src/server/           db, catalog (leitura e gravação), projects, project-view, actions,
+                      security (Fases 1-3); llm, pipeline, tutor, uploads, budget (Fases 4-7)
 src/app/              rotas Next (páginas + API)
 src/components/       UI; ui/ = shadcn/ui (copiados do registro oficial, ADR-0004)
 tests/unit/           Vitest · tests/e2e/ Playwright · tests/evals/ (Fase 4)
@@ -125,3 +138,6 @@ tests/unit/           Vitest · tests/e2e/ Playwright · tests/evals/ (Fase 4)
   `ArduPilot/ardupilot` (`ArduCopter/ReleaseNotes.txt`). Cite o commit usado.
 - O Playwright do contêiner não baixa navegador: rode os E2E com
   `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/opt/pw-browsers/chromium`.
+- Os E2E sobem o próprio servidor (`scripts/e2e-server.mjs`): pasta de build `.next-e2e`,
+  `tsconfig.e2e.json`, catálogo e banco temporários. Testes que mexem em totais comparam só o total
+  que mudam (rodam em paralelo, e o "já tenho" vale para todos os projetos).
