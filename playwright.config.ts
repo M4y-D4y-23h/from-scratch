@@ -25,7 +25,12 @@ export default defineConfig({
       name: "chromium",
       use: {
         ...devices["Desktop Chrome"],
-        launchOptions: chromiumExecutable ? { executablePath: chromiumExecutable } : {},
+        launchOptions: {
+          // WebGL sem placa de vídeo (CI e contêineres): o Chromium usa o SwiftShader, que nas
+          // versões novas precisa desta permissão explícita. Só vale para os testes.
+          args: ["--enable-unsafe-swiftshader"],
+          ...(chromiumExecutable ? { executablePath: chromiumExecutable } : {}),
+        },
       },
     },
   ],
