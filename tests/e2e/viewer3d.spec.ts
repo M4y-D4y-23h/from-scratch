@@ -2,13 +2,14 @@ import { expect, type Page, test } from "@playwright/test";
 
 /*
  * Aceite da Fase 2 (SPEC B.18): o visualizador desenha os 3 arquétipos (com screenshot de cada
- * um, guardado no relatório e como artefato do CI) e trocar a hélice muda o modelo.
+ * um, guardado no relatório e como artefato do CI) e trocar a hélice muda o modelo. Desde a
+ * Fase 3 o 3D fica no centro da página do build de referência.
  */
 
 const ARQUETIPOS = ["a1-gps-filmagem", "a2-fpv-5pol", "a3-tiny-whoop"] as const;
 
-// A primeira visita compila a página no `pnpm dev`; no Windows do CI isso pode demorar.
-test.describe.configure({ timeout: 120_000 });
+// A primeira visita compila a página no `next dev`; no Windows do CI isso pode demorar.
+test.describe.configure({ timeout: 180_000 });
 
 function collectErrors(page: Page): string[] {
   const erros: string[] = [];
@@ -19,10 +20,12 @@ function collectErrors(page: Page): string[] {
   return erros;
 }
 
+const regiao3d = (page: Page) => page.getByRole("region", { name: "Modelo 3D em escala real" });
+
 async function openViewer(page: Page, url: string) {
   await page.goto(url);
   const viewer = page.getByTestId("visualizador-3d");
-  await expect(viewer).toHaveAttribute("data-pronto", "sim", { timeout: 90_000 });
+  await expect(viewer).toHaveAttribute("data-pronto", "sim", { timeout: 120_000 });
   return viewer;
 }
 
@@ -66,7 +69,7 @@ test.describe("visualizador 3D", () => {
   for (const id of ARQUETIPOS) {
     test(`desenha ${id} (screenshot)`, async ({ page }, testInfo) => {
       const erros = collectErrors(page);
-      const viewer = await openViewer(page, `/3d/${id}/economica`);
+      const viewer = await openViewer(page, `/referencia/${id}/economica`);
       expect(await distinctColors(page)).toBeGreaterThan(20);
       const png = await viewer.screenshot({ path: testInfo.outputPath(`3d-${id}.png`) });
       await testInfo.attach(`3d-${id}`, { body: png, contentType: "image/png" });
@@ -78,8 +81,10 @@ test.describe("visualizador 3D", () => {
   test("clicar numa peça abre o painel com função, selo, preço e onde procurar", async ({
     page,
   }) => {
-    await openViewer(page, "/3d/a2-fpv-5pol/economica");
-    await page.getByRole("button", { name: /XING2 2207/ }).click();
+    await openViewer(page, "/referencia/a2-fpv-5pol/economica");
+    const viewer = regiao3d(page);
+    await viewer.getByText("Peças no modelo", { exact: true }).click();
+    await viewer.getByRole("button", { name: /XING2 2207/ }).click();
     const painel = page.getByRole("complementary", { name: "Detalhes do modelo" });
     await expect(painel.getByRole("heading", { name: /XING2 2207/ })).toBeVisible();
     await expect(painel).toContainText("Não verificado");
@@ -87,11 +92,19 @@ test.describe("visualizador 3D", () => {
     await expect(painel).toContainText("Onde procurar");
   });
 
+  test("'ver no 3D' na lista de peças seleciona a peça no modelo", async ({ page }) => {
+    await openViewer(page, "/referencia/a2-fpv-5pol/economica");
+    await page.getByRole("button", { name: /Ver .*XING2 2207.* no 3D/ }).click();
+    const painel = page.getByRole("complementary", { name: "Detalhes do modelo" });
+    await expect(painel.getByRole("heading", { name: /XING2 2207/ })).toBeVisible();
+  });
+
   test('trocar a hélice de 5" para 3" muda o modelo e avisa que é simulação', async ({
     page,
   }, testInfo) => {
-    const viewer = await openViewer(page, "/3d/a2-fpv-5pol/economica");
+    const viewer = await openViewer(page, "/referencia/a2-fpv-5pol/economica");
     const antes = await canvasSignature(page);
+    await regiao3d(page).getByText("Experimentar (só o desenho)", { exact: true }).click();
     await page.getByLabel("Diâmetro da hélice").selectOption("3");
     await expect.poll(() => canvasSignature(page)).not.toBe(antes);
     await expect(
@@ -101,8 +114,10 @@ test.describe("visualizador 3D", () => {
     await testInfo.attach("3d-a2-helice-3pol", { body: png, contentType: "image/png" });
   });
 
-  test("combinação que não existe dá 404", async ({ page }) => {
-    const resposta = await page.goto("/3d/a2-fpv-5pol/luxo");
+  test("faixa que não existe dá 404; o endereço da Fase 2 redireciona", async ({ page }) => {
+    const resposta = await page.goto("/referencia/a2-fpv-5pol/luxo");
     expect(resposta?.status()).toBe(404);
+    await page.goto("/3d/a2-fpv-5pol/premium");
+    await expect(page).toHaveURL(/\/referencia\/a2-fpv-5pol\/premium$/);
   });
 });

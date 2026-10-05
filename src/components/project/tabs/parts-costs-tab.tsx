@@ -158,7 +158,7 @@ function Total({
   return (
     <div className={`rounded-lg border p-3 ${destaque ? "bg-muted/60" : ""}`}>
       <dt className="flex items-center justify-between gap-1 text-xs text-muted-foreground">
-        {rotulo}
+        <span>{rotulo}</span>
         <Seal status={faixa.status} compacto />
       </dt>
       <dd className={destaque ? "text-base font-semibold" : "text-sm font-medium"}>

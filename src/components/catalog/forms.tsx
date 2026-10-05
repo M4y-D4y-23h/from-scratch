@@ -341,7 +341,18 @@ export function PriceForm({
 }
 
 /** O item inteiro em JSON, validado pelo schema e pelo catálogo antes de gravar. */
-export function JsonEditorForm({
+export function JsonEditorForm(props: {
+  kind: string;
+  id: string;
+  versao: string;
+  json: string;
+  importacao?: boolean;
+}) {
+  // Uma versão nova do item (depois de salvar) recomeça o editor com o JSON gravado.
+  return <JsonEditor key={props.versao} {...props} />;
+}
+
+function JsonEditor({
   kind,
   id,
   versao,
@@ -354,8 +365,8 @@ export function JsonEditorForm({
   json: string;
   importacao?: boolean;
 }) {
+  const [texto, setTexto] = useState(json);
   const [state, onSubmit, pending] = useSubmit((fd) => {
-    const texto = text(fd, "json");
     const v = text(fd, "versao");
     return importacao
       ? saveImportParamsJsonAction(v, texto)
@@ -370,8 +381,8 @@ export function JsonEditorForm({
       <Textarea
         id={`json-${id}`}
         name="json"
-        defaultValue={json}
-        key={versao}
+        value={texto}
+        onChange={(e) => setTexto(e.target.value)}
         spellCheck={false}
         rows={18}
         className="min-h-96 font-mono text-xs"

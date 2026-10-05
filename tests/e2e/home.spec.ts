@@ -13,6 +13,12 @@ test.describe("página inicial", () => {
     await expect(page.locator("html")).toHaveAttribute("lang", "pt-BR");
     await expect(page.getByRole("heading", { level: 1, name: "From Scratch" })).toBeVisible();
     await expect(page.getByRole("status")).toContainText("Em construção");
+    await expect(page.getByRole("heading", { name: "Drones de referência" })).toBeVisible();
+    await expect(page.getByRole("link", { name: 'FPV 5" de freestyle' })).toHaveAttribute(
+      "href",
+      "/referencia/a2-fpv-5pol/economica",
+    );
+    await expect(page.getByRole("heading", { name: "Seus projetos" })).toBeVisible();
     expect(consoleErrors).toEqual([]);
   });
 
