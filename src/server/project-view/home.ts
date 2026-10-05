@@ -22,6 +22,8 @@ export type ReferenceCard = {
     twr?: number;
     voo: { min?: number; max?: number; selo: VerificationStatus };
     total: CentsRange;
+    /** Itens que ficaram fora do total por não terem preço pesquisado. */
+    sem_preco: number;
     dificuldade: string;
   };
 };
@@ -49,6 +51,7 @@ export function referenceCards(loaded: LoadedCatalog): ReferenceCard[] {
           selo: report.metricas.flight.selo,
         },
         total: report.custos.total,
+        sem_preco: report.custos.sem_preco.length,
         dificuldade: report.dificuldade.rotulo,
       },
     };

@@ -15,7 +15,7 @@ import {
 import Link from "next/link";
 import { connection } from "next/server";
 
-import { dataHoraBr, fmt, fmtMinutes, formatRange } from "@/components/format";
+import { dataHoraBr, fmt, fmtMinutes, formatRange, unpricedNote } from "@/components/format";
 import { Seal } from "@/components/seal";
 import { SiteHeader } from "@/components/site-header";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -169,6 +169,11 @@ export default async function HomePage() {
                           {formatRange(c.economica.total)}
                           <Seal status={c.economica.total.status} compacto />
                         </dd>
+                        {c.economica.sem_preco > 0 && (
+                          <dd className="col-span-2 text-xs text-muted-foreground">
+                            {unpricedNote(c.economica.sem_preco)}
+                          </dd>
+                        )}
                       </dl>
                     )}
                     <nav aria-label={`Faixas de ${c.nome}`} className="mt-auto">

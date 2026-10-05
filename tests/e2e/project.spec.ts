@@ -76,6 +76,10 @@ test.describe("painéis do build de referência", () => {
     ]) {
       await expect(totais.getByText(total, { exact: true })).toBeVisible();
     }
+    // O total avisa o que ficou de fora por falta de preço (no A1: toalha, extintor e kit de
+    // primeiros socorros), aqui e no resumo.
+    await expect(totais).toContainText(/\+ \d+ itens? sem preço/);
+    await expect(resumo(page)).toContainText(/\+ \d+ itens? sem preço/);
     await expect(page.getByRole("link", { name: /Mercado Livre/ }).first()).toHaveAttribute(
       "href",
       /^https:\/\/lista\.mercadolivre\.com\.br\//,

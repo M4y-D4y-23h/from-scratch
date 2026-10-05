@@ -58,6 +58,14 @@ export function rangeOrZero(range: CentsRange | undefined): string {
   return range ? formatRange(range) : "sem preço pesquisado";
 }
 
+/**
+ * "+ 3 itens sem preço": o que um total deixa de fora por não ter preço pesquisado. Vai junto do
+ * total, para ninguém ler o valor como completo (extintor e rabicho XT60 também custam).
+ */
+export function unpricedNote(n: number): string | undefined {
+  return n > 0 ? `+ ${n} ${n === 1 ? "item" : "itens"} sem preço` : undefined;
+}
+
 /** Texto do preço com a data: "R$ 10,00 a R$ 20,00 (02/10/2026)". */
 export function priceWithDate(range: CentsRange): string {
   return `${formatRange(range)} (${dataBr(range.data_mais_antiga)})`;

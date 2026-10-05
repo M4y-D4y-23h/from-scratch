@@ -1,7 +1,7 @@
 import { CircleCheck, CircleHelp, MessagesSquare, OctagonX } from "lucide-react";
 import Link from "next/link";
 
-import { fmt, fmtHours, fmtMinutes, formatRange } from "@/components/format";
+import { fmt, fmtHours, fmtMinutes, formatRange, unpricedNote } from "@/components/format";
 import { Glossed } from "@/components/glossary/glossary";
 import { Seal } from "@/components/seal";
 import { TIER_LABEL } from "@/domain/categories/drone/build";
@@ -40,20 +40,23 @@ function Row({
   rotulo,
   valor,
   selo,
+  nota,
 }: {
   rotulo: string;
   valor: string;
   selo?: VerificationStatus;
+  nota?: string;
 }) {
   return (
-    <div className="flex items-baseline justify-between gap-2 py-1.5">
+    <div className="flex flex-wrap items-baseline justify-between gap-x-2 py-1.5">
       <dt className="text-muted-foreground">
         <Glossed text={rotulo} />
       </dt>
-      <dd className="flex items-center gap-1.5 text-right font-medium">
+      <dd className="ml-auto flex items-center gap-1.5 text-right font-medium">
         {valor}
         {selo && <Seal status={selo} compacto />}
       </dd>
+      {nota && <dd className="basis-full text-right text-xs text-muted-foreground">{nota}</dd>}
     </div>
   );
 }
@@ -106,6 +109,7 @@ export function ProjectSummary({ data }: { data: ProjectViewData }) {
           rotulo="Custo total"
           valor={formatRange(data.relatorio.custos.total)}
           selo={data.relatorio.custos.total.status}
+          nota={unpricedNote(data.relatorio.custos.sem_preco.length)}
         />
         <Row rotulo="Dificuldade" valor={`${d.rotulo} (${fmt(d.nota, 2)})`} />
         <Row rotulo="Horas (aprender e fazer)" valor={fmtHours(d.horas_totais)} selo="estimativa" />

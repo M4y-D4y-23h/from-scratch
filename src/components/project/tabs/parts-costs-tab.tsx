@@ -1,6 +1,6 @@
 import { ExternalLink, Package, Store } from "lucide-react";
 
-import { dataBr, formatRange, priceWithDate } from "@/components/format";
+import { dataBr, formatRange, priceWithDate, unpricedNote } from "@/components/format";
 import { Glossed } from "@/components/glossary/glossary";
 import { Seal } from "@/components/seal";
 import type { BomRow, PurchaseOption } from "@/domain/categories/drone/bom";
@@ -65,7 +65,12 @@ export function PartsCostsTab({ data }: { data: ProjectViewData }) {
             faixa={c.importacao_estimada}
             nota="já incluída nas peças"
           />
-          <Total rotulo="Total geral" faixa={c.total} destaque />
+          <Total
+            rotulo="Total geral"
+            faixa={c.total}
+            destaque
+            nota={unpricedNote(c.sem_preco.length)}
+          />
         </dl>
         <ul className="space-y-1 text-xs text-muted-foreground">
           <li>
