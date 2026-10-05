@@ -92,8 +92,8 @@ bloco "casos que devem falhar" de `src/domain/categories/drone/compatibility.tes
   das três faixas com kits e explicação de cada escolha; custos; dificuldade (fórmula da SPEC
   B.8); "onde fazer"; alertas; perfis de parâmetros de firmware; comparação 450 mm × 5"; montar ×
   comprar pronto. Tudo puro (sem I/O), com as heurísticas em `config.ts` e a origem de cada uma.
-- **Catálogo real (`data/catalog/drone/`):** 44 peças, 4 tabelas de empuxo, 25 ferramentas/EPI, 3
-  arquétipos com 98 passos de montagem, 2 perfis de firmware (ArduCopter 4.7 e Betaflight 4.5) e
+- **Catálogo real (`data/catalog/drone/`):** 45 peças, 4 tabelas de empuxo, 25 ferramentas/EPI, 3
+  arquétipos com 102 passos de montagem, 2 perfis de firmware (ArduCopter 4.7 e Betaflight 4.5) e
   5 drones prontos de referência. Cada peça com página oficial lida em 04/10/2026, preço da loja
   oficial em US$ e selo ❓ (ninguém conferiu ainda, SPEC B.6).
 - **Banco local:** SQLite + Drizzle espelhando catálogo e glossário (`pnpm db:sync`), migrações
@@ -111,12 +111,12 @@ frete; ⚠️ estimativa):
 
 | Arquétipo                 | Faixa       | Peso    | TWR  | Pairar | Voo         | Peças (R$)     | Dificuldade          |
 | ------------------------- | ----------- | ------- | ---- | ------ | ----------- | -------------- | -------------------- |
-| 1. GPS para filmar (450)  | econômica   | 1.607 g | 3,3  | 47%    | 8,5–12 min  | 6.182 a 7.971  | Avançado (2,76)      |
+| 1. GPS para filmar (450)  | econômica   | 1.607 g | 3,3  | 47%    | 8,5–12 min  | 6.182 a 7.971  | Avançado (2,75)      |
 |                           | equilibrada | 1.613 g | 3,3  | 47%    | 8,4–11,9    | 8.240 a 10.337 | Avançado             |
 |                           | premium     | 1.639 g | 3,25 | 47%    | 8,3–11,7    | 8.644 a 10.838 | Avançado             |
-| 2. FPV 5" (Betaflight)    | econômica   | 730 g   | 9,2  | ≤ 50%  | 2,9–9,7 min | 4.213 a 6.101  | Avançado (2,8)       |
-|                           | equilibrada | 732 g   | 9,2  | ≤ 50%  | 2,9–9,6     | 5.466 a 7.592  | Avançado             |
-|                           | premium     | 732 g   | 9,2  | ≤ 50%  | 2,9–9,6     | 6.333 a 8.671  | Avançado             |
+| 2. FPV 5" (Betaflight)    | econômica   | 736 g   | 9,2  | ≤ 50%  | 2,9–9,6 min | 4.213 a 6.101  | Avançado (2,8)       |
+|                           | equilibrada | 737 g   | 9,1  | ≤ 50%  | 2,9–9,6     | 5.466 a 7.592  | Avançado             |
+|                           | premium     | 737 g   | 9,1  | ≤ 50%  | 2,9–9,6     | 6.333 a 8.671  | Avançado             |
 | 3. Tiny Whoop (sub-250 g) | econômica   | 26 g    | 4,4  | 40%    | 2,3–3,8 min | 2.236 a 3.389  | Intermediário (1,79) |
 |                           | equilibrada | 34 g    | 5,6  | 33%    | 3,9–6,5     | 3.218 a 4.501  | Intermediário        |
 |                           | premium     | 34 g    | 5,6  | 33%    | 3,9–6,5     | 3.781 a 5.118  | Intermediário        |
@@ -215,6 +215,50 @@ Para mexer num número e ver o efeito: edite o JSON da peça em `data/catalog/dr
 
 ### Revisão adversarial da Fase 1 (SPEC B.19.7)
 
-_(em andamento)_
+Feita sobre os 9 builds (`pnpm report`), os 102 passos, os alertas e os perfis de firmware. O que
+apareceu e o que foi feito:
 
-**Dados do catálogo para você verificar:** _(em andamento)_
+- _O que machucaria um leigo?_
+  - **Corrigido:** no 450 mm, a bateria era ligada pela primeira vez na calibração dos ESCs,
+    depois de soldar o receptor e de ligar o vídeo direto na bateria, sem repetir a medição de
+    curto (o teste vinha antes dessas soldas). Novo passo "Primeira ligação com bateria, sem
+    hélices" (mede de novo e liga pelo smoke stopper); no 5", a primeira ligação também mede de
+    novo.
+  - **Corrigido:** o 450 mm e o 5" não ensinavam a carregar a LiPo (só o whoop ensinava). Novo
+    passo bloqueante "Carregar a bateria pela primeira vez": LiPo, número de células, 1C,
+    conector de balanceamento, bolsa anti-chamas e alguém olhando.
+  - **Corrigido:** o failsafe do Betaflight para os motores, então o drone cai onde estiver. O
+    passo do teste agora diz isso e manda não voar sobre pessoas, carros ou casas.
+  - Conferido: hélices só no local de voo, depois dos testes de direção dos motores e de
+    failsafe na bancada (checkpoints bloqueantes nos 3 guias); antena antes da primeira ligação;
+    RTL testado baixo e perto; alertas de LiPo, solda, hélices e regras em todo projeto.
+- _O que faria o drone não voar?_
+  - **Corrigido:** o 5" não tinha capacitor. A caixa da stack não traz um (conferido na lista da
+    iFlight), e em 6S os picos de tensão podem queimar a ESC. Entrou um capacitor de baixa ESR
+    (~1000 µF, como recomenda o Betaflight), com passo de solda e polaridade.
+  - **Corrigido:** os ajustes do Betaflight para LiHV e DShot bidirecional dependiam do id da peça;
+    agora dependem da química da bateria e do firmware do ESC.
+  - **Corrigido:** o pareamento do 450 mm não falava da versão do ExpressLRS. O modo MAVLink exige
+    3.5.0 ou mais novo no rádio e no receptor e 1.5.0 no TX Backpack (documentação do ELRS).
+  - Conferido: TWR, pairar, C-rating, corrente do ESC, BEC e UARTs nos 9 builds; o único aviso é o
+    pico de corrente do PM02 V3, aceito (pairando, ~13 A).
+  - **Pendente:** as taxas de telemetria (`MAVn_*`) do modo MAVLink do ELRS. Afetam a fluidez da
+    telemetria no celular, não o voo. O passo avisa, e os valores entram no perfil depois de
+    conferir no código da 4.7 qual `MAVn` corresponde à porta do receptor.
+- _O que estouraria o orçamento?_
+  - **Corrigido:** o simulador era "recomendado" (fora do total), mas o treino nele é passo
+    obrigatório nos 3 guias. Agora é essencial (+R$ 30–100; errata 2.3).
+  - **Corrigido (latente):** reservas além do que vem num kit sumiriam do custo; agora são
+    compradas à parte (hoje nenhum slot pede isso: o kit do X500 já traz 6 hélices, 2 de reserva).
+  - Sempre avisado: frete, IOF e spread do cartão ficam fora; itens sem preço pesquisado aparecem à
+    parte (rabicho XT60, capacitor, toalha, extintor, kit de primeiros socorros, chaves de precisão).
+- _O que quebraria no Windows?_ `pnpm report` usa `tsx` e `path.resolve`, sem sintaxe de bash; o CI
+  roda no Windows a cada envio.
+
+**Dados do catálogo para você verificar** (o que mais mexe nos números e na segurança): tabelas de
+empuxo (T-MOTOR AIR2216 II + T1045 II a 16 V; iFlight XING2 2207 1855KV + Gemfan 51466 a 24 V;
+BETAFPV 0702/0802 1S), massa e C das baterias (CNHL 4S 3300 30C, MiniStar 6S 1500 120C, LAVA II
+320/480), BEC e UARTs das controladoras (Pixhawk 6C/6C Mini, BLITZ Mini ATF435, Matrix 1S), limite
+de 30 A do conector do PM02 V3, encaixe da bateria e da hélice nos frames Air65 II/Air75 II, altura
+do suporte de GPS do X500 (108 mm, medida no CAD) e os preços de 04/10/2026 com o câmbio de
+02/10/2026.
