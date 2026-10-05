@@ -75,16 +75,23 @@ function matchesFilter(c: Component, filtro: Record<string, unknown> | undefined
   return Object.entries(filtro).every(([k, v]) => specs[k] === v);
 }
 
+/** Peças do catálogo que cabem no slot (categoria e filtro de specs), de qualquer faixa. */
+export function slotCandidates(
+  slot: Archetype["slots"][number],
+  catalog: DroneCatalog,
+): Component[] {
+  return catalog.componentes.filter(
+    (c) => slot.categorias.includes(c.categoria) && matchesFilter(c, slot.filtro_specs),
+  );
+}
+
 export function candidatesFor(
   slot: Archetype["slots"][number],
   catalog: DroneCatalog,
   faixa: Tier,
 ): Component[] {
-  return catalog.componentes.filter(
-    (c) =>
-      slot.categorias.includes(c.categoria) &&
-      matchesFilter(c, slot.filtro_specs) &&
-      (c.faixas.length === 0 || c.faixas.includes(faixa)),
+  return slotCandidates(slot, catalog).filter(
+    (c) => c.faixas.length === 0 || c.faixas.includes(faixa),
   );
 }
 
@@ -133,6 +140,48 @@ export function applyPurchasePlan(build: Build, catalog: DroneCatalog): Build {
     }
   }
   return { ...build, itens };
+}
+
+export type FinalizeResult =
+  { build: Build; descartado?: undefined } | { build?: undefined; descartado: string };
+
+/**
+ * Completa um rascunho de build com o que é derivado das peças (o mesmo para o solver e para a
+ * troca de peça): telemetria padrão (ADR-0017) e plano de compra (kits, peças que vêm na caixa
+ * de outras). Devolve o motivo quando a combinação não faz sentido para comprar.
+ */
+export function finalizeBuild(
+  rascunho: Build,
+  archetype: Archetype,
+  catalog: DroneCatalog,
+  telemetriaEscolhida?: TelemetryOption,
+): FinalizeResult {
+  // A telemetria para o celular (ADR-0017) é parte do Arquétipo 1 (ArduPilot); no Betaflight
+  // o receptor fica em CRSF e não há estação de solo.
+  const telemetria =
+    telemetriaEscolhida ??
+    (archetype.firmware === "ArduPilot" ? defaultTelemetry(rascunho) : "nenhuma");
+  // Módulo de telemetria Wi-Fi só faz sentido se for a opção escolhida.
+  if (telemetria !== "wifi_no_drone" && firstOf(rascunho, "telemetria")) {
+    return {
+      descartado:
+        "O módulo de telemetria Wi-Fi só serve quando a telemetria vai por Wi-Fi no drone; com rádio e receptor ExpressLRS, ela já vai pelo rádio.",
+    };
+  }
+  const build = applyPurchasePlan(
+    { ...rascunho, opcoes: { ...rascunho.opcoes, telemetria } },
+    catalog,
+  );
+  // Peça que só vem dentro de outro produto (ex.: antena da AIO) precisa vir na caixa de uma
+  // peça escolhida; sozinha ela não pode ser comprada.
+  const avulsa = build.itens.find((i) => !i.componente.vendido_separadamente && !i.fornecido_por);
+  if (avulsa) {
+    const c = avulsa.componente;
+    return {
+      descartado: `${c.marca} ${c.modelo} não é vendida separadamente: só vem na caixa de outro produto, que não está no projeto.`,
+    };
+  }
+  return { build };
 }
 
 function cartesian<T>(lists: T[][]): T[][] {
@@ -188,22 +237,9 @@ export function solve(input: SolverInput): SolverResult {
         itens,
         opcoes: { ...DEFAULT_BUILD_OPTIONS, celular: "android", ...input.opcoes },
       };
-      // A telemetria para o celular (ADR-0017) é parte do Arquétipo 1 (ArduPilot); no Betaflight
-      // o receptor fica em CRSF e não há estação de solo.
-      const telemetria =
-        input.opcoes?.telemetria ??
-        (archetype.firmware === "ArduPilot" ? defaultTelemetry(rascunho) : "nenhuma");
-      // Módulo de telemetria Wi-Fi só faz sentido se for a opção escolhida.
-      if (telemetria !== "wifi_no_drone" && firstOf(rascunho, "telemetria")) continue;
-      const build = applyPurchasePlan(
-        { ...rascunho, opcoes: { ...rascunho.opcoes, telemetria } },
-        catalog,
-      );
-      // Peça que só vem dentro de outro produto (ex.: antena da AIO) precisa vir na caixa de uma
-      // peça escolhida; sozinha ela não pode ser comprada.
-      if (build.itens.some((i) => !i.componente.vendido_separadamente && !i.fornecido_por)) {
-        continue;
-      }
+      const final = finalizeBuild(rascunho, archetype, catalog, input.opcoes?.telemetria);
+      if (!final.build) continue;
+      const build = final.build;
       const { report, metrics } = validateBuild({
         build,
         archetype,
