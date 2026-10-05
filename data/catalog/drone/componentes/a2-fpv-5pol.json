@@ -69,7 +69,9 @@
       "furacao_motor": ["16x16 M3"],
       "furacao_stack": ["20x20 M3"],
       "espessura_braco_mm": 6,
-      "material": "fibra_de_carbono"
+      "material": "fibra_de_carbono",
+      "espessura_placa_mm": 3,
+      "straps_bateria": 2
     }
   },
   {

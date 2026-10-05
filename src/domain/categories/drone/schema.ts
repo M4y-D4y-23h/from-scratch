@@ -49,11 +49,11 @@ export function normalizeMountPattern(pattern: string): string {
   return `${nums.join("x")}${thread ? ` ${thread}` : ""}`;
 }
 
-type ParsedMount =
+export type ParsedMount =
   | { tipo: "retangular"; a: number; b: number; rosca?: string }
   | { tipo: "circular"; diametro: number; furos: number; rosca: string };
 
-function parseMountPattern(pattern: string): ParsedMount | undefined {
+export function parseMountPattern(pattern: string): ParsedMount | undefined {
   const r = /^(\d+(?:\.\d+)?)x(\d+(?:\.\d+)?)(?: (M\d(?:\.\d)?))?$/.exec(pattern.trim());
   if (r) return { tipo: "retangular", a: Number(r[1]), b: Number(r[2]), rosca: r[3] };
   const c = /^Ø(\d+(?:\.\d+)?) (\d)x(M\d(?:\.\d)?)$/.exec(pattern.trim());
@@ -185,6 +185,16 @@ export const frameSpecsSchema = z.object({
   slot_bateria_mm: z
     .object({ largura: z.number().positive(), altura: z.number().positive() })
     .optional(),
+  /** Medidas usadas só para desenhar o 3D (SPEC B.11), quando o fabricante publica. */
+  placa_central_mm: z
+    .object({ comprimento: z.number().positive(), largura: z.number().positive() })
+    .optional(),
+  espessura_placa_mm: z.number().positive().optional(),
+  /** Espaço livre entre a placa de baixo e a de cima (onde ficam FC/stack). */
+  espaco_entre_placas_mm: z.number().positive().optional(),
+  altura_trem_de_pouso_mm: z.number().positive().optional(),
+  /** Quantos straps de bateria vêm com o frame (0 = nenhum; ausente = não informado). */
+  straps_bateria: z.int().min(0).optional(),
 });
 
 export const motorSpecsSchema = z.object({

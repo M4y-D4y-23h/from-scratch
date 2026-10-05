@@ -48,6 +48,23 @@ export const SRC = {
     url: "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/ArduCopter/ReleaseNotes.txt",
     acessado_em: ACESSO,
   } satisfies Source,
+  ardupilotMotorOrder: {
+    titulo:
+      "ArduPilot (código, commit e204ca7): ordem e sentido dos motores do Quad X (AP_MotorsMatrix)",
+    tipo: "documentacao_oficial",
+    url: "https://github.com/ArduPilot/ardupilot/blob/e204ca77a8012342b52af17beb78adaca598113c/libraries/AP_Motors/AP_MotorsMatrix.cpp",
+    acessado_em: "2026-10-05",
+    observacao:
+      "Quad X: motor 1 frente-direita (anti-horário), 2 trás-esquerda (anti-horário), 3 frente-esquerda (horário), 4 trás-direita (horário).",
+  } satisfies Source,
+  betaflightMotorDirection: {
+    titulo: 'Betaflight: aba Motors e motores invertidos (padrão "props in")',
+    tipo: "documentacao_oficial",
+    url: "https://github.com/betaflight/betaflight.com/blob/57c42a8c5c3b20be04cb8ef43a352cf82e6cdb4a/docs/wiki/guides/current/Reversed-motor-direction.md",
+    acessado_em: "2026-10-05",
+    observacao:
+      "Quad X: motor 1 trás-direita, 2 frente-direita, 3 trás-esquerda, 4 frente-esquerda. Padrão (props in): frente-esquerda horário, frente-direita anti-horário.",
+  } satisfies Source,
   betaflightConfigs: {
     titulo: "Betaflight: configurações oficiais das placas (repositório betaflight/config)",
     tipo: "documentacao_oficial",

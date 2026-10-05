@@ -36,11 +36,11 @@
         "titulo": "CNHL: 3300mAh 14.8V 4S 30C Lipo Battery with XT60 Plug (especificação oficial)",
         "tipo": "pagina_fabricante",
         "url": "https://chinahobbyline.com/products/cnhl-3300mah-14-8v-4s-30c-lipo-battery-with-xt60-plug",
-        "acessado_em": "2026-10-04"
+        "acessado_em": "2026-10-05"
       }
     ],
     "notas": [
-      "30C contínuo / 60C de pico; carga completa 16,8 V (4,20 V por célula). Corpo de 136 mm; cerca de 361 g (fabricante)."
+      "30C contínuo / 60C de pico; carga completa 16,8 V (4,20 V por célula). 136 x 44 x 30 mm (o fabricante avisa variação de 1 a 5 mm); cerca de 361 g."
     ],
     "notas_seguranca": [
       "Carregue só com carregador balanceador, sobre superfície que não pega fogo, sem sair de perto.",
@@ -54,6 +54,11 @@
       "c_pico": 60,
       "conector": "XT60",
       "quimica": "LiPo"
+    },
+    "dimensoes_mm": {
+      "comprimento": 136,
+      "largura": 44,
+      "altura": 30
     }
   }
 ]
