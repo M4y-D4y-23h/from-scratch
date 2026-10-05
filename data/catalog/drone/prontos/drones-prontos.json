@@ -89,7 +89,8 @@
       "receptor",
       "camera_fpv",
       "vtx",
-      "antena"
+      "antena",
+      "consumivel"
     ],
     "baterias_inclusas": 0,
     "massa_g": 285,

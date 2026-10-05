@@ -286,7 +286,7 @@
       "itens": [
         "Medi a continuidade entre + e − e não há curto.",
         "As hélices NÃO estão nos motores.",
-        "Vou ligar a bateria pela primeira vez através do smoke stopper."
+        "Ainda não vou ligar a bateria: a medição se repete no fim da montagem, antes da primeira ligação."
       ]
     }
   },
@@ -539,6 +539,79 @@
     ]
   },
   {
+    "id": "carregar-bateria",
+    "titulo": "Carregar a bateria pela primeira vez",
+    "objetivo": "Ligar a bateria no carregador balanceador pelo conector de potência (XT60) E pelo conector de balanceamento (o pequeno, branco), escolher LiPo, 4S (14,8 V) e uma corrente de 1C (3,3 A para a de 3300 mAh), e carregar dentro da bolsa anti-chamas, sobre superfície que não pega fogo, sem sair de perto.",
+    "por_que_importa": "Química errada (LiHV numa LiPo), número de células errado ou carga sem o balanceamento sobrecarregam uma célula: é assim que LiPo estufa e pega fogo. 1C (a capacidade em Ah, em ampères) é a escolha conservadora do From Scratch: carregar mais rápido esquenta e desgasta a bateria.",
+    "pecas": ["bateria"],
+    "ferramentas": ["carregador-balanceador", "bolsa-anti-chamas", "lipo-checker"],
+    "tempo_min": [60, 90],
+    "dominios": {
+      "potencia_lipo": 2
+    },
+    "riscos": ["Bateria carregada no modo errado ou sem ninguém olhando pode pegar fogo."],
+    "como_saber_que_deu_certo": [
+      "O carregador terminou sozinho e mostra 4,20 V em cada célula (16,8 V no total).",
+      "A bateria não esquentou nem estufou."
+    ],
+    "erros_comuns": [
+      "Escolher LiHV ou o número errado de células no carregador.",
+      "Esquecer o conector de balanceamento (o carregador acusa erro ou carrega sem equilibrar as células)."
+    ],
+    "local": "em_casa",
+    "alertas": ["lipo"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "CNHL: 3300 mAh 4S 30C (carga completa 16,8 V)",
+        "tipo": "pagina_fabricante",
+        "url": "https://chinahobbyline.com/products/cnhl-3300mah-14-8v-4s-30c-lipo-battery-with-xt60-plug",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "checkpoint": {
+      "bloqueante": true,
+      "itens": [
+        "Conferi duas vezes: LiPo e 4S no carregador.",
+        "O conector de balanceamento está ligado.",
+        "A bateria está na bolsa anti-chamas, longe de coisas que pegam fogo, e eu fico por perto até terminar."
+      ]
+    }
+  },
+  {
+    "id": "primeiro-power-on",
+    "titulo": "Primeira ligação com bateria, sem hélices",
+    "objetivo": "Com tudo ligado (receptor, GPS, câmera e transmissor de vídeo), medir de novo a continuidade entre + e − no XT60 da bateria. Depois, sem hélices, ligar a bateria através do smoke stopper e observar: os LEDs da controladora, do GPS e do receptor acendem, os ESCs apitam e nada esquenta ou cheira a queimado. Desligar em seguida.",
+    "por_que_importa": "As soldas do receptor e do vídeo foram feitas depois do primeiro teste de curto. Se houver curto, o smoke stopper limita a corrente e salva as placas.",
+    "pecas": ["modulo_energia", "bateria"],
+    "ferramentas": ["multimetro", "smoke-stopper", "lipo-checker"],
+    "tempo_min": [10, 20],
+    "dominios": {
+      "potencia_lipo": 2
+    },
+    "riscos": ["Curto-circuito pode queimar placas ou causar fogo."],
+    "como_saber_que_deu_certo": [
+      "O multímetro não apita entre + e − (um bipe curto que some é normal por causa dos capacitores).",
+      "Os LEDs acendem e os ESCs tocam os bipes de inicialização.",
+      "Nenhuma peça esquenta em 1 minuto."
+    ],
+    "erros_comuns": [],
+    "local": "em_casa",
+    "alertas": ["primeiro-power-on", "helices", "lipo", "vtx-sem-antena"],
+    "variaveis": [],
+    "fontes": [],
+    "checkpoint": {
+      "bloqueante": true,
+      "itens": [
+        "As hélices NÃO estão nos motores.",
+        "Medi de novo + e − no XT60 com tudo ligado e não há curto.",
+        "A antena de vídeo está rosqueada no transmissor.",
+        "Vou ligar pelo smoke stopper e desconectar se sair fumaça ou algo esquentar.",
+        "A bateria está carregada e sem estufar."
+      ]
+    }
+  },
+  {
     "id": "instalar-qgc",
     "titulo": "Instalar o QGroundControl",
     "objetivo": "Instalar o QGroundControl no computador (Windows) e no celular Android.",
@@ -717,7 +790,7 @@
     "objetivo": "Fazer a calibração 'todos de uma vez' dos ESCs, SEM hélices, para todos os motores começarem a girar no mesmo ponto do acelerador.",
     "por_que_importa": "ESCs descalibrados giram cada motor de um jeito, e o drone fica instável.",
     "pecas": ["esc", "bateria"],
-    "ferramentas": ["smoke-stopper"],
+    "ferramentas": [],
     "tempo_min": [15, 30],
     "dominios": {
       "firmware_config": 2,
@@ -748,7 +821,7 @@
   {
     "id": "bind-radio",
     "titulo": "Parear o rádio com o receptor",
-    "objetivo": "Gravar a mesma frase de pareamento (bind phrase) no rádio e no receptor ELRS e conferir que conectam.",
+    "objetivo": "Atualizar o rádio e o receptor para a mesma versão do ExpressLRS (3.5.0 ou mais nova, exigida pelo modo MAVLink da telemetria no celular), gravar a mesma frase de pareamento (bind phrase) nos dois e conferir que conectam.",
     "por_que_importa": "Sem o pareamento o drone não recebe nenhum comando.",
     "pecas": ["radio_tx", "receptor"],
     "ferramentas": [],
@@ -760,7 +833,7 @@
     "como_saber_que_deu_certo": [
       "O LED do receptor fica aceso fixo com o rádio ligado e o rádio mostra a conexão."
     ],
-    "erros_comuns": [],
+    "erros_comuns": ["Versões diferentes do ExpressLRS no rádio e no receptor: eles não pareiam."],
     "local": "em_casa",
     "alertas": [],
     "variaveis": [],
@@ -782,7 +855,7 @@
   {
     "id": "modo-mavlink-elrs",
     "titulo": "Ativar o modo MAVLink do ELRS (telemetria no celular)",
-    "objetivo": "No script Lua do ELRS, trocar o Link Mode para MAVLink e ligar o Wi-Fi do Backpack para telemetria; conferir SERIAL1 em MAVLink a 460800 baud.",
+    "objetivo": "Com rádio e receptor no ExpressLRS 3.5.0 ou mais novo e o TX Backpack do rádio no 1.5.0 ou mais novo, trocar o Link Mode para MAVLink no script Lua do ELRS e ligar o Wi-Fi do Backpack para telemetria; conferir SERIAL1 em MAVLink a 460800 baud.",
     "por_que_importa": "Assim o mapa, a bateria e o botão de retorno chegam ao celular pelo próprio rádio, em todo o alcance do voo.",
     "pecas": ["radio_tx", "receptor"],
     "ferramentas": [],
@@ -797,7 +870,9 @@
     ],
     "erros_comuns": [
       "Ligar o Wi-Fi do Backpack pelo menu de atualização (vira modo de firmware, não telemetria).",
-      "Usar 115 no SERIAL1_BAUD (vale 460)."
+      "Usar 115 no SERIAL1_BAUD (vale 460).",
+      "Firmware antigo no rádio, no receptor ou no Backpack: a opção MAVLink não aparece ou o celular não recebe a telemetria.",
+      "Taxas de telemetria altas demais para o link: o mapa e a lista de parâmetros demoram ou falham. A documentação do ELRS manda baixar as taxas da porta do receptor (no ArduCopter 4.7, os parâmetros MAVn_*); o perfil do From Scratch ainda não traz esses valores."
     ],
     "local": "em_casa",
     "alertas": [],

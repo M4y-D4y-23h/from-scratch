@@ -272,6 +272,46 @@
     "fontes": []
   },
   {
+    "id": "soldar-capacitor",
+    "titulo": "Soldar o capacitor na entrada de energia da ESC",
+    "objetivo": "Soldar o capacitor nos pads de bateria da ESC, junto do XT60: a perna do lado da faixa (−) no negativo e a outra no positivo, com as pernas curtas e isoladas com termo-retrátil. Prender o corpo do capacitor no frame, longe das hélices.",
+    "por_que_importa": "Os motores geram picos de tensão na linha da bateria. O capacitor segura esses picos, que podem queimar a ESC e sujar o vídeo e o giroscópio. A caixa da stack não traz um.",
+    "pecas": ["consumivel", "stack"],
+    "ferramentas": [
+      "ferro-de-solda",
+      "estanho",
+      "fluxo-de-solda",
+      "termo-retratil",
+      "alicate-corte-desencapador",
+      "oculos-protecao",
+      "kit-fixacao"
+    ],
+    "tempo_min": [15, 30],
+    "dominios": {
+      "eletronica_solda": 2
+    },
+    "riscos": ["Capacitor eletrolítico ligado ao contrário esquenta e pode estourar."],
+    "como_saber_que_deu_certo": [
+      "A faixa do capacitor (−) está no pad negativo, conferido duas vezes.",
+      "O capacitor está preso e não balança."
+    ],
+    "erros_comuns": [
+      "Inverter a polaridade.",
+      "Deixar o capacitor solto: as pernas quebram com a vibração."
+    ],
+    "local": "em_casa",
+    "alertas": ["solda"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "Betaflight: FAQ (ruído elétrico: capacitor de baixa ESR de valor alto, \"1000 µF parece comum\")",
+        "tipo": "documentacao_oficial",
+        "url": "https://github.com/betaflight/betaflight.com/blob/57c42a8c5c3b20be04cb8ef43a352cf82e6cdb4a/docs/wiki/guides/current/FAQ.md",
+        "acessado_em": "2026-10-05"
+      }
+    ]
+  },
+  {
     "id": "teste-curto",
     "titulo": "Procurar curto com o multímetro",
     "objetivo": "Com o multímetro em continuidade, encostar as pontas no + e no − do XT60: não pode apitar. Conferir também entre cada fio de motor e o −.",
@@ -430,12 +470,52 @@
     "fontes": []
   },
   {
+    "id": "carregar-bateria",
+    "titulo": "Carregar a bateria pela primeira vez",
+    "objetivo": "Ligar a bateria no carregador balanceador pelo conector de potência (XT60) E pelo conector de balanceamento (o pequeno, branco), escolher LiPo, 6S (22,2 V) e uma corrente de 1C (1,5 A para a de 1500 mAh), e carregar dentro da bolsa anti-chamas, sobre superfície que não pega fogo, sem sair de perto.",
+    "por_que_importa": "Química errada (LiHV numa LiPo), número de células errado ou carga sem o balanceamento sobrecarregam uma célula: é assim que LiPo estufa e pega fogo. 1C (a capacidade em Ah, em ampères) é a escolha conservadora do From Scratch: carregar mais rápido esquenta e desgasta a bateria.",
+    "pecas": ["bateria"],
+    "ferramentas": ["carregador-balanceador", "bolsa-anti-chamas", "lipo-checker"],
+    "tempo_min": [60, 90],
+    "dominios": {
+      "potencia_lipo": 2
+    },
+    "riscos": ["Bateria carregada no modo errado ou sem ninguém olhando pode pegar fogo."],
+    "como_saber_que_deu_certo": [
+      "O carregador terminou sozinho e mostra 4,20 V em cada célula (25,2 V no total).",
+      "A bateria não esquentou nem estufou."
+    ],
+    "erros_comuns": [
+      "Escolher LiHV ou o número errado de células no carregador.",
+      "Esquecer o conector de balanceamento (o carregador acusa erro ou carrega sem equilibrar as células)."
+    ],
+    "local": "em_casa",
+    "alertas": ["lipo"],
+    "variaveis": [],
+    "fontes": [
+      {
+        "titulo": "CNHL: MiniStar 1500 mAh 6S 120C (carga completa 25,2 V; carga máxima 5C)",
+        "tipo": "pagina_fabricante",
+        "url": "https://chinahobbyline.com/products/cnhl-ministar-series-1500mah-22-2v-6s-120c-lipo-battery-with-xt60-plug",
+        "acessado_em": "2026-10-04"
+      }
+    ],
+    "checkpoint": {
+      "bloqueante": true,
+      "itens": [
+        "Conferi duas vezes: LiPo e 6S no carregador.",
+        "O conector de balanceamento está ligado.",
+        "A bateria está na bolsa anti-chamas, longe de coisas que pegam fogo, e eu fico por perto até terminar."
+      ]
+    }
+  },
+  {
     "id": "primeiro-power-on",
     "titulo": "Primeira ligação, sem hélices",
-    "objetivo": "Sem hélices, ligar a bateria através do smoke stopper e observar: LEDs acendem, os motores apitam a melodia de inicialização e nada esquenta ou cheira a queimado.",
+    "objetivo": "Medir de novo a continuidade entre + e − no XT60 (as soldas do receptor e do vídeo vieram depois do primeiro teste). Depois, sem hélices, ligar a bateria através do smoke stopper e observar: LEDs acendem, os motores apitam a melodia de inicialização e nada esquenta ou cheira a queimado.",
     "por_que_importa": "Se houver curto, o smoke stopper limita a corrente e salva as placas.",
     "pecas": ["stack", "bateria"],
-    "ferramentas": ["smoke-stopper", "lipo-checker"],
+    "ferramentas": ["multimetro", "smoke-stopper", "lipo-checker"],
     "tempo_min": [10, 20],
     "dominios": {
       "potencia_lipo": 2
@@ -454,6 +534,7 @@
       "bloqueante": true,
       "itens": [
         "As hélices NÃO estão instaladas.",
+        "Medi de novo + e − no XT60 depois de soldar receptor, câmera e vídeo, e não há curto.",
         "Vou ligar pelo smoke stopper e desconectar se sair fumaça.",
         "A bateria está carregada e sem estufar."
       ]
@@ -795,7 +876,7 @@
     "id": "teste-failsafe-bancada",
     "titulo": "Testar o failsafe na bancada (sem hélices)",
     "objetivo": "Sem hélices, armar, subir um pouco o acelerador e desligar o rádio: em cerca de 1,5 s os motores devem parar e o OSD mostrar o aviso de failsafe.",
-    "por_que_importa": "Se o failsafe não funcionar, um drone sem sinal continua voando sem controle.",
+    "por_que_importa": "Se o failsafe não funcionar, um drone sem sinal continua voando sem controle. No Betaflight o failsafe para os motores: o drone cai onde estiver. Por isso, nunca voe sobre pessoas, carros ou casas.",
     "pecas": ["radio_tx", "stack", "motor"],
     "ferramentas": [],
     "tempo_min": [20, 40],

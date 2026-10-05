@@ -49,6 +49,12 @@
       "obrigatorio": true
     },
     {
+      "slot": "capacitor",
+      "categorias": ["consumivel"],
+      "quantidade": 1,
+      "obrigatorio": true
+    },
+    {
       "slot": "receptor",
       "categorias": ["receptor"],
       "quantidade": 1,

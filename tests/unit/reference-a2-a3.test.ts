@@ -152,11 +152,12 @@ describe('Arquétipo 2 (FPV 5"): builds de referência com o catálogo real', ()
     );
   });
 
-  it("custos: tudo com preço, exceto o rabicho XT60 (genérico) e o EPI sem preço pesquisado", () => {
+  it("custos: tudo com preço, exceto os genéricos (XT60, capacitor) e o EPI sem preço pesquisado", () => {
     for (const plano of result.faixas) {
       expect(plano.custos.sem_preco.sort()).toEqual(
         [
           "Extintor de incêndio",
+          "Genérico Capacitor eletrolítico de baixa ESR, ~1000 µF, 35 V ou mais",
           "Genérico Rabicho XT60 macho com fio de silicone 12 AWG (≈ 10 cm)",
           "Kit de primeiros socorros",
           "Toalha grande",
