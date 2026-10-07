@@ -68,7 +68,9 @@ diferente, o próprio pnpm baixa e usa a versão certa automaticamente.
 
 ### 5. Baixe o projeto
 
-Prefira uma pasta com caminho curto (o Windows tem limite de tamanho de caminho):
+Use uma pasta com caminho curto (o Windows tem limite de tamanho de caminho) num disco **NTFS**,
+como o `C:`. Pendrive, HD externo ou cartão formatados em FAT32 ou exFAT, e unidades de rede ou de
+nuvem, não servem: o `pnpm install` precisa criar atalhos de pasta que esses discos não aceitam.
 
 ```powershell
 git clone https://github.com/M4y-D4y-23h/from-scratch.git C:\dev\from-scratch
@@ -193,6 +195,10 @@ recusa scripts com sintaxe só de bash).
 - **Playwright reclama que falta o navegador**: rode `pnpm test:e2e:install`.
 - **"Cannot find module ...\node_modules\next\..."**: as dependências não foram instaladas nessa
   pasta. Rode `pnpm install` no terminal do VS Code (o F5 já faz isso antes de subir o app).
+- **`ERR_PNPM_EISDIR ... symlink` no `pnpm install`**: o projeto está num disco que não aceita os
+  atalhos de pasta do pnpm (FAT32 ou exFAT, comum em pendrive e HD externo, ou unidade de rede ou
+  de nuvem). Confira com `(Get-Volume -DriveLetter F).FileSystem` (troque o `F` pela letra do
+  disco) e clone o projeto num disco NTFS, como em `C:\dev\from-scratch` (passo 5).
 - **Não abre pelo celular na mesma rede**: é de propósito; o app só atende o próprio computador.
 - **"Não consegui gravar ... (EPERM)" no /catalogo**: o arquivo está aberto ou preso por outro
   programa (antivírus, editor). Feche-o e salve de novo; o catálogo não foi alterado.
