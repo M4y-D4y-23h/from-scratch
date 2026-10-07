@@ -17,9 +17,9 @@ decisões importantes de forma breve. Ele autorizou corrigir a SPEC quando ela e
 
 ## Estado atual
 
-- **Fases 0 a 4: concluídas** (o dono liberou a Fase 5 em 2026-10-08; os evals com o Claude ainda
+- **Fases 0 a 4: concluídas** (o dono liberou a Fase 5 em 2026-10-07; os evals com o Claude ainda
   dependem de ele rodar `pnpm evals` com a chave). **Fase 5 (guia de montagem, SPEC B.13):
-  concluída em 2026-10-08, aguardando a revisão do dono** (resumo, decisões pendentes e revisão
+  concluída em 2026-10-07, aguardando a revisão do dono** (resumo, decisões pendentes e revisão
   adversarial em `docs/PROGRESS.md`). Próxima: **Fase 6 (tutor + imagens, SPEC B.14 e B.15)**, só
   depois da revisão.
 - Páginas: `/` (campo do pedido, drones de referência e projetos), `/novo` (pedido → perguntas →

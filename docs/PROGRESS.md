@@ -495,7 +495,7 @@ cada slot ("rotulo" nos arquétipos), que agora aparecem na lista de peças.
 - **Catálogo com abas:** Peças, Drones prontos, Ferramentas e EPI e Tabelas de empuxo, com filtros
   que respondem enquanto você digita.
 
-## Fase 4: Pipeline com LLM (concluída em 2026-10-07; o dono liberou a Fase 5 em 2026-10-08)
+## Fase 4: Pipeline com LLM (concluída em 2026-10-07; o dono liberou a Fase 5 em 2026-10-07)
 
 **Aceite (SPEC B.18):** "B.10 completo, com perguntas clicáveis e 2–3 opções; evals 1–12 passam
 nos critérios."
@@ -628,7 +628,7 @@ Roteiro no navegador:
 como antes, os preços dos itens sem preço. As faixas de orçamento das perguntas foram escolhidas
 pelos preços atuais do catálogo.
 
-## Fase 5: Guia de montagem (concluída em 2026-10-08, aguardando revisão)
+## Fase 5: Guia de montagem (concluída em 2026-10-07, aguardando revisão)
 
 **Aceite (SPEC B.18):** "percorro um projeto do passo 1 ao final, com o progresso salvo".
 **Atendido:** `tests/e2e/guide.spec.ts` começa a montar o Tiny Whoop a partir do drone de

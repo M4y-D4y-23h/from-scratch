@@ -856,7 +856,7 @@ Datas no formato AAAA-MM-DD. "Verificado em" indica quando a informação extern
 
 ## ADR-0028: guia de montagem (checkpoints como portões e progresso por projeto)
 
-- **Data:** 2026-10-08 · **Status:** aceita (Fase 5, SPEC B.13 e B.9)
+- **Data:** 2026-10-07 · **Status:** aceita (Fase 5, SPEC B.13 e B.9)
 - **Contexto:** a SPEC pede o guia passo a passo com checkpoints de segurança bloqueantes antes
   dos passos críticos (primeira ligação, hélices, primeiro voo), destaque no 3D e o progresso
   salvo por projeto. Os passos já estavam no catálogo (26 a 42 por arquétipo, 5 a 10 com
