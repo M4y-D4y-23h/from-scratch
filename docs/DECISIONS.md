@@ -853,3 +853,36 @@ Datas no formato AAAA-MM-DD. "Verificado em" indica quando a informação extern
   o app continua útil, mas lê só pedidos diretos; no modo simples não há a camada 2 de segurança
   (o pré-filtro continua). A explicação personalizada da linguagem dos passos (B.10, passo 7) fica
   para a Fase 5, com o guia de montagem.
+
+## ADR-0028: guia de montagem (checkpoints como portões e progresso por projeto)
+
+- **Data:** 2026-10-08 · **Status:** aceita (Fase 5, SPEC B.13 e B.9)
+- **Contexto:** a SPEC pede o guia passo a passo com checkpoints de segurança bloqueantes antes
+  dos passos críticos (primeira ligação, hélices, primeiro voo), destaque no 3D e o progresso
+  salvo por projeto. Os passos já estavam no catálogo (26 a 42 por arquétipo, 5 a 10 com
+  checklist), com peças, ferramentas, parâmetros, alertas e fontes.
+- **Decisão (regras):**
+  - O checklist de um passo crítico é marcado item por item e **confirmado antes** de fazer o
+    passo; só então o passo pode ser marcado como feito.
+  - Os passos críticos são **portões**: nenhum passo depois de um crítico pendente pode ser
+    marcado como feito. Ler adiante é livre (planejar faz parte), e os outros passos podem ser
+    feitos em qualquer ordem.
+  - Desfazer um passo apaga a confirmação do checklist: refazer um passo crítico pede tudo de novo.
+  - **Trocar uma peça** (ou voltar para uma versão antiga) reabre os passos que usam as categorias
+    de peça que mudaram: a primeira ligação, o sentido dos motores ou o failsafe feitos com a peça
+    antiga não valem para a nova. A mensagem da troca diz quantos passos voltaram.
+  - As regras ficam no domínio (`guide.ts`, puro): o servidor confere antes de gravar e o
+    navegador usa as mesmas funções para montar a tela.
+- **Decisão (dados e tela):**
+  - Progresso por projeto em `progresso_passos` (a tabela já existia), fora das versões: marcar
+    um passo não cria versão. Passos que saem do guia por uma troca ficam guardados, mas não contam.
+  - No drone de referência o guia é só leitura; "Começar a montar" cria o seu projeto (versão 1 =
+    referência) e abre o guia. Uma versão antiga também é só leitura.
+  - O passo aberto fica no endereço (`?passo=`) e as peças dele são destacadas no 3D sem rolar a
+    tela. O marcador da aba (12/25) acompanha na hora (um contexto React compartilhado).
+  - O botão "perguntar ao tutor sobre este passo" aparece desativado até a Fase 6.
+- **Consequências:** o aceite ("percorro um projeto do passo 1 ao final, com o progresso salvo") é
+  um teste no navegador (`tests/e2e/guide.spec.ts`), com recarga no meio. A IA personalizar a
+  linguagem dos passos (B.10, passo 7) fica para a Fase 6, junto do tutor: os textos do catálogo
+  já são para leigos e têm fonte. Marcar os itens do checklist não prova que a pessoa conferiu;
+  ele é um lembrete obrigatório, não uma garantia.

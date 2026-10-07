@@ -25,6 +25,12 @@ export function GuideProgressProvider({
   children: ReactNode;
 }) {
   const [progresso, setProgresso] = useState(inicial);
+  // O servidor mandou um progresso diferente (ex.: trocar uma peça reabriu passos): ele vale.
+  const [doServidor, setDoServidor] = useState(inicial);
+  if (inicial !== doServidor) {
+    setDoServidor(inicial);
+    if (JSON.stringify(inicial) !== JSON.stringify(doServidor)) setProgresso(inicial);
+  }
   const valor = useMemo(() => ({ progresso, setProgresso }), [progresso]);
   return <GuideProgressContext.Provider value={valor}>{children}</GuideProgressContext.Provider>;
 }

@@ -6,9 +6,9 @@ import { loadDroneCatalog } from "@/server/catalog/load";
 import { openDatabase } from "@/server/db/client";
 import { referenceBuild, snapshotFor } from "@/server/project-view/view";
 import { doneCounts, getProgress } from "@/server/projects/progress";
-import { createProject, deleteProject } from "@/server/projects/repository";
+import { createProject, deleteProject, getVersion } from "@/server/projects/repository";
 
-import { applyGuideAction, currentSteps } from "./service";
+import { applyGuideAction, currentSteps, reopenStepsAfterChange } from "./service";
 
 /*
  * O guia gravado no banco (SPEC B.13 e aceite da Fase 5): percorrer um projeto do passo 1 ao
@@ -116,6 +116,38 @@ describe("progresso do guia no banco", () => {
       ok: true,
       progresso: [],
     });
+  });
+
+  it("trocar uma peça reabre os passos que usam aquela peça (e só eles)", () => {
+    const { db, id, passos } = novoProjeto();
+    for (const passo of passos) {
+      if (passo.checkpoint)
+        applyGuideAction(db, loaded, id, {
+          tipo: "confirmar",
+          passo_id: passo.id,
+          marcados: passo.checkpoint.itens,
+        });
+      applyGuideAction(db, loaded, id, { tipo: "feito", passo_id: passo.id });
+    }
+    const pecas = getVersion(db, id)?.pecas ?? [];
+    const motor = pecas.find((c) => c.categoria === "motor");
+    if (!motor) throw new Error("sem motor");
+    // Mesmos dados, outro id: para o guia, é uma peça nova na categoria "motor".
+    const depois = pecas.map((c) => (c.id === motor.id ? { ...c, id: `${c.id}-novo` } : c));
+    const reabertos = reopenStepsAfterChange(db, loaded, id, pecas, depois);
+    const comMotor = passos.filter((p) => p.pecas.includes("motor")).map((p) => p.id);
+    expect(reabertos).toBe(comMotor.length);
+    expect(comMotor).toContain("direcao-motores");
+    const progresso = getProgress(db, id);
+    for (const p of progresso) {
+      expect(p.status, p.passo_id).toBe(comMotor.includes(p.passo_id) ? "pendente" : "feito");
+    }
+    // O checklist do passo reaberto precisa ser confirmado de novo.
+    expect(
+      progresso.find((p) => p.passo_id === "direcao-motores")?.checkpoint_confirmado_em,
+    ).toBeUndefined();
+    // Sem mudança de peça, nada reabre.
+    expect(reopenStepsAfterChange(db, loaded, id, pecas, pecas)).toBe(0);
   });
 
   it("apagar o projeto apaga o progresso", () => {

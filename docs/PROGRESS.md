@@ -495,7 +495,7 @@ cada slot ("rotulo" nos arquétipos), que agora aparecem na lista de peças.
 - **Catálogo com abas:** Peças, Drones prontos, Ferramentas e EPI e Tabelas de empuxo, com filtros
   que respondem enquanto você digita.
 
-## Fase 4: Pipeline com LLM (concluída em 2026-10-07, aguardando revisão)
+## Fase 4: Pipeline com LLM (concluída em 2026-10-07; o dono liberou a Fase 5 em 2026-10-08)
 
 **Aceite (SPEC B.18):** "B.10 completo, com perguntas clicáveis e 2–3 opções; evals 1–12 passam
 nos critérios."
@@ -627,3 +627,108 @@ Roteiro no navegador:
 07/10/2026; confira em anthropic.com/pricing), o câmbio do catálogo (usado no custo em R$) e,
 como antes, os preços dos itens sem preço. As faixas de orçamento das perguntas foram escolhidas
 pelos preços atuais do catálogo.
+
+## Fase 5: Guia de montagem (concluída em 2026-10-08, aguardando revisão)
+
+**Aceite (SPEC B.18):** "percorro um projeto do passo 1 ao final, com o progresso salvo".
+**Atendido:** `tests/e2e/guide.spec.ts` começa a montar o Tiny Whoop a partir do drone de
+referência, confirma os 5 checklists de segurança, marca os 26 passos, recarrega a página no meio
+(o progresso e o passo onde parou continuam lá) e termina com "Guia concluído!". No banco,
+`src/server/guide/service.test.ts` faz o mesmo e confere as recusas.
+
+As decisões pendentes da Fase 4 (rótulo de dificuldade do whoop, esforço da explicação e modo
+simples sem a camada 2) ficaram como estavam, já que o dono liberou a fase seguinte sem pedir
+mudança.
+
+### Feito
+
+- **A aba Montagem é o guia (SPEC B.13):**
+  - progresso (X de N passos, %, tempo que falta) e "Continuar de onde parei";
+  - um passo por vez: objetivo, por que importa, peças deste build (com quantidade), ferramentas,
+    parâmetros do firmware do passo com o valor do projeto, como saber que deu certo, erros
+    comuns, riscos, alertas, nível exigido por área e as fontes;
+  - lista de todos os passos (feito, pendente, checklist, opcional), anterior/próximo e o passo
+    no endereço (`?passo=`), para voltar e compartilhar.
+- **Checkpoints de segurança (SPEC B.9, ADR-0028):** o checklist é marcado item por item e
+  confirmado antes de fazer o passo crítico. Nenhum passo depois de um crítico pendente pode ser
+  marcado, e o passo bloqueado leva até o que falta. Desfazer apaga a confirmação. Tudo é
+  conferido no servidor.
+- **Trocar uma peça reabre os passos que usam aquela peça** (primeira ligação, sentido dos
+  motores, failsafe...), com aviso na mensagem da troca.
+- **3D:** as peças do passo aberto ficam destacadas no modelo, sem rolar a tela; a lista
+  "Destacar as peças do passo" usa a mesma numeração do guia.
+- **Drones de referência:** guia só para leitura e o botão "Começar a montar", que cria o seu
+  projeto e abre o guia. Versões antigas também são só leitura.
+- **Progresso** no marcador da aba (12/25, ao vivo) e na lista de projetos da página inicial.
+- **Botão "Perguntar ao tutor sobre este passo"** desativado, com o aviso de que chega na Fase 6.
+- **Testes:** 476 de unidade (eram 434), incluindo a integridade dos 9 guias com o catálogo real
+  (toda peça, ferramenta, parâmetro e alerta citado existe no projeto) e as regras dos
+  checkpoints; no navegador, 26 (eram 24).
+
+### Como testar
+
+```powershell
+git pull
+pnpm install
+pnpm app        # ou F5; abra http://localhost:3000
+pnpm check
+pnpm test:e2e
+```
+
+Roteiro no navegador:
+
+1. Abra um drone de referência (ex.: Tiny Whoop → Econômica) → aba **Montagem**: o guia aparece
+   só para leitura. Clique em **Começar a montar**.
+2. Vá marcando "Feito, ir para o próximo". No passo 11 ("Primeira ligação, sem hélices") o botão
+   fica desativado até você marcar os 3 itens do checklist e clicar em **Confirmar o checklist**.
+3. Na lista "Todos os passos", abra "Instalar as hélices": ele avisa que falta o passo 11 e
+   leva até ele.
+4. Feche o navegador e abra o projeto de novo (pela página inicial): o progresso e o passo onde
+   você parou continuam lá.
+5. Troque uma peça (ex.: os motores, na aba Peças e Custos): a mensagem diz quantos passos do guia
+   voltaram a pendente.
+
+### Para você decidir
+
+1. **Portões nos passos críticos:** hoje, nenhum passo depois de um crítico pendente pode ser
+   marcado (ler adiante é livre). É rígido de propósito (segurança primeiro). Prefere que só os
+   próprios passos críticos exijam o checklist, sem travar os seguintes?
+2. **A IA personalizar a linguagem dos passos** (SPEC B.10, passo 7): deixei para a Fase 6, junto
+   do tutor. Os textos do catálogo já são para leigos e têm fonte. Concorda?
+
+### Ficou de fora (de propósito)
+
+- Tutor por chat e fotos (Fase 6): o botão do passo está desativado.
+- Personalizar a linguagem dos passos com a IA (veja acima).
+- Anotações e fotos por passo, e o "quanto tempo levei" de cada um.
+- Animação de montagem no 3D (o destaque mostra as peças, não o movimento).
+
+### Problemas conhecidos
+
+- Marcar os itens do checklist não prova que a pessoa conferiu: é um lembrete obrigatório.
+- Passo que sai do guia por uma troca de peça (ex.: telemetria por Wi-Fi) mantém o progresso
+  guardado, mas não conta; se a peça voltar, o passo volta como estava.
+- No `pnpm dev`, cada clique leva de 0,2 a 1 s (o servidor recalcula o guia do projeto para
+  conferir as regras); na versão rápida é bem menos.
+
+### Revisão adversarial da Fase 5 (SPEC B.19.7)
+
+- _O que machucaria um leigo?_
+  - **Corrigido:** terminar o guia e depois trocar a FC ou os motores deixava "feitos" a primeira
+    ligação, o sentido dos motores e o failsafe, feitos com as peças antigas. Agora esses passos
+    voltam a pendente, com o checklist para confirmar de novo.
+  - Os passos críticos não podem ser pulados (portões, conferidos no servidor, mesmo chamando a
+    ação direto); desfazer apaga a confirmação; os alertas de cada passo aparecem nele, com as
+    fontes; o primeiro passo do whoop e do FPV é treinar no simulador.
+- _O que faria o drone não voar?_ O guia não muda o projeto: os parâmetros do firmware mostrados
+  em cada passo são os do perfil versionado, com os valores calculados para as peças do projeto.
+  O teste de integridade garante que todo parâmetro citado num passo tem valor.
+- _O que estouraria o orçamento?_ Nada novo: o guia não tem custo; as ferramentas de cada passo
+  são as da lista do projeto (com "já tenho").
+- _Segurança do app:_ ações só do próprio computador, com zod (id do projeto UUID, id do passo
+  no formato do catálogo, no máximo 30 itens de checklist); as regras são conferidas no servidor
+  com os passos da versão atual.
+
+**Dados do catálogo para você verificar:** os textos dos passos e dos checklists dos três
+arquétipos (`data/catalog/drone/passos/`), principalmente os passos críticos, que agora são
+portões no guia; e, como antes, os preços dos itens sem preço.

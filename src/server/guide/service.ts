@@ -2,14 +2,16 @@ import {
   canConfirmCheckpoint,
   canMarkDone,
   type StepProgress,
+  stepsUsingCategories,
 } from "@/domain/categories/drone/guide";
-import type { BuildStepTemplate } from "@/domain/categories/drone/schema";
+import type { BuildStepTemplate, Component } from "@/domain/categories/drone/schema";
 import type { LoadedCatalog } from "@/server/catalog/load";
 import type { Db } from "@/server/db";
 import { savedProjectView } from "@/server/project-view/view";
 import {
   confirmCheckpoint,
   getProgress,
+  reopenSteps,
   resetProgress,
   setStepStatus,
 } from "@/server/projects/progress";
@@ -92,4 +94,29 @@ export function applyGuideAction(
       break;
   }
   return { ok: true, progresso: getProgress(db, projetoId) };
+}
+
+/**
+ * Depois de uma versão nova (troca de peça, voltar para uma versão antiga): os passos que usam
+ * uma peça que mudou voltam a pendente. Devolve quantos voltaram.
+ */
+export function reopenStepsAfterChange(
+  db: Db,
+  loaded: LoadedCatalog,
+  projetoId: string,
+  antes: readonly Component[],
+  depois: readonly Component[],
+): number {
+  const idsAntes = new Set(antes.map((c) => c.id));
+  const idsDepois = new Set(depois.map((c) => c.id));
+  const mudaram = new Set(
+    [
+      ...antes.filter((c) => !idsDepois.has(c.id)),
+      ...depois.filter((c) => !idsAntes.has(c.id)),
+    ].map((c) => c.categoria as string),
+  );
+  if (mudaram.size === 0) return 0;
+  const passos = currentSteps(db, loaded, projetoId);
+  if ("erro" in passos) return 0;
+  return reopenSteps(db, projetoId, stepsUsingCategories(passos, mudaram));
 }

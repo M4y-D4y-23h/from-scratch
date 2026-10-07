@@ -192,3 +192,15 @@ export function canMarkDone(
   }
   return { ok: true };
 }
+
+/**
+ * Passos que usam alguma destas categorias de peça. Depois de trocar uma peça, eles voltam a
+ * pendente: a primeira ligação, o sentido dos motores ou o failsafe feitos com a peça antiga não
+ * valem para a nova (segurança primeiro).
+ */
+export function stepsUsingCategories(
+  passos: readonly BuildStepTemplate[],
+  categorias: ReadonlySet<string>,
+): string[] {
+  return passos.filter((p) => p.pecas.some((c) => categorias.has(c))).map((p) => p.id);
+}

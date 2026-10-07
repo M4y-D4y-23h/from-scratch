@@ -17,15 +17,15 @@ decisões importantes de forma breve. Ele autorizou corrigir a SPEC quando ela e
 
 ## Estado atual
 
-- **Fases 0 a 3: concluídas.** **Fase 4 (pipeline com LLM, SPEC B.10): concluída em 2026-10-07,
-  aguardando a revisão do dono** (resumo, decisões pendentes e revisão adversarial em
-  `docs/PROGRESS.md`). Os 13 evals passam no modo simples; com o Claude, falta o dono rodar
-  `pnpm evals` com a chave dele. Próxima: **Fase 5 (guia de montagem, SPEC B.13)**, só depois da
-  revisão.
+- **Fases 0 a 4: concluídas** (o dono liberou a Fase 5 em 2026-10-08; os evals com o Claude ainda
+  dependem de ele rodar `pnpm evals` com a chave). **Fase 5 (guia de montagem, SPEC B.13):
+  concluída em 2026-10-08, aguardando a revisão do dono** (resumo, decisões pendentes e revisão
+  adversarial em `docs/PROGRESS.md`). Próxima: **Fase 6 (tutor + imagens, SPEC B.14 e B.15)**, só
+  depois da revisão.
 - Páginas: `/` (campo do pedido, drones de referência e projetos), `/novo` (pedido → perguntas →
-  opções → projeto), `/referencia/[arquetipo]/[faixa]` e
-  `/projetos/[id]` (resumo, 3D e as 6 abas; `?aba=`), `/catalogo` (+ `/catalogo/[tipo]/[id]` e
-  `/catalogo/importacao`) e `/glossario`. `/3d/...` redireciona para `/referencia/...`.
+  opções → projeto), `/referencia/[arquetipo]/[faixa]` e `/projetos/[id]` (resumo, 3D e as 6 abas;
+  `?aba=` e `?passo=`), `/catalogo` (+ `/catalogo/[tipo]/[id]` e `/catalogo/importacao`) e
+  `/glossario`. `/3d/...` redireciona para `/referencia/...`.
 - Projeto = escolha (slot → peça) guardada em versões no SQLite; kits e itens "fornecido_por" são
   recalculados (`swap.ts`, ADR-0024). Toda troca é revalidada no servidor; troca que deixa falha
   bloqueante é recusada.
@@ -34,6 +34,11 @@ decisões importantes de forma breve. Ele autorizou corrigir a SPEC quando ela e
   `src/server/pipeline/run.ts` (orquestra; memória das leituras da IA) + `src/server/llm/`
   (cliente, prompts, schemas, config). A IA só lê o pedido e explica a escolha (sem algarismos);
   sem chave ou com `FROM_SCRATCH_LLM=simples`, modo simples. Ações em `server/actions/pedido.ts`.
+- Guia de montagem (ADR-0028): `domain/categories/drone/guide.ts` (passos do projeto, estado e
+  regras: checklist confirmado antes do passo crítico; crítico pendente é portão para os
+  seguintes; trocar peça reabre os passos daquela categoria) + `server/projects/progress.ts`
+  (tabela `progresso_passos`, fora das versões) + `server/guide/service.ts` (confere e grava) +
+  aba Montagem (`components/project/guide/`). Referência e versão antiga: só leitura.
 - /catalogo grava nos JSON de `data/catalog/drone/` (validação do catálogo inteiro, escrita
   atômica, formato do Prettier; ADR-0025). Server actions que gravam chamam `assertLocalRequest`
   (só Host local) e validam a entrada com zod. `pnpm dev`/`start` escutam só em 127.0.0.1.
@@ -124,9 +129,11 @@ docs/                 SPEC (íntegra, não formatar), DECISIONS, PROGRESS, GLOSS
 data/catalog/drone/   catálogo curado versionado (Fase 1)
 src/domain/core/      tipos genéricos (Fase 1)
 src/domain/categories/drone/  schema, compatibilidade, cálculos, solver, dificuldade, custos,
-                      locais, segurança, cena 3D, lista de peças, troca (Fases 1-3)
+                      locais, segurança, cena 3D, lista de peças, troca (Fases 1-3), pipeline
+                      do pedido (4), guia de montagem (5)
 src/server/           db, catalog (leitura e gravação), projects, project-view, actions,
-                      security (Fases 1-3); llm, pipeline (Fase 4); tutor, uploads, budget (5-7)
+                      security (Fases 1-3); llm, pipeline (4); guide (5); tutor, uploads,
+                      budget (6-7)
 src/app/              rotas Next (páginas + API)
 src/components/       UI; ui/ = shadcn/ui (copiados do registro oficial, ADR-0004)
 tests/unit/           Vitest · tests/e2e/ Playwright · tests/evals/ (casos da B.17, Fase 4)

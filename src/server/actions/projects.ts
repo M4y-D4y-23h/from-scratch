@@ -15,6 +15,7 @@ import {
 import type { Archetype, Component } from "@/domain/categories/drone/schema";
 import { loadDroneCatalog, type LoadedCatalog } from "@/server/catalog/load";
 import { getDb } from "@/server/db";
+import { reopenStepsAfterChange } from "@/server/guide/service";
 import { referenceBuild, snapshotFor, TIER_LABEL } from "@/server/project-view/view";
 import {
   addVersion,
@@ -225,8 +226,23 @@ export async function swapOnProjectAction(
     catalogo_hash: loaded.hash,
     snapshot: trocado.snapshot,
   });
+  // Passos do guia feitos com a peça antiga voltam a pendente (segurança primeiro).
+  const reabertos = reopenStepsAfterChange(
+    db,
+    loaded,
+    projetoId,
+    atual.pecas,
+    trocado.snapshot.pecas,
+  );
   refresh();
-  return { ok: true, mensagem: `Versão ${numero} salva. Tudo foi recalculado com a peça nova.` };
+  return {
+    ok: true,
+    mensagem:
+      `Versão ${numero} salva. Tudo foi recalculado com a peça nova.` +
+      (reabertos > 0
+        ? ` ${reabertos} ${reabertos === 1 ? "passo do guia voltou" : "passos do guia voltaram"} a pendente, porque ${reabertos === 1 ? "usa" : "usam"} a peça trocada: refaça com a peça nova.`
+        : ""),
+  };
 }
 
 /** Volta para uma versão antiga criando uma versão nova igual a ela (o histórico não se perde). */
@@ -243,11 +259,13 @@ export async function restoreVersionAction(
   const loaded = loadDroneCatalog();
   const calculado = snapshotFor(antiga.escolha, { loaded, ferramentasQueTenho: ownedTools(db) });
   if ("erro" in calculado) return { ok: false, erro: calculado.erro };
+  const antes = getVersion(db, projetoId)?.pecas ?? [];
   addVersion(db, projetoId, {
     motivo: `Voltou para a versão ${numero}`,
     catalogo_hash: loaded.hash,
     snapshot: calculado.snapshot,
   });
+  reopenStepsAfterChange(db, loaded, projetoId, antes, calculado.snapshot.pecas);
   redirect(`/projetos/${projetoId}`);
 }
 

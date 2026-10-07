@@ -12,10 +12,11 @@ com tutor. Na v1, só **drones multirrotores**.
 - Decisões técnicas (e o porquê): [`docs/DECISIONS.md`](docs/DECISIONS.md)
 - Andamento por fase: [`docs/PROGRESS.md`](docs/PROGRESS.md)
 
-**Status:** Fases 0 a 4 concluídas. Você descreve o drone com as suas palavras e recebe até três
+**Status:** Fases 0 a 5 concluídas. Você descreve o drone com as suas palavras e recebe até três
 opções com peças reais (ou a explicação, com números, de por que não dá). Cada projeto abre com 3D
 em escala, custos, dificuldade, onde fazer, segurança e cálculos, e dá para trocar peças com tudo
-recalculado, com versões. O guia de montagem interativo é a Fase 5; o tutor, a Fase 6.
+recalculado, com versões. O guia de montagem leva do passo 1 ao primeiro voo, com os checklists de
+segurança e o progresso salvo. O tutor por chat é a Fase 6.
 
 ---
 
@@ -167,6 +168,11 @@ mexem nos seus arquivos nem nos seus projetos, e podem rodar com o `pnpm dev` ab
   cabem no seu orçamento, com os alertas e o que foi assumido. Se não der (20 kg de carga, 1 hora
   de voo...), ele explica com os números e mostra o mais perto disso. Escolher uma opção cria o
   seu projeto.
+- **Guia de montagem (aba Montagem):** um passo por vez, com as peças e ferramentas do seu
+  projeto, os parâmetros do firmware, como saber que deu certo e os erros comuns. Antes dos passos
+  críticos (primeira ligação, hélices, primeiro voo) há um checklist de segurança que precisa ser
+  confirmado para avançar. O progresso fica salvo no projeto e as peças do passo aparecem
+  destacadas no 3D. Num drone de referência, clique em "Começar a montar".
 - **Página inicial:** os três drones de referência (GPS para filmar, FPV 5" e Tiny Whoop), cada um
   em três faixas de preço, e os seus projetos.
 - **Página do drone:** resumo, 3D em escala real e as abas Peças e Custos, Dificuldade, Onde fazer,

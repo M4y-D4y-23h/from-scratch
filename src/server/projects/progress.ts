@@ -91,3 +91,21 @@ export function doneCounts(db: Db): Map<string, number> {
     .all();
   return new Map(linhas.map((l) => [l.projeto_id, Number(l.feitos)]));
 }
+
+/**
+ * Volta para pendente (e apaga a confirmação do checklist) os passos já feitos ou confirmados
+ * desta lista. Devolve quantos voltaram.
+ */
+export function reopenSteps(
+  db: Db,
+  projetoId: string,
+  passoIds: readonly string[],
+  agora = new Date(),
+): number {
+  const alvo = new Set(passoIds);
+  const afetados = getProgress(db, projetoId).filter(
+    (p) => alvo.has(p.passo_id) && (p.status === "feito" || p.checkpoint_confirmado_em),
+  );
+  for (const p of afetados) setStepStatus(db, projetoId, p.passo_id, "pendente", agora);
+  return afetados.length;
+}
