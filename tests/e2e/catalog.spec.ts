@@ -10,16 +10,34 @@ test.describe.configure({ mode: "serial", timeout: 180_000 });
 
 const RABICHO = "/catalogo/componente/conector-xt60-rabicho";
 
-test("lista e filtra o catálogo", async ({ page }) => {
-  await page.goto("/catalogo");
+test("abas do catálogo e filtros que respondem na hora", async ({ page }, testInfo) => {
+  await page.goto("/catalogo", { waitUntil: "networkidle" });
   await expect(page.getByRole("heading", { level: 1, name: "Catálogo" })).toBeVisible();
+  await expect(page.getByRole("tab", { name: /Peças/ })).toHaveAttribute("aria-selected", "true");
   await expect(page.getByRole("status")).toHaveText("45 de 45");
+  const png = await page.screenshot({ path: testInfo.outputPath("catalogo.png") });
+  await testInfo.attach("catalogo", { body: png, contentType: "image/png" });
+  // A busca filtra enquanto digita, sem botão nem recarregar a página.
   await page.getByLabel("Buscar").fill("pixhawk");
-  await page.getByRole("button", { name: "Filtrar" }).click();
   await expect(page.getByRole("status")).toHaveText("3 de 45");
   await expect(page.getByRole("rowheader", { name: /Pixhawk 6C Mini/ })).toBeVisible();
-  await page.getByRole("link", { name: /Tabelas de empuxo/ }).click();
+  await expect(page).toHaveURL(/q=pixhawk/);
+
+  // Outra aba: filtros limpos e a aba no endereço.
+  await page.getByRole("tab", { name: /Tabelas de empuxo/ }).click();
   await expect(page.getByRole("status")).toHaveText("4 de 4");
+  await expect(page).toHaveURL(/tipo=empuxo/);
+  await page.getByRole("tab", { name: /Drones prontos/ }).click();
+  await expect(page.getByRole("status")).toHaveText("5 de 5");
+  await page.getByRole("link", { name: /Abrir DJI Mini 4K/ }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("DJI Mini 4K");
+
+  // O endereço com a aba abre direto nela.
+  await page.goto("/catalogo?tipo=ferramentas", { waitUntil: "networkidle" });
+  await expect(page.getByRole("tab", { name: /Ferramentas e EPI/ })).toHaveAttribute(
+    "aria-selected",
+    "true",
+  );
 });
 
 test("preço em R$ numa peça sem preço: o custo do projeto passa a incluí-la", async ({ page }) => {

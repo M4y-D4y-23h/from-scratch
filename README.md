@@ -212,6 +212,10 @@ recusa scripts com sintaxe só de bash).
   de nuvem). Confira com `(Get-Volume -DriveLetter F).FileSystem` (troque o `F` pela letra do
   disco) e clone o projeto num disco NTFS, como em `C:\dev\from-scratch` (passo 5).
 - **Não abre pelo celular na mesma rede**: é de propósito; o app só atende o próprio computador.
+- **O botão "N" do Next (dev tools) sumiu**: a opção "Hide Dev Tools for this session" esconde o
+  botão até o servidor de desenvolvimento reiniciar (ou por 1 dia). Pare o servidor (`Shift + F5`
+  no VS Code, ou `Ctrl + C` no terminal) e suba de novo com "Desenvolver" ou `pnpm dev`. Na versão
+  rápida (`pnpm app`, F5 padrão) esse botão não existe: ele é só do modo de desenvolvimento.
 - **"Não consegui gravar ... (EPERM)" no /catalogo**: o arquivo está aberto ou preso por outro
   programa (antivírus, editor). Feche-o e salve de novo; o catálogo não foi alterado.
 
