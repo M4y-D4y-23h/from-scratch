@@ -67,9 +67,15 @@ decisões importantes de forma breve. Ele autorizou corrigir a SPEC quando ela e
 | `pnpm db:sync`                  | Cria/atualiza o banco local (`data/local/`) a partir do catálogo.          |
 | `pnpm db:generate`              | Gera migração do Drizzle (use `--name <nome>`).                            |
 
-No VS Code, F5 roda o `pnpm install` (`.vscode/tasks.json`), sobe o app com o depurador e abre o
-Edge (`.vscode/launch.json`, adaptado do guia
+`pnpm app` = `build` + `start` (versão rápida, para usar o app). No VS Code, o F5 padrão é "Usar o
+app (versão rápida)" (`pnpm install` + `pnpm build` + `next start`, abre o navegador); "Desenvolver"
+é o `next dev` com depurador no Edge (`.vscode/launch.json` e `tasks.json`, adaptados do guia
 `node_modules/next/dist/docs/01-app/02-guides/debugging.md`: pnpm e servidor só em 127.0.0.1).
+
+Desempenho (ADR-0026): contas do servidor guardadas por hash do catálogo (`server/cache/memo.ts`,
+`server/engine/solve.ts`; quem recebe um valor da memória não pode alterá-lo); abas desenhadas no
+navegador e mantidas montadas; `LazyDetails` para blocos fechados; um balão de glossário por
+página. Comandos liberados sem confirmação nas sessões na nuvem: `.claude/settings.json`.
 
 ## Regras inegociáveis (resumo da SPEC B.1 e B.19)
 

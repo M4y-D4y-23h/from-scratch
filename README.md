@@ -106,18 +106,29 @@ Abra <http://localhost:3000> no navegador. Para parar, volte ao PowerShell e ape
 O app só atende o próprio computador (escuta em 127.0.0.1): ele grava os arquivos do catálogo, e
 ninguém na sua rede deve conseguir fazer isso.
 
+**Versão rápida (para usar o app):** `pnpm dev` compila cada página na primeira visita e roda o
+React na versão de desenvolvimento, o que deixa tudo mais lento. Para só usar o app, prefira:
+
+```powershell
+pnpm app
+```
+
+Ele compila tudo de uma vez (cerca de 1 minuto; as próximas vezes reaproveitam o cache) e abre a
+versão otimizada em <http://localhost:3000>: as páginas abrem e as abas trocam bem mais rápido.
+Mudanças no código só valem quando você rodar de novo.
+
 **Pelo VS Code (F5):** abra a pasta do projeto no VS Code (aceite instalar as extensões
 recomendadas) e:
 
 1. Pare o `pnpm dev` do terminal, se estiver rodando (os dois disputariam a porta 3000).
-2. Aperte **F5**. O VS Code roda o `pnpm install` (na primeira vez demora alguns minutos; depois,
-   segundos), sobe o servidor e, quando ele fica pronto, abre o Edge já conectado ao depurador.
-3. Para investigar algo, clique à esquerda do número de uma linha (aparece uma bolinha vermelha):
-   o app para ali quando aquele código rodar, no servidor ou no navegador.
-4. **Shift + F5** encerra tudo.
+2. Aperte **F5**. A opção padrão, **"Usar o app (versão rápida)"**, roda o `pnpm install` e o
+   `pnpm build` e abre o app no seu navegador quando ele fica pronto.
+3. **Shift + F5** encerra.
 
-No painel "Executar e Depurar" (`Ctrl + Shift + D`) também há "Só o servidor" e "Só o navegador".
-A configuração fica em `.vscode/launch.json`.
+No painel "Executar e Depurar" (`Ctrl + Shift + D`) há também **"Desenvolver (recompila ao salvar,
+com depurador)"**: recompila a cada arquivo salvo e abre o Edge conectado ao depurador (clique à
+esquerda do número de uma linha para o app parar ali). É mais lento; use quando for mexer no código.
+E ainda "Só o servidor" e "Só o navegador". A configuração fica em `.vscode/launch.json`.
 
 ### 9. Rode as verificações (opcional, mas é o que roda antes de cada commit)
 
@@ -167,6 +178,7 @@ recusa scripts com sintaxe só de bash).
 | `pnpm dev`               | Abre o app em http://localhost:3000 (só para este computador).         |
 | `pnpm build`             | Gera a versão otimizada (também confere os tipos).                     |
 | `pnpm start`             | Roda a versão gerada pelo `build`.                                     |
+| `pnpm app`               | `build` + `start`: a versão rápida, para usar o app.                   |
 | `pnpm test`              | Testes de unidade (Vitest).                                            |
 | `pnpm test:watch`        | Testes de unidade, rodando de novo a cada alteração.                   |
 | `pnpm test:e2e`          | Testes no navegador (Playwright), num servidor separado.               |

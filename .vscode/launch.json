@@ -7,10 +7,27 @@
   "version": "0.2.0",
   "configurations": [
     {
-      // Padrão do F5: sobe o servidor e, quando ele fica pronto, abre o Edge já depurando.
-      // Pontos de parada funcionam no código do servidor (src/server, src/domain) e no do navegador
-      // (src/components). Parar a depuração (Shift+F5) desliga o servidor.
-      "name": "Rodar o app (servidor + navegador)",
+      // Padrão do F5, para USAR o app: compila tudo uma vez (cerca de 1 minuto; depois o cache
+      // ajuda) e abre no seu navegador. As páginas não compilam mais ao abrir e o React roda na
+      // versão otimizada: é o modo mais rápido. Mudanças no código só valem no próximo F5.
+      "name": "Usar o app (versão rápida)",
+      "type": "node",
+      "request": "launch",
+      "preLaunchTask": "Preparar a versão rápida (pnpm build)",
+      "program": "${workspaceFolder}/node_modules/next/dist/bin/next",
+      "args": ["start", "-H", "127.0.0.1"],
+      "skipFiles": ["<node_internals>/**"],
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "- Local:.+(https?://.+)",
+        "uriFormat": "%s"
+      }
+    },
+    {
+      // Para MEXER no código: recompila a cada arquivo salvo e abre o Edge já depurando (pontos
+      // de parada no servidor e no navegador). Cada página compila na primeira visita e o React
+      // roda na versão de desenvolvimento: é mais lento. Shift+F5 desliga o servidor.
+      "name": "Desenvolver (recompila ao salvar, com depurador)",
       "type": "node",
       "request": "launch",
       "preLaunchTask": "Instalar dependências (pnpm install)",
@@ -27,8 +44,8 @@
       }
     },
     {
-      // Só o servidor, num terminal do VS Code. Abra http://localhost:3000 no navegador que
-      // preferir; os pontos de parada valem para o código do servidor.
+      // Só o servidor de desenvolvimento, num terminal do VS Code. Abra http://localhost:3000 no
+      // navegador que preferir; os pontos de parada valem para o código do servidor.
       "name": "Só o servidor (abra o navegador você mesmo)",
       "type": "node-terminal",
       "request": "launch",

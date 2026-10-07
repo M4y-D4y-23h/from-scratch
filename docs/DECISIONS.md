@@ -772,3 +772,35 @@ Datas no formato AAAA-MM-DD. "Verificado em" indica quando a informação extern
   `git diff` antes do commit). Criar item novo pela página ficou de fora: é pelo JSON no editor de
   texto, validado com `pnpm catalog:check`. Gravar a partir de outro aparelho da rede é recusado de
   propósito.
+
+## ADR-0026: desempenho (contas guardadas, abas no navegador e versão rápida)
+
+- **Data:** 2026-10-07 · **Status:** aceita (pedido do dono: "todo o site mais rápido")
+- **Contexto:** o dono achou o app lento no `pnpm dev`: compilar, abrir uma página e até trocar de
+  aba. Medido no contêiner: no modo de desenvolvimento, com tudo já compilado, a página do
+  Arquétipo 1 levava 2,3 s no servidor (o solver e as 35 regras rodavam de novo a cada visita),
+  mandava 950 KB de HTML (as 6 abas desenhadas no servidor), e trocar de aba levava de 0,2 a 1 s
+  (montar a aba + redesenhar o 3D e todos os botões, porque a aba aberta estava no mesmo contexto
+  React que eles). No Windows do dono tudo isso é mais lento.
+- **Decisão:**
+  - **Contas guardadas na memória do servidor** (`server/cache/memo.ts`, até 96 entradas, a menos
+    usada sai primeiro): solver por catálogo (hash) + arquétipo + opções; página de projeto por
+    catálogo + escolha de peças + "já tenho"; cartões da página inicial e visão do /catalogo por
+    catálogo. O catálogo só é validado de novo quando o conteúdo dos arquivos muda. O motor é
+    determinístico, então guardar não muda nenhum número; quem recebe um valor guardado não pode
+    alterá-lo.
+  - **Abas desenhadas no navegador** a partir dos dados, que chegam uma vez só; o servidor desenha
+    só a aba inicial. Aba já aberta continua montada (escondida): voltar é instantâneo.
+  - **Estado da página em três contextos** (ações, aba aberta, seleção/destaque): trocar de aba não
+    redesenha o 3D nem os botões das listas.
+  - **`LazyDetails`**: blocos fechados (passos, regras, ferramentas) só montam o conteúdo quando
+    abertos pela primeira vez.
+  - **Um balão de glossário por página** (âncora virtual do Radix), em vez de um por termo.
+  - **Versão rápida para usar o app** (`pnpm app` e o F5 padrão): `next build` + `next start`.
+    Nada compila ao abrir uma página e o React roda otimizado. O `pnpm dev` fica para mexer no
+    código.
+- **Consequências:** medido no modo de desenvolvimento: página do Arquétipo 1 0,2 s, página
+  inicial 0,12 s, HTML 484 KB, trocar de aba 0,02–0,14 s; a versão rápida é de 3 a 5 vezes mais
+  rápida que isso no navegador. A primeira visita depois de mudar o catálogo ainda paga a conta
+  inteira. O texto dentro de um bloco fechado que nunca foi aberto não aparece na busca do
+  navegador (Ctrl+F).

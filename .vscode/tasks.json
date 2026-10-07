@@ -9,6 +9,15 @@
       "type": "shell",
       "command": "pnpm install",
       "problemMatcher": []
+    },
+    {
+      // Versão rápida: compila o app inteiro de uma vez (cerca de 1 minuto; as próximas vezes
+      // reaproveitam o cache). Depois disso nenhuma página precisa compilar ao ser aberta.
+      "label": "Preparar a versão rápida (pnpm build)",
+      "type": "shell",
+      "command": "pnpm build",
+      "dependsOn": "Instalar dependências (pnpm install)",
+      "problemMatcher": []
     }
   ]
 }

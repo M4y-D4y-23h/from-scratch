@@ -11,6 +11,7 @@
     "dev": "next dev -H 127.0.0.1",
     "build": "next build",
     "start": "next start -H 127.0.0.1",
+    "app": "next build && next start -H 127.0.0.1",
     "lint": "eslint . --max-warnings=0",
     "lint:fix": "eslint . --fix",
     "typecheck": "next typegen && tsc --noEmit",
