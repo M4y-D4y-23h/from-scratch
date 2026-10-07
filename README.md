@@ -104,6 +104,19 @@ Abra <http://localhost:3000> no navegador. Para parar, volte ao PowerShell e ape
 O app só atende o próprio computador (escuta em 127.0.0.1): ele grava os arquivos do catálogo, e
 ninguém na sua rede deve conseguir fazer isso.
 
+**Pelo VS Code (F5):** abra a pasta do projeto no VS Code (aceite instalar as extensões
+recomendadas) e:
+
+1. Pare o `pnpm dev` do terminal, se estiver rodando (os dois disputariam a porta 3000).
+2. Aperte **F5**. O VS Code sobe o servidor e, quando ele fica pronto, abre o Edge já conectado
+   ao depurador.
+3. Para investigar algo, clique à esquerda do número de uma linha (aparece uma bolinha vermelha):
+   o app para ali quando aquele código rodar, no servidor ou no navegador.
+4. **Shift + F5** encerra tudo.
+
+No painel "Executar e Depurar" (`Ctrl + Shift + D`) também há "Só o servidor" e "Só o navegador".
+A configuração fica em `.vscode/launch.json`.
+
 ### 9. Rode as verificações (opcional, mas é o que roda antes de cada commit)
 
 ```powershell

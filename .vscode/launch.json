@@ -1,0 +1,44 @@
+{
+  // F5 no VS Code (painel "Executar e Depurar", Ctrl+Shift+D). Baseado no guia oficial do Next 16
+  // (node_modules/next/dist/docs/01-app/02-guides/debugging.md), com pnpm e o servidor escutando
+  // só em 127.0.0.1, como o `pnpm dev` (ADR-0025). Pare o `pnpm dev` do terminal antes de apertar
+  // F5, para os dois não disputarem a porta 3000.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      // Padrão do F5: sobe o servidor e, quando ele fica pronto, abre o Edge já depurando.
+      // Pontos de parada funcionam no código do servidor (src/server, src/domain) e no do navegador
+      // (src/components). Parar a depuração (Shift+F5) desliga o servidor.
+      "name": "Rodar o app (servidor + navegador)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/next/dist/bin/next",
+      "args": ["dev", "-H", "127.0.0.1"],
+      "runtimeArgs": ["--inspect"],
+      "skipFiles": ["<node_internals>/**"],
+      "serverReadyAction": {
+        "action": "debugWithEdge",
+        "killOnServerStop": true,
+        "pattern": "- Local:.+(https?://.+)",
+        "uriFormat": "%s",
+        "webRoot": "${workspaceFolder}"
+      }
+    },
+    {
+      // Só o servidor, num terminal do VS Code. Abra http://localhost:3000 no navegador que
+      // preferir; os pontos de parada valem para o código do servidor.
+      "name": "Só o servidor (abra o navegador você mesmo)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "pnpm dev --inspect"
+    },
+    {
+      // Só o navegador (Edge), com o servidor já rodando (`pnpm dev` ou a opção acima).
+      "name": "Só o navegador (servidor já rodando)",
+      "type": "msedge",
+      "request": "launch",
+      "url": "http://127.0.0.1:3000",
+      "webRoot": "${workspaceFolder}"
+    }
+  ]
+}
