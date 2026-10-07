@@ -26,7 +26,8 @@
     "db:sync": "tsx scripts/db-sync.ts",
     "catalog:check": "tsx scripts/catalog-check.ts",
     "catalog:format": "tsx scripts/catalog-format.ts",
-    "report": "tsx scripts/report.ts"
+    "report": "tsx scripts/report.ts",
+    "evals": "tsx scripts/evals.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.131.0",

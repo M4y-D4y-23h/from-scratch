@@ -88,8 +88,9 @@ const PATTERNS: Record<BlockedCategory, RegExp[]> = {
       `\\b(solt|jog|lanc|derrub|atir|arremess)\\w*\\b.{0,40}\\b(em|nas?|nos?|sobre|contra)\\s+(as\\s+|os\\s+|uma?\\s+)?${PESSOAS}`,
     ),
     // "armado" fica de fora de propósito: é o estado normal do drone pronto para voar.
-    /\b(arma|armas|explosiv\w*|granada|bomba|incendiari\w*|lanca[- ]?chamas|molotov|municao|projetil|projeteis)\b/,
-    /\b(atir\w*|dispar\w*)\b.{0,30}\b(tiro|bala|projetil|chumbo|flecha|dardo)/,
+    // "bomba de água" (irrigação) e afins não são arma.
+    /\b(arma|armas|explosiv\w*|granadas?|bombas?(?! (de |d)?(agua|ar|vacuo|combustivel|calor)\b| hidraulica)|incendiari\w*|lanca[- ]?chamas|molotov|municao|projetil|projeteis)\b/,
+    /\b(atir\w*|dispar\w*|lanc\w*)\b.{0,30}\b(tiros?|balas?|projetil|projeteis|chumb\w*|flechas?|dardos?|pedras?|paintball|airsoft)/,
     new RegExp(`\\b(ferir|machucar|atacar|matar)\\b.{0,30}${PESSOAS}`),
   ],
   quimicos: [

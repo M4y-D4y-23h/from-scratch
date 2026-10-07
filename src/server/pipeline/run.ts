@@ -162,6 +162,7 @@ export type Analysis = {
 export type Analyzer = (pedido: string) => Promise<Analysis>;
 
 type UsageSink = StructuredCall<z.ZodType>["registro"];
+type UsageHook = StructuredCall<z.ZodType>["aoUsar"];
 
 /** Riscos que a própria intenção já mostra (valem nos dois modos, com ou sem IA). */
 function alertCategories(i: DroneIntent): string[] {
@@ -196,7 +197,7 @@ export function simpleAnalysis(pedido: string, avisos: string[] = []): Analysis 
 export const simpleAnalyzer: Analyzer = async (pedido) => simpleAnalysis(pedido);
 
 /** Análise pelo Claude (uma chamada: segurança + intenção). Falha da API → modo simples. */
-export function llmAnalyzer(registro?: UsageSink): Analyzer {
+export function llmAnalyzer(registro?: UsageSink, aoUsar?: UsageHook): Analyzer {
   return async (pedido) => {
     try {
       const { dados, uso } = await structuredCall({
@@ -205,6 +206,7 @@ export function llmAnalyzer(registro?: UsageSink): Analyzer {
         user: analysisUserMessage(pedido),
         schema: requestAnalysisSchema,
         registro,
+        aoUsar,
       });
       const intencao = sanitizeIntent(dados.intencao);
       const extras = alertCategories(intencao);
@@ -496,7 +498,7 @@ export function findCard(
 /** Explica a escolha em linguagem simples. Sem IA, ou se o texto tiver número: os motivos das regras. */
 export async function explainChoice(
   r: OptionsResult,
-  opcoes: { registro?: UsageSink; tentarDeNovo?: boolean } = {},
+  opcoes: { registro?: UsageSink; aoUsar?: UsageHook; tentarDeNovo?: boolean } = {},
 ): Promise<Explanation> {
   const regras: Explanation = { paragrafos: r.motivos, origem: "regras" };
   if (r.modo === "simples" || llmMode() === "simples") return regras;
@@ -519,6 +521,7 @@ export async function explainChoice(
           user: explanationUserMessage(dados),
           schema: explanationSchema,
           registro: opcoes.registro,
+          aoUsar: opcoes.aoUsar,
         });
         return acceptExplanation(saida.paragrafos, r.motivos);
       } catch (error) {

@@ -157,6 +157,8 @@ export type StructuredCall<S extends z.ZodType> = {
   schema: S;
   /** Para gravar o uso (sem banco, nada é gravado: testes e scripts). */
   registro?: { db: Db; cambioBrl: number; projetoId?: string };
+  /** Recebe o uso de cada chamada (o script de evals soma o custo real). */
+  aoUsar?: (uso: CallRecord) => void;
 };
 
 export type StructuredResult<T> = { dados: T; uso: CallRecord };
@@ -193,6 +195,7 @@ export async function structuredCall<S extends z.ZodType>(
     custo_usd: costUsd(porModelo),
   };
   if (pedido.registro) recordUsage(pedido.registro, uso);
+  pedido.aoUsar?.(uso);
 
   if (message.stop_reason === "refusal") {
     throw new LlmRefusal(message.stop_details?.category ?? null);

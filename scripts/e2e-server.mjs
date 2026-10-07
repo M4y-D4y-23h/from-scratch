@@ -29,6 +29,8 @@ const filho = spawn(process.execPath, [next, "dev", "-H", "127.0.0.1", "-p", por
     FROM_SCRATCH_DB: path.join(temporaria, "e2e.db"),
     FROM_SCRATCH_NEXT_DIST: ".next-e2e",
     NEXT_TELEMETRY_DISABLED: "1",
+    // Os testes nunca chamam a API paga, mesmo com a chave no .env.local.
+    FROM_SCRATCH_LLM: "simples",
   },
 });
 
