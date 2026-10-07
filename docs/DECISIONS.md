@@ -804,3 +804,52 @@ Datas no formato AAAA-MM-DD. "Verificado em" indica quando a informação extern
   rápida que isso no navegador. A primeira visita depois de mudar o catálogo ainda paga a conta
   inteira. O texto dentro de um bloco fechado que nunca foi aberto não aparece na busca do
   navegador (Ctrl+F).
+
+## ADR-0027: pipeline do pedido (IA só lê e explica; regras decidem; modo simples)
+
+- **Data:** 2026-10-07 · **Status:** aceita (Fase 4, SPEC B.10 e B.17)
+- **Contexto:** a Fase 4 transforma um pedido em linguagem natural em 2–3 opções de projeto. A
+  SPEC B.1 manda que o LLM nunca produza número de engenharia; a B.9 pede segurança em camadas; a
+  B.10 pede perguntas clicáveis (no máximo 3–5), suposições visíveis, arquétipo por regras e
+  inviabilidade com números. O app roda no computador do dono, que paga cada chamada.
+- **Decisão (onde a IA entra):**
+  - **Uma chamada para ler o pedido** (rota `analise_pedido`, esforço `low`): classificação de
+    segurança (B.9, camada 2) e intenção (B.10, passo 2) juntas, em saída estruturada
+    (`output_config.format` com o schema zod), validada de novo com zod no servidor. Valores
+    absurdos viram "não disse" (`sanitizeIntent`).
+  - **Uma chamada para explicar a escolha** (rota `explicacao_projeto`, esforço `high`), depois
+    que as opções aparecem. O texto só é aceito sem nenhum algarismo, com até 4 parágrafos e sem
+    nada que o pré-filtro recusaria; senão ficam os motivos das regras. Os números ficam nos
+    cartões, vindos do motor de cálculo.
+  - Perguntas, escolha do arquétipo, opções, orçamento e inviabilidade são **regras
+    determinísticas** (`domain/categories/drone/pipeline/`): a IA não escolhe nada.
+  - Modelo `claude-opus-5-5` nas duas rotas (`server/llm/config.ts`), com o fallback de recusa no
+    servidor (`server-side-fallback-2026-07-01`, `fallbacks: "default"`). Recusa do modelo vira
+    bloqueio; categoria proibida bloqueia mesmo se a classificação disser "permitido". O prompt de
+    sistema é fixo e vai com `cache_control` (cache de prompt).
+  - Custo de cada chamada (tokens por modelo, inclusive o de reserva) gravado em `uso_api` com o
+    câmbio do catálogo; preços da API conferidos em 2026-10-07 e anotados no código.
+- **Decisão (segurança e custo):**
+  - Pré-filtro determinístico antes da IA (padrões estreitos, testados contra pedidos legítimos
+    como "bomba de água" e "drone que me siga para filmar"). Todo bloqueio ou alerta vai para
+    `eventos_seguranca`, uma vez por pedido enviado.
+  - As ações são server actions (POST) e só aceitam o próprio computador (`assertLocalRequest`).
+    `/novo?pedido=...` só preenche o campo: um link de fora não gasta uma chamada. O pedido digitado
+    na página inicial é enviado ao abrir `/novo` por uma marca no `sessionStorage`, que um link
+    externo não consegue criar.
+  - A leitura da IA fica na memória do servidor por versão do prompt + texto: responder às
+    perguntas e criar o projeto refazem o pipeline sem pagar outra chamada. Se a API falhar, o
+    pedido é lido no **modo simples** (palavras-chave), com aviso na tela; enviar de novo tenta a
+    IA outra vez.
+- **Decisão (modo simples e evals):**
+  - Sem `ANTHROPIC_API_KEY` (ou com `FROM_SCRATCH_LLM=simples`) o app funciona no modo simples. Os
+    testes no navegador forçam esse modo e nunca chamam a API.
+  - Os 13 casos da B.17 estão em `tests/evals/casos.ts`, com critérios verificáveis. Rodam no modo
+    simples nos testes de unidade e com o Claude em `pnpm evals`, que mostra o custo estimado e
+    pede confirmação antes. Relatório em `data/local/evals/`.
+  - Inviável para o catálogo inteiro (autonomia acima do que qualquer drone voa, orçamento abaixo
+    do mais barato) aparece antes das perguntas, que não mudariam a resposta.
+- **Consequências:** a dependência `@anthropic-ai/sdk` (prevista na SPEC B.3) entrou. Sem a chave,
+  o app continua útil, mas lê só pedidos diretos; no modo simples não há a camada 2 de segurança
+  (o pré-filtro continua). A explicação personalizada da linguagem dos passos (B.10, passo 7) fica
+  para a Fase 5, com o guia de montagem.

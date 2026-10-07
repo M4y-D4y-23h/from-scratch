@@ -142,6 +142,13 @@ describe("leitura do pedido", () => {
     expect(cleanAnswers("lixo")).toEqual({});
   });
 
+  it("a pergunta do orçamento diz quanto custa hoje o projeto mais barato", async () => {
+    const r = await run("quero um drone", simpleAnalyzer);
+    const orcamento =
+      r.tipo === "perguntas" ? r.perguntas.find((p) => p.id === "orcamento") : undefined;
+    expect(orcamento?.ajuda).toMatch(/a partir de R\$\s?[\d.]+,\d{2}, com as ferramentas\.$/);
+  });
+
   it("pedido curto demais é recusado na entrada", async () => {
     await expect(run("oi", simpleAnalyzer)).rejects.toThrow();
   });

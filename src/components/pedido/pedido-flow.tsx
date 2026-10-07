@@ -254,10 +254,12 @@ export function PedidoFlow({ inicial, modo }: { inicial: string; modo: LlmMode }
 function ModeNotice({ modo }: { modo: LlmMode }) {
   return modo === "ia" ? (
     <p className="flex items-start gap-2 text-xs text-muted-foreground">
-      <Bot aria-hidden="true" className="mt-0.5 size-3.5 shrink-0" />A IA (Claude) lê o pedido e
-      explica a escolha; peças, números e regras vêm do catálogo e do motor de cálculo. Cada pedido
-      novo faz uma chamada paga à API, registrada com o custo no banco local; responder às perguntas
-      não faz outra.
+      <Bot aria-hidden="true" className="mt-0.5 size-3.5 shrink-0" />
+      <span>
+        A IA (Claude) lê o pedido e explica a escolha; peças, números e regras vêm do catálogo e do
+        motor de cálculo. O texto do pedido vai para a API da Anthropic; cada pedido novo é uma
+        chamada paga, registrada com o custo no banco local. Responder às perguntas não faz outra.
+      </span>
     </p>
   ) : (
     <p className="flex items-start gap-2 rounded-lg border border-dashed p-3 text-xs text-muted-foreground">

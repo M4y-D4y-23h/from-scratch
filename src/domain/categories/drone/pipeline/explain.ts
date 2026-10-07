@@ -5,6 +5,8 @@
  * do catálogo e do motor de cálculo, e aparecem nos cartões das opções (SPEC B.1.1).
  */
 
+import { prefilterRequest } from "./safety-filter";
+
 export type Explanation = { paragrafos: string[]; origem: "ia" | "regras" };
 
 /** Algum algarismo (0–9 ou de outros alfabetos)? */
@@ -16,8 +18,9 @@ const MAX_PARAGRAFOS = 4;
 const MAX_CARACTERES = 700;
 
 /**
- * Aceita a explicação do LLM só se ela for curta, não vazia e sem números. Qualquer problema:
- * volta a explicação das regras (nunca um texto pela metade).
+ * Aceita a explicação do LLM só se ela for curta, não vazia, sem números e sem nada que o
+ * pré-filtro de segurança recusaria (defesa extra contra um pedido que tente desviar o texto).
+ * Qualquer problema: volta a explicação das regras (nunca um texto pela metade).
  */
 export function acceptExplanation(
   paragrafos: readonly string[],
@@ -27,6 +30,7 @@ export function acceptExplanation(
   const ok =
     limpos.length > 0 &&
     limpos.length <= MAX_PARAGRAFOS &&
-    limpos.every((p) => p.length <= MAX_CARACTERES && !hasDigits(p));
+    limpos.every((p) => p.length <= MAX_CARACTERES && !hasDigits(p)) &&
+    !prefilterRequest(limpos.join(" ")).bloqueado;
   return ok ? { paragrafos: limpos, origem: "ia" } : { paragrafos: [...motivos], origem: "regras" };
 }

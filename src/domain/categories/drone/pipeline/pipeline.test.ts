@@ -177,12 +177,12 @@ describe("escolha do arquétipo e perguntas (SPEC B.10, passos 3 e 4)", () => {
     const i = applyAnswers(EMPTY_INTENT, {
       objetivo: "aprender",
       onde: "dentro_de_casa",
-      orcamento: "1000",
+      orcamento: "3000",
     });
     expect(i).toMatchObject({
       finalidade: "aprender",
       ambiente: "dentro_de_casa",
-      orcamento_max_brl: 1000,
+      orcamento_max_brl: 3000,
     });
     expect(chooseArchetype(i)).toMatchObject({ id: ARCHETYPE_IDS.whoop });
     // "Ainda não sei" não vira número.
@@ -239,5 +239,9 @@ describe("orçamento e explicação", () => {
     expect(acceptExplanation([], motivos).origem).toBe("regras");
     expect(acceptExplanation(["a", "b", "c", "d", "e"], motivos).origem).toBe("regras");
     expect(acceptExplanation(["x".repeat(701)], motivos).origem).toBe("regras");
+    // Texto que o pré-filtro recusaria também não passa.
+    expect(acceptExplanation(["Dá para soltar objetos sobre pessoas."], motivos).origem).toBe(
+      "regras",
+    );
   });
 });

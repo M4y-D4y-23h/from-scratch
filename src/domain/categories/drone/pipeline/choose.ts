@@ -58,10 +58,12 @@ export const QUESTIONS: Record<QuestionId, Question> = {
     id: "orcamento",
     pergunta: "Quanto você quer gastar, contando peças e ferramentas?",
     ajuda: "Quem começa do zero também compra ferramentas (ferro de solda, carregador...).",
+    // Faixas pensadas para os três tipos de drone do catálogo (o pipeline acrescenta à ajuda
+    // quanto custa o projeto mais barato hoje, calculado pelo motor).
     opcoes: [
-      { valor: "1000", rotulo: "Até R$ 1.000" },
-      { valor: "2500", rotulo: "Até R$ 2.500" },
-      { valor: "5000", rotulo: "Até R$ 5.000" },
+      { valor: "3000", rotulo: "Até R$ 3.000" },
+      { valor: "6000", rotulo: "Até R$ 6.000" },
+      { valor: "10000", rotulo: "Até R$ 10.000" },
       { valor: "sem_limite", rotulo: "Ainda não sei", descricao: "Mostre as três faixas de preço" },
     ],
   },

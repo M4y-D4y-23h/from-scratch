@@ -12,9 +12,10 @@ com tutor. Na v1, só **drones multirrotores**.
 - Decisões técnicas (e o porquê): [`docs/DECISIONS.md`](docs/DECISIONS.md)
 - Andamento por fase: [`docs/PROGRESS.md`](docs/PROGRESS.md)
 
-**Status:** Fases 0 a 3 concluídas. Os três drones de referência já abrem com 3D em escala,
-custos, dificuldade, onde fazer, segurança e cálculos, e dá para trocar peças com tudo recalculado
-(salvando como projeto, com versões). O pedido em linguagem natural (com IA) é a Fase 4.
+**Status:** Fases 0 a 4 concluídas. Você descreve o drone com as suas palavras e recebe até três
+opções com peças reais (ou a explicação, com números, de por que não dá). Cada projeto abre com 3D
+em escala, custos, dificuldade, onde fazer, segurança e cálculos, e dá para trocar peças com tudo
+recalculado, com versões. O guia de montagem interativo é a Fase 5; o tutor, a Fase 6.
 
 ---
 
@@ -92,8 +93,15 @@ precisa do Visual Studio Build Tools).
 Copy-Item .env.example .env.local
 ```
 
-O `.env.local` **nunca** vai para o git. A chave da API do Claude (`ANTHROPIC_API_KEY`) só será
-necessária a partir da Fase 4; por enquanto pode deixar em branco.
+O `.env.local` **nunca** vai para o git. A chave da API do Claude (`ANTHROPIC_API_KEY`) é
+opcional:
+
+- **Sem a chave**, o app funciona no **modo simples**: o pedido é lido por palavras-chave. Entende
+  pedidos diretos ("drone pequeno pra voar dentro de casa", "até R$ 3.000", "1 hora de voo").
+- **Com a chave**, a IA (Claude) lê pedidos livres e explica a escolha. Cada pedido novo é uma
+  chamada paga, e o custo fica registrado no banco local. Para ligar: crie a chave no console da
+  Anthropic (seção "API Keys"), cole depois do `ANTHROPIC_API_KEY=` no `.env.local` (abra com
+  `notepad .env.local`) e reinicie o app.
 
 ### 8. Rode
 
@@ -153,6 +161,12 @@ mexem nos seus arquivos nem nos seus projetos, e podem rodar com o `pnpm dev` ab
 
 ## O que já dá para fazer
 
+- **Novo projeto (`/novo`, ou o campo na página inicial):** descreva o drone com as suas palavras.
+  O app recusa o que é perigoso (com explicação), pergunta só o que falta (opções clicáveis),
+  escolhe o tipo de drone e mostra até três opções com custo, peso, tempo de voo, dificuldade e se
+  cabem no seu orçamento, com os alertas e o que foi assumido. Se não der (20 kg de carga, 1 hora
+  de voo...), ele explica com os números e mostra o mais perto disso. Escolher uma opção cria o
+  seu projeto.
 - **Página inicial:** os três drones de referência (GPS para filmar, FPV 5" e Tiny Whoop), cada um
   em três faixas de preço, e os seus projetos.
 - **Página do drone:** resumo, 3D em escala real e as abas Peças e Custos, Dificuldade, Onde fazer,
@@ -173,28 +187,30 @@ mexem nos seus arquivos nem nos seus projetos, e podem rodar com o `pnpm dev` ab
 Todos funcionam igual no PowerShell, no cmd, no macOS e no Linux (há um teste automático que
 recusa scripts com sintaxe só de bash).
 
-| Comando                  | O que faz                                                              |
-| ------------------------ | ---------------------------------------------------------------------- |
-| `pnpm dev`               | Abre o app em http://localhost:3000 (só para este computador).         |
-| `pnpm build`             | Gera a versão otimizada (também confere os tipos).                     |
-| `pnpm start`             | Roda a versão gerada pelo `build`.                                     |
-| `pnpm app`               | `build` + `start`: a versão rápida, para usar o app.                   |
-| `pnpm test`              | Testes de unidade (Vitest).                                            |
-| `pnpm test:watch`        | Testes de unidade, rodando de novo a cada alteração.                   |
-| `pnpm test:e2e`          | Testes no navegador (Playwright), num servidor separado.               |
-| `pnpm test:e2e:install`  | Baixa o Chromium usado pelo Playwright (uma vez só).                   |
-| `pnpm lint`              | ESLint (falha com qualquer aviso).                                     |
-| `pnpm lint:fix`          | ESLint corrigindo o que for automático.                                |
-| `pnpm typecheck`         | Gera os tipos das rotas do Next e roda `tsc --noEmit`.                 |
-| `pnpm format`            | Formata tudo com o Prettier.                                           |
-| `pnpm format:check`      | Só confere a formatação.                                               |
-| `pnpm check`             | Formatação + lint + tipos + testes de unidade.                         |
-| `pnpm shadcn add <nome>` | Adiciona um componente do shadcn/ui (ex.: `pnpm shadcn add tooltip`).  |
-| `pnpm report`            | Mostra os 9 builds de referência no terminal (`pnpm report a1`).       |
-| `pnpm catalog:check`     | Confere o catálogo e o glossário.                                      |
-| `pnpm catalog:format`    | Deixa os JSON do catálogo no formato que a página /catalogo grava.     |
-| `pnpm db:sync`           | Cria/atualiza o banco local (`data/local/`); o app também faz sozinho. |
-| `pnpm db:generate`       | Gera uma migração do banco (para quem mexe no schema).                 |
+| Comando                  | O que faz                                                               |
+| ------------------------ | ----------------------------------------------------------------------- |
+| `pnpm dev`               | Abre o app em http://localhost:3000 (só para este computador).          |
+| `pnpm build`             | Gera a versão otimizada (também confere os tipos).                      |
+| `pnpm start`             | Roda a versão gerada pelo `build`.                                      |
+| `pnpm app`               | `build` + `start`: a versão rápida, para usar o app.                    |
+| `pnpm test`              | Testes de unidade (Vitest).                                             |
+| `pnpm test:watch`        | Testes de unidade, rodando de novo a cada alteração.                    |
+| `pnpm test:e2e`          | Testes no navegador (Playwright), num servidor separado.                |
+| `pnpm test:e2e:install`  | Baixa o Chromium usado pelo Playwright (uma vez só).                    |
+| `pnpm lint`              | ESLint (falha com qualquer aviso).                                      |
+| `pnpm lint:fix`          | ESLint corrigindo o que for automático.                                 |
+| `pnpm typecheck`         | Gera os tipos das rotas do Next e roda `tsc --noEmit`.                  |
+| `pnpm format`            | Formata tudo com o Prettier.                                            |
+| `pnpm format:check`      | Só confere a formatação.                                                |
+| `pnpm check`             | Formatação + lint + tipos + testes de unidade.                          |
+| `pnpm shadcn add <nome>` | Adiciona um componente do shadcn/ui (ex.: `pnpm shadcn add tooltip`).   |
+| `pnpm report`            | Mostra os 9 builds de referência no terminal (`pnpm report a1`).        |
+| `pnpm evals`             | Testa a leitura dos pedidos com a IA (mostra o custo e pergunta antes). |
+| `pnpm evals --simples`   | Os mesmos testes no modo simples, sem custo.                            |
+| `pnpm catalog:check`     | Confere o catálogo e o glossário.                                       |
+| `pnpm catalog:format`    | Deixa os JSON do catálogo no formato que a página /catalogo grava.      |
+| `pnpm db:sync`           | Cria/atualiza o banco local (`data/local/`); o app também faz sozinho.  |
+| `pnpm db:generate`       | Gera uma migração do banco (para quem mexe no schema).                  |
 
 ## Problemas comuns no Windows
 
@@ -223,8 +239,9 @@ recusa scripts com sintaxe só de bash).
 
 - O Next.js coleta telemetria anônima de uso por padrão. Para desligar neste computador:
   `pnpm exec next telemetry disable`.
-- A partir da Fase 4, o texto dos seus pedidos e as fotos enviadas ao tutor vão para a API da
-  Anthropic (Claude). A chave fica só no servidor local, nunca no navegador.
+- Com a chave da API ligada, o texto dos seus pedidos vai para a API da Anthropic (Claude); na
+  Fase 6, também as fotos enviadas ao tutor. A chave fica só no servidor local, nunca no navegador.
+  Sem a chave (modo simples), nada sai do seu computador.
 
 ## Estrutura
 
@@ -234,7 +251,7 @@ data/catalog/drone/ catálogo curado (peças, empuxo, ferramentas, arquétipos),
 src/app/            páginas e rotas do Next.js
 src/components/     componentes de interface (ui/ = shadcn/ui)
 src/domain/         regras de engenharia em TypeScript puro (cálculos, regras, solver, 3D)
-src/server/         banco, catálogo, projetos e ações; LLM, uploads e orçamento a partir da Fase 4
+src/server/         banco, catálogo, projetos, ações, LLM e o pipeline do pedido
 scripts/            scripts do terminal (report, catalog:check, servidor dos testes)
-tests/              testes de unidade (unit/) e de navegador (e2e/)
+tests/              testes de unidade (unit/), de navegador (e2e/) e os casos dos evals (evals/)
 ```

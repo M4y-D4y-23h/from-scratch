@@ -483,3 +483,147 @@ Veja a mudança com `git diff`; se foi só um teste, desfaça com `git checkout 
 incêndio, kit de primeiros socorros, rabicho XT60 e capacitor), que dá para salvar em /catalogo; o
 câmbio de 02/10/2026 e as regras do imposto de importação em /catalogo/importacao; e os nomes de
 cada slot ("rotulo" nos arquétipos), que agora aparecem na lista de peças.
+
+## Entre as fases 3 e 4: pedidos do dono (2026-10-07)
+
+- **Desempenho (ADR-0026):** contas do motor guardadas na memória do servidor, abas desenhadas no
+  navegador e mantidas abertas, um balão de glossário por página e a versão rápida para usar o app
+  (`pnpm app` e o F5 padrão). Medido no modo de desenvolvimento: página do Arquétipo 1 de 2,3 s
+  para 0,2 s; trocar de aba de 0,2–1 s para 0,02–0,14 s.
+- **"Esconder as ferramentas do Next" (dev tools):** vale até reiniciar o `pnpm dev` (ou um dia); o
+  README explica como voltar. Na versão rápida o botão não aparece.
+- **Catálogo com abas:** Peças, Drones prontos, Ferramentas e EPI e Tabelas de empuxo, com filtros
+  que respondem enquanto você digita.
+
+## Fase 4: Pipeline com LLM (concluída em 2026-10-07, aguardando revisão)
+
+**Aceite (SPEC B.18):** "B.10 completo, com perguntas clicáveis e 2–3 opções; evals 1–12 passam
+nos critérios."
+
+- **Modo simples (sem IA): 13 de 13 casos passam** (`tests/unit/evals-simples.test.ts`, que roda no
+  `pnpm check` e no CI, e `pnpm evals --simples`).
+- **Com o Claude: ainda não rodado.** O contêiner desta sessão não tem chave da API, e nenhuma
+  chamada paga foi feita. Rode `pnpm evals` no seu computador: ele mostra antes o custo estimado
+  (hoje, de US$ 0,38 a US$ 3,03 pelos 13 casos) e pede confirmação. O cliente da API foi testado
+  com respostas simuladas: recusa, fallback de modelo, JSON inválido, resposta cortada, custo por
+  modelo e memória.
+
+### Feito
+
+- **Página `/novo` (e o campo na página inicial):** você descreve o drone com as suas palavras. O
+  app:
+  1. recusa o que é perigoso (armas, químicos, bloqueadores, vigilância, esconder das
+     autoridades), com explicação e uma alternativa;
+  2. pergunta só o que falta (até 5 perguntas, com opções clicáveis);
+  3. escolhe o tipo de drone pelas regras e explica o porquê;
+  4. mostra até 3 opções (econômica, equilibrada, premium) com custo com e sem ferramentas, peso,
+     TWR, tempo de voo, dificuldade, se cabe no orçamento e os avisos de cada uma;
+  5. mostra os alertas do que você pediu (voar longe, perto de pessoas, uso comercial, controle só
+     pelo celular, iPhone) e as suposições ("dá para mudar").
+- **Pedido impossível:** explicação com os números do motor de cálculo e a opção viável mais
+  próxima. Exemplos: carga (empuxo e peso do drone mais forte do catálogo), autonomia (o que voa
+  mais tempo) e orçamento (o mais barato que cabe, ou o mais barato de todos).
+- **Escolher uma opção cria o projeto** (versão 1, com o pedido, a intenção, as respostas e as
+  opções mostradas). A página do projeto mostra "Seu pedido".
+- **Onde a IA entra (ADR-0027):** uma chamada lê o pedido (segurança + intenção, saída estruturada
+  validada com zod) e outra explica a escolha. A explicação só é aceita sem nenhum número; os
+  números ficam nos cartões, vindos do motor.
+  - Fallback de recusa no servidor; custo de cada chamada gravado em `uso_api`; registro de
+    segurança em `eventos_seguranca`.
+  - A leitura fica na memória: responder às perguntas e criar o projeto não pagam outra chamada.
+- **Modo simples:** sem chave da API, o pedido é lido por palavras-chave, e a página avisa. Se a
+  API falhar, o app cai nesse modo com um aviso, e enviar de novo tenta a IA outra vez.
+- **Testes:** 434 de unidade (eram 362) e 24 no navegador (eram 20). Os testes no navegador forçam
+  o modo simples e nunca chamam a API.
+
+### Como testar
+
+```powershell
+git pull
+pnpm install
+pnpm dev                 # ou F5 / pnpm app; abra http://localhost:3000
+pnpm check               # inclui os 13 evals no modo simples
+pnpm evals --simples     # os evals no terminal, sem custo
+```
+
+Com a IA (opcional; cada pedido custa uma chamada à API):
+
+```powershell
+Copy-Item .env.example .env.local   # se ainda não existir
+notepad .env.local                  # cole a chave em ANTHROPIC_API_KEY=
+pnpm dev                            # reinicie o app para ler a chave
+pnpm evals                          # mostra o custo estimado e pergunta antes
+```
+
+Roteiro no navegador:
+
+1. Na página inicial, escreva "quero um drone" e clique em **Montar meu projeto**. Responda às 3
+   perguntas e veja as opções; abra "Riscos e regras" e "O que assumimos".
+2. Clique num exemplo ("drone simples com GPS... controle pelo celular"). Escolha "Só pelo
+   celular (experimental)" e veja o alerta de perigo aparecer.
+3. Teste "drone que carregue 20 kg por R$ 500" (impossível, com números) e "drone com câmera para
+   vigiar minha vizinha" (recusado).
+4. Escolha uma opção: o projeto abre com tudo calculado e "Seu pedido" na lateral.
+
+### Para você decidir
+
+1. **Rodar `pnpm evals` com a sua chave** e me mandar o relatório (`data/local/evals/`) se algum
+   caso falhar. Esse é o último passo do aceite.
+2. **Dificuldade do Tiny Whoop:** a SPEC espera "dificuldade baixa" no caso 1, mas o motor dá
+   "Intermediário" (nota 1,79; é a menor do catálogo: FPV 2,8 e GPS 2,75). Hoje o eval confere
+   "a menor do catálogo". Quer mudar as faixas dos rótulos (ADR-0019) para o whoop aparecer como
+   "Iniciante"?
+3. **Esforço da explicação:** `high` (a SPEC B.3 pede alto para a geração do projeto). Leva mais
+   tempo e custa mais que `medium`; enquanto isso, a tela já mostra os motivos das regras. Manter?
+4. **Modo simples sem a camada 2 de segurança:** sem chave, só o pré-filtro protege. O projeto que
+   sai é sempre um drone do catálogo, sem nada de perigoso. Aceita assim?
+
+### Ficou de fora (de propósito)
+
+- A IA reescrevendo a linguagem dos passos (B.10, passo 7): fica para a Fase 5, com o guia de
+  montagem.
+- Mudar Android/iPhone, tipo de controle ou uso depois de criar o projeto: por enquanto, faça outro
+  pedido.
+- Limite de gasto com a API (B.16): Fase 7. O custo já fica registrado em `uso_api`.
+- Conversa livre com a IA: o tutor é a Fase 6.
+
+### Problemas conhecidos
+
+- A leitura pela IA não foi testada com o modelo de verdade nesta sessão (veja o aceite acima).
+- O modo simples entende pedidos diretos ("até R$ 2.000", "1 hora de voo", "dentro de casa"); frases
+  livres, gírias e negações ("não quero GPS") precisam da IA.
+- A explicação pela IA aparece alguns segundos depois das opções (esforço alto).
+- A primeira análise depois de abrir o app calcula os 9 builds; as próximas usam a memória.
+
+### Revisão adversarial da Fase 4 (SPEC B.19.7)
+
+- _O que machucaria um leigo?_
+  - **Corrigido:** o pré-filtro deixava passar "atirar com chumbinho" e bloqueava "bomba de água".
+    Os padrões foram ajustados, com testes dos dois lados.
+  - **Corrigido:** a explicação da IA agora também passa pelo pré-filtro (um pedido que tentasse
+    desviar o texto cai nos motivos das regras).
+  - Categoria proibida bloqueia mesmo se a classificação disser "permitido"; objetivo ambíguo faz
+    perguntar o objetivo antes de mostrar qualquer projeto. Pedidos com riscos (longe, perto de
+    pessoas, comercial) mostram os alertas em destaque, com as fontes.
+  - Recusa do próprio modelo vira bloqueio com explicação. Nenhum texto livre da IA aparece além
+    da explicação conferida.
+- _O que faria o drone não voar?_ As opções saem do solver com todas as regras bloqueantes
+  conferidas; opção bloqueada não pode ser escolhida; o projeto é recalculado no servidor ao ser
+  criado, nunca a partir do que o navegador mandou. Controle só pelo celular aparece como
+  experimental, com alerta de perigo e a regra de aviso.
+- _O que estouraria o orçamento?_
+  - **Corrigido:** a pergunta de orçamento oferecia "Até R$ 1.000", mas nenhum projeto do catálogo
+    custa tão pouco. As faixas agora são R$ 3.000, 6.000 e 10.000, e a ajuda diz quanto custa hoje
+    o projeto mais barato (calculado pelo motor).
+  - **Corrigido:** o aviso de itens sem preço aparecia duas vezes no cartão.
+  - O orçamento é conferido com o total com ferramentas (ou só as peças, se você disser); "pode
+    caber" quando só os preços mais baixos cabem; itens sem preço aparecem como "+ N sem preço".
+  - Custo da API: só por POST e só do próprio computador; link não dispara chamada; memória
+    evita pagar duas vezes pelo mesmo pedido; os evals mostram o custo antes e pedem confirmação.
+- _Privacidade:_ a página avisa que o texto do pedido vai para a API da Anthropic. A chave fica só
+  no `.env.local`.
+
+**Dados para você verificar:** os preços da API em `src/server/llm/config.ts` (conferidos em
+07/10/2026; confira em anthropic.com/pricing), o câmbio do catálogo (usado no custo em R$) e,
+como antes, os preços dos itens sem preço. As faixas de orçamento das perguntas foram escolhidas
+pelos preços atuais do catálogo.

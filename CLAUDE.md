@@ -17,16 +17,23 @@ decisões importantes de forma breve. Ele autorizou corrigir a SPEC quando ela e
 
 ## Estado atual
 
-- **Fases 0 (fundação), 1 (domínio) e 2 (3D): concluídas** (o dono liberou a Fase 3 em
-  2026-10-05). **Fase 3 (painéis e /catalogo): concluída em 2026-10-05, aguardando a revisão do
-  dono** (resumo, decisões pendentes e revisão adversarial em `docs/PROGRESS.md`). Próxima:
-  **Fase 4 (pipeline com LLM, SPEC B.10)**, só depois da revisão.
-- Páginas: `/` (drones de referência e projetos), `/referencia/[arquetipo]/[faixa]` e
+- **Fases 0 a 3: concluídas.** **Fase 4 (pipeline com LLM, SPEC B.10): concluída em 2026-10-07,
+  aguardando a revisão do dono** (resumo, decisões pendentes e revisão adversarial em
+  `docs/PROGRESS.md`). Os 13 evals passam no modo simples; com o Claude, falta o dono rodar
+  `pnpm evals` com a chave dele. Próxima: **Fase 5 (guia de montagem, SPEC B.13)**, só depois da
+  revisão.
+- Páginas: `/` (campo do pedido, drones de referência e projetos), `/novo` (pedido → perguntas →
+  opções → projeto), `/referencia/[arquetipo]/[faixa]` e
   `/projetos/[id]` (resumo, 3D e as 6 abas; `?aba=`), `/catalogo` (+ `/catalogo/[tipo]/[id]` e
   `/catalogo/importacao`) e `/glossario`. `/3d/...` redireciona para `/referencia/...`.
 - Projeto = escolha (slot → peça) guardada em versões no SQLite; kits e itens "fornecido_por" são
   recalculados (`swap.ts`, ADR-0024). Toda troca é revalidada no servidor; troca que deixa falha
   bloqueante é recusada.
+- Pipeline do pedido (ADR-0027): `src/domain/categories/drone/pipeline/` (pré-filtro, intenção,
+  modo simples, perguntas, escolha do arquétipo, opções e inviabilidade, tudo determinístico) +
+  `src/server/pipeline/run.ts` (orquestra; memória das leituras da IA) + `src/server/llm/`
+  (cliente, prompts, schemas, config). A IA só lê o pedido e explica a escolha (sem algarismos);
+  sem chave ou com `FROM_SCRATCH_LLM=simples`, modo simples. Ações em `server/actions/pedido.ts`.
 - /catalogo grava nos JSON de `data/catalog/drone/` (validação do catálogo inteiro, escrita
   atômica, formato do Prettier; ADR-0025). Server actions que gravam chamam `assertLocalRequest`
   (só Host local) e validam a entrada com zod. `pnpm dev`/`start` escutam só em 127.0.0.1.
@@ -62,6 +69,7 @@ decisões importantes de forma breve. Ele autorizou corrigir a SPEC quando ela e
 | `pnpm format`                   | Prettier.                                                                  |
 | `pnpm shadcn add <nome>`        | Novo componente do shadcn/ui (estilo `new-york`, Radix).                   |
 | `pnpm report [a1] [--detalhes]` | Builds de referência no terminal (peças, números, custos, regras).         |
+| `pnpm evals [--simples] [2b]`   | Evals da SPEC B.17 (com a IA mostra o custo e pede confirmação antes).     |
 | `pnpm catalog:check`            | Valida o catálogo (`data/catalog/drone/`) e o glossário.                   |
 | `pnpm catalog:format`           | Deixa os JSON do catálogo no formato que a página /catalogo grava.         |
 | `pnpm db:sync`                  | Cria/atualiza o banco local (`data/local/`) a partir do catálogo.          |
@@ -118,10 +126,10 @@ src/domain/core/      tipos genéricos (Fase 1)
 src/domain/categories/drone/  schema, compatibilidade, cálculos, solver, dificuldade, custos,
                       locais, segurança, cena 3D, lista de peças, troca (Fases 1-3)
 src/server/           db, catalog (leitura e gravação), projects, project-view, actions,
-                      security (Fases 1-3); llm, pipeline, tutor, uploads, budget (Fases 4-7)
+                      security (Fases 1-3); llm, pipeline (Fase 4); tutor, uploads, budget (5-7)
 src/app/              rotas Next (páginas + API)
 src/components/       UI; ui/ = shadcn/ui (copiados do registro oficial, ADR-0004)
-tests/unit/           Vitest · tests/e2e/ Playwright · tests/evals/ (Fase 4)
+tests/unit/           Vitest · tests/e2e/ Playwright · tests/evals/ (casos da B.17, Fase 4)
 ```
 
 ## Convenções

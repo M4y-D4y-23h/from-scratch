@@ -29,6 +29,7 @@ import {
   catalogInfeasibility,
   type Infeasibility,
   type OptionCard,
+  optionCard,
   planRequest,
   requestAlerts,
 } from "@/domain/categories/drone/pipeline/plan";
@@ -40,6 +41,7 @@ import {
   REFUSALS,
 } from "@/domain/categories/drone/pipeline/safety-filter";
 import { buildProjectReport } from "@/domain/categories/drone/project";
+import { formatBRL } from "@/domain/core/money";
 import type { SafetyAlert } from "@/domain/core/safety";
 import { memo } from "@/server/cache/memo";
 import type { LoadedCatalog } from "@/server/catalog/load";
@@ -369,6 +371,23 @@ export function archetypePlans(
 // O pipeline
 // ---------------------------------------------------------------------------
 
+/** Na pergunta do orçamento, quanto custa hoje o projeto mais barato do catálogo (motor de cálculo). */
+function withCheapest(perguntas: Question[], todos: ArchetypePlans[], i: DroneIntent): Question[] {
+  const minimo = Math.min(
+    ...todos.flatMap((p) => p.faixas.map((t) => optionCard(p, t, i).total.min_centavos)),
+  );
+  if (!Number.isFinite(minimo)) return perguntas;
+  return perguntas.map((p) =>
+    p.id === "orcamento"
+      ? {
+          ...p,
+          ajuda:
+            `${p.ajuda ?? ""} Hoje, o projeto mais barato do catálogo custa a partir de ${formatBRL(minimo)}, com as ferramentas.`.trim(),
+        }
+      : p,
+  );
+}
+
 function refusalFor(categorias: readonly string[]): RefusalView {
   const categoria = BLOCKED_CATEGORIES.find((c) => categorias.includes(c));
   return categoria ? { categoria, ...REFUSALS[categoria] } : { ...GENERIC_REFUSAL };
@@ -435,7 +454,12 @@ export async function runPipeline(
     const esclarecerAntes = precisa_esclarecer && respostas.objetivo === undefined;
     const inviavel = esclarecerAntes ? undefined : catalogInfeasibility(intencao, todos);
     if (inviavel) return { ...base, tipo: "inviavel", inviabilidade: inviavel, suposicoes };
-    return { ...base, tipo: "perguntas", perguntas, suposicoes };
+    return {
+      ...base,
+      tipo: "perguntas",
+      perguntas: withCheapest(perguntas, todos, intencao),
+      suposicoes,
+    };
   }
 
   // 4. Arquétipo (regras). Ainda indefinido depois das perguntas: o mais seguro para começar.
