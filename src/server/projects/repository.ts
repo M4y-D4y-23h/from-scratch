@@ -36,7 +36,21 @@ export type VersionSnapshot = {
   cena?: DroneScene;
 };
 
-export type NewVersion = { motivo: string; catalogo_hash: string; snapshot: VersionSnapshot };
+/** O que veio do pedido em linguagem natural (SPEC B.5): só na versão criada pelo pipeline. */
+export type RequestRecord = {
+  intencao: unknown;
+  respostas: Record<string, string>;
+  /** As opções mostradas (resumo de cada faixa) e qual foi escolhida. */
+  opcoes: unknown;
+  opcao_escolhida: string;
+};
+
+export type NewVersion = {
+  motivo: string;
+  catalogo_hash: string;
+  snapshot: VersionSnapshot;
+  pedido?: RequestRecord;
+};
 
 export type ProjectSummary = {
   id: string;
@@ -66,7 +80,10 @@ function versionValues(projetoId: string, numero: number, v: NewVersion, agora: 
     numero,
     motivo: v.motivo,
     catalogo_hash: v.catalogo_hash,
-    opcao_escolhida: s.escolha.faixa_origem ?? null,
+    intencao: v.pedido?.intencao ?? null,
+    respostas: v.pedido?.respostas ?? null,
+    opcoes: v.pedido?.opcoes ?? null,
+    opcao_escolhida: v.pedido?.opcao_escolhida ?? s.escolha.faixa_origem ?? null,
     bom: { escolha: s.escolha, pecas: s.pecas },
     calculos: { validacao: s.validacao, metricas: s.metricas },
     dificuldade: s.dificuldade,

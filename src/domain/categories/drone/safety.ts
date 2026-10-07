@@ -145,6 +145,24 @@ export const GLOBAL_ALERTS: readonly SafetyAlert[] = [
   },
 ];
 
+/** Um alerta global pelo id (o pipeline do pedido reaproveita os textos com fonte). */
+export function globalAlert(id: string): SafetyAlert | undefined {
+  return GLOBAL_ALERTS.find((a) => a.id === id);
+}
+
+/** Uso não recreativo (RBAC nº 100): no projeto e no pedido ("filmar casamentos"). */
+export function nonRecreationalAlert(): SafetyAlert {
+  return {
+    id: "uso-nao-recreativo" satisfies (typeof DYNAMIC_ALERT_IDS)[number],
+    nivel: "regulatorio",
+    titulo: "Uso não recreativo segue o RBAC nº 100",
+    texto: `Filmagem paga ou qualquer uso que não seja lazer segue o RBAC nº 100 da ANAC (cadastro, seguro e outras exigências) e as regras do DECEA para operações não recreativas. ${REGULATORY_DISCLAIMER}`,
+    acoes: ["Leia o RBAC nº 100 antes de usar o drone para trabalho."],
+    fontes: [SRC.anacRes805Rbac100, SRC.deceaIca10040],
+    verificado_em: VERIFICADO_EM,
+  };
+}
+
 /** Alertas calculados a partir do build (dynamicAlerts): os passos também podem citá-los. */
 const DYNAMIC_ALERT_IDS = ["video-e-visada", "uso-nao-recreativo"] as const;
 
@@ -182,17 +200,7 @@ function dynamicAlerts(build: Build): SafetyAlert[] {
       verificado_em: VERIFICADO_EM,
     });
   }
-  if (build.opcoes.uso === "nao_recreativo") {
-    alertas.push({
-      id: "uso-nao-recreativo" satisfies (typeof DYNAMIC_ALERT_IDS)[number],
-      nivel: "regulatorio",
-      titulo: "Uso não recreativo segue o RBAC nº 100",
-      texto: `Filmagem paga ou qualquer uso que não seja lazer segue o RBAC nº 100 da ANAC (cadastro, seguro e outras exigências) e as regras do DECEA para operações não recreativas. ${REGULATORY_DISCLAIMER}`,
-      acoes: ["Leia o RBAC nº 100 antes de usar o drone para trabalho."],
-      fontes: [SRC.anacRes805Rbac100, SRC.deceaIca10040],
-      verificado_em: VERIFICADO_EM,
-    });
-  }
+  if (build.opcoes.uso === "nao_recreativo") alertas.push(nonRecreationalAlert());
   return alertas;
 }
 
