@@ -26,7 +26,8 @@ type Aviso = { tipo: "ok" | "erro"; texto: string };
 type WorkspaceActions = {
   abrirAba: (aba: TabId) => void;
   selecionar: (componenteId: string | undefined) => void;
-  destacar: (d: Destaque | undefined) => void;
+  /** `rolar: false` destaca sem levar a tela até o 3D (ex.: o passo aberto no guia). */
+  destacar: (d: Destaque | undefined, opcoes?: { rolar?: boolean }) => void;
   abrirTroca: (slot: string) => void;
   fecharTroca: () => void;
   notificar: (aviso: Aviso | undefined) => void;
@@ -75,9 +76,9 @@ export function WorkspaceProvider({
     setSelecionado(id);
     if (id) scrollToViewer();
   }, []);
-  const destacar = useCallback((d: Destaque | undefined) => {
+  const destacar = useCallback((d: Destaque | undefined, opcoes?: { rolar?: boolean }) => {
     setDestaque(d);
-    if (d) scrollToViewer();
+    if (d && opcoes?.rolar !== false) scrollToViewer();
   }, []);
   const abrirTroca = useCallback((slot: string) => setTrocaSlot(slot), []);
   const fecharTroca = useCallback(() => setTrocaSlot(undefined), []);

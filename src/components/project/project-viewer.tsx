@@ -47,7 +47,8 @@ export type ProjectViewerProps = {
   firmware: Firmware;
   build: Build;
   partes: Record<string, ScenePartInfo>;
-  passos: Array<{ id: string; titulo: string; pecas: string[] }>;
+  /** Passos do guia (numero = posição no guia, como na aba Montagem). */
+  passos: Array<{ id: string; numero: number; titulo: string; pecas: string[] }>;
   /** Frames do catálogo para o "experimentar" (só o desenho). */
   frames: Component[];
   /** Peça → slot que tem alternativas compatíveis (para o botão "Trocar"). */
@@ -218,9 +219,9 @@ export function ProjectViewer(props: ProjectViewerProps) {
             <option value="">Nenhum</option>
             {props.passos
               .filter((p) => p.pecas.length > 0)
-              .map((p, i) => (
+              .map((p) => (
                 <option key={p.id} value={p.id}>
-                  {i + 1}. {p.titulo}
+                  {p.numero}. {p.titulo}
                 </option>
               ))}
           </select>

@@ -34,10 +34,13 @@ export const TAB_INFO: Record<TabId, { rotulo: string; Icon: LucideIcon }> = {
 export function ProjectTabs({
   paineis,
   marcadores = {},
+  extras = {},
 }: {
   paineis: Record<TabId, ReactNode>;
   /** Número pequeno ao lado do nome da aba (ex.: alertas de perigo). */
   marcadores?: Partial<Record<TabId, { texto: string; titulo: string }>>;
+  /** Marcador que muda com a página (ex.: progresso do guia, ao vivo). */
+  extras?: Partial<Record<TabId, ReactNode>>;
 }) {
   const aba = useActiveTab();
   const { abrirAba } = useWorkspaceActions();
@@ -70,6 +73,7 @@ export function ProjectTabs({
                   <span className="sr-only"> ({m.titulo})</span>
                 </span>
               )}
+              {extras[id]}
             </TabsTrigger>
           );
         })}

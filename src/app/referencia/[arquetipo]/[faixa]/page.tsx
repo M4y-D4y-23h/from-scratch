@@ -32,7 +32,7 @@ export async function generateMetadata(
 export default async function ReferencePage(props: PageProps<"/referencia/[arquetipo]/[faixa]">) {
   await connection();
   const { arquetipo, faixa } = await props.params;
-  const { aba } = await props.searchParams;
+  const { aba, passo } = await props.searchParams;
   const tier = tierOf(faixa);
   if (!tier) notFound();
   const loaded = loadDroneCatalog();
@@ -45,6 +45,7 @@ export default async function ReferencePage(props: PageProps<"/referencia/[arque
     <ProjectPage
       data={data}
       aba={isTab(aba) ? aba : "pecas"}
+      passo={typeof passo === "string" ? passo : undefined}
       frames={loaded.catalog.componentes.filter((c) => c.categoria === "frame")}
     />
   );

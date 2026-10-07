@@ -9,6 +9,7 @@ import { SiteHeader } from "@/components/site-header";
 import { loadDroneCatalog } from "@/server/catalog/load";
 import { getDb } from "@/server/db";
 import { savedProjectView } from "@/server/project-view/view";
+import { getProgress } from "@/server/projects/progress";
 import { getProject, getVersion, listVersions } from "@/server/projects/repository";
 import { ownedTools } from "@/server/tools/owned";
 
@@ -26,7 +27,7 @@ export async function generateMetadata(props: PageProps<"/projetos/[id]">): Prom
 export default async function SavedProjectPage(props: PageProps<"/projetos/[id]">) {
   await connection();
   const { id } = await props.params;
-  const { aba, versao } = await props.searchParams;
+  const { aba, versao, passo } = await props.searchParams;
   const db = getDb();
   const projeto = getProject(db, id);
   if (!projeto) notFound();
@@ -73,6 +74,8 @@ export default async function SavedProjectPage(props: PageProps<"/projetos/[id]"
     <ProjectPage
       data={data}
       aba={isTab(aba) ? aba : "pecas"}
+      passo={typeof passo === "string" ? passo : undefined}
+      progresso={getProgress(db, id)}
       frames={loaded.catalog.componentes.filter((c) => c.categoria === "frame")}
     />
   );

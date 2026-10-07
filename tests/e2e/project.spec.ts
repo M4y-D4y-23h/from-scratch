@@ -48,7 +48,7 @@ test.describe("painéis do build de referência", () => {
       ["Peças e Custos", "Quanto custa"],
       ["Dificuldade", "Dificuldade geral"],
       ["Onde fazer", "Onde fazer cada coisa"],
-      ["Montagem", /Passo a passo/],
+      ["Montagem", "Guia de montagem"],
       ["Segurança", /Riscos e regras/],
       ["Cálculos", "Os números do projeto"],
     ];

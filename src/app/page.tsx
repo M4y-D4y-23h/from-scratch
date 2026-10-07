@@ -24,6 +24,7 @@ import { TIER_LABEL } from "@/domain/categories/drone/build";
 import { loadDroneCatalog } from "@/server/catalog/load";
 import { getDb } from "@/server/db";
 import { referenceCards } from "@/server/project-view/home";
+import { doneCounts } from "@/server/projects/progress";
 import { listProjects } from "@/server/projects/repository";
 
 type Feature = {
@@ -90,7 +91,9 @@ export default async function HomePage() {
   // Os projetos ficam no banco local e o catálogo pode mudar pela página /catalogo.
   await connection();
   const cards = referenceCards(loadDroneCatalog());
-  const projetos = listProjects(getDb());
+  const db = getDb();
+  const projetos = listProjects(db);
+  const feitos = doneCounts(db);
   const nomeArquetipo = new Map(cards.map((c) => [c.id, c.nome]));
 
   return (
@@ -116,10 +119,9 @@ export default async function HomePage() {
           >
             <Construction aria-hidden="true" className="mt-0.5 size-5 shrink-0" />
             <p>
-              <strong>Em construção (Fase 4: pedido em linguagem natural).</strong> Já dá para
-              descrever o drone e receber até três opções com peças reais, ou abrir um drone de
-              referência. O guia de montagem com checkpoints vem na Fase 5 e o tutor por chat, na
-              Fase 6.
+              <strong>Em construção (Fase 5: guia de montagem).</strong> Já dá para descrever o
+              drone, escolher uma opção com peças reais e seguir o guia passo a passo, com os
+              checklists de segurança e o progresso salvo. O tutor por chat vem na Fase 6.
             </p>
           </div>
         </section>
@@ -228,8 +230,11 @@ export default async function HomePage() {
                         {p.faixa_origem
                           ? `, faixa ${TIER_LABEL[p.faixa_origem].toLowerCase()}`
                           : ""}
-                        {" · "}versão {p.versao_atual} · atualizado em{" "}
-                        {dataHoraBr(p.atualizado_em.toISOString())}
+                        {" · "}versão {p.versao_atual}
+                        {feitos.get(p.id)
+                          ? ` · guia: ${feitos.get(p.id)} ${feitos.get(p.id) === 1 ? "passo feito" : "passos feitos"}`
+                          : ""}
+                        {" · "}atualizado em {dataHoraBr(p.atualizado_em.toISOString())}
                       </span>
                     </span>
                     <ArrowRight aria-hidden="true" className="size-4 text-muted-foreground" />
