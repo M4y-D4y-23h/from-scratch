@@ -173,6 +173,38 @@ export async function swapOnReferenceAction(
   redirect(`/projetos/${id}?aba=pecas`);
 }
 
+/**
+ * "Começar a montar" num build de referência: cria o seu projeto (versão 1 = referência), onde o
+ * progresso do guia fica salvo, e abre a aba Montagem.
+ */
+export async function startFromReferenceAction(
+  arquetipoId: string,
+  faixa: string,
+): Promise<ActionResult> {
+  const bloqueio = await guard();
+  if (bloqueio) return bloqueio;
+  const tier = TIERS.find((t) => t === faixa);
+  if (!tier) return { ok: false, erro: "Faixa inválida." };
+  const loaded = loadDroneCatalog();
+  const db = getDb();
+  const ref = referenceBuild(loaded, arquetipoId, tier);
+  if (!ref) return { ok: false, erro: "Build de referência não encontrado." };
+  const calculado = snapshotFor(choiceFromBuild(ref.build, tier), {
+    loaded,
+    ferramentasQueTenho: ownedTools(db),
+  });
+  if ("erro" in calculado) return { ok: false, erro: calculado.erro };
+  const id = createProject(db, {
+    titulo: `Meu projeto: ${ref.archetype.nome}`,
+    versao: {
+      motivo: `Build de referência, faixa ${TIER_LABEL[tier].toLowerCase()}`,
+      catalogo_hash: loaded.hash,
+      snapshot: calculado.snapshot,
+    },
+  });
+  redirect(`/projetos/${id}?aba=montagem`);
+}
+
 /** Troca peças num projeto salvo: nova versão, página atualizada. */
 export async function swapOnProjectAction(
   projetoId: string,
