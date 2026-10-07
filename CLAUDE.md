@@ -67,7 +67,8 @@ decisões importantes de forma breve. Ele autorizou corrigir a SPEC quando ela e
 | `pnpm db:sync`                  | Cria/atualiza o banco local (`data/local/`) a partir do catálogo.          |
 | `pnpm db:generate`              | Gera migração do Drizzle (use `--name <nome>`).                            |
 
-No VS Code, F5 sobe o app com o depurador e abre o Edge (`.vscode/launch.json`, adaptado do guia
+No VS Code, F5 roda o `pnpm install` (`.vscode/tasks.json`), sobe o app com o depurador e abre o
+Edge (`.vscode/launch.json`, adaptado do guia
 `node_modules/next/dist/docs/01-app/02-guides/debugging.md`: pnpm e servidor só em 127.0.0.1).
 
 ## Regras inegociáveis (resumo da SPEC B.1 e B.19)

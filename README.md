@@ -108,8 +108,8 @@ ninguém na sua rede deve conseguir fazer isso.
 recomendadas) e:
 
 1. Pare o `pnpm dev` do terminal, se estiver rodando (os dois disputariam a porta 3000).
-2. Aperte **F5**. O VS Code sobe o servidor e, quando ele fica pronto, abre o Edge já conectado
-   ao depurador.
+2. Aperte **F5**. O VS Code roda o `pnpm install` (na primeira vez demora alguns minutos; depois,
+   segundos), sobe o servidor e, quando ele fica pronto, abre o Edge já conectado ao depurador.
 3. Para investigar algo, clique à esquerda do número de uma linha (aparece uma bolinha vermelha):
    o app para ali quando aquele código rodar, no servidor ou no navegador.
 4. **Shift + F5** encerra tudo.
@@ -191,6 +191,8 @@ recusa scripts com sintaxe só de bash).
   primeira vez; as próximas usam o cache do pnpm.
 - **Erros de caminho muito longo**: clone em uma pasta curta, como `C:\dev\from-scratch`.
 - **Playwright reclama que falta o navegador**: rode `pnpm test:e2e:install`.
+- **"Cannot find module ...\node_modules\next\..."**: as dependências não foram instaladas nessa
+  pasta. Rode `pnpm install` no terminal do VS Code (o F5 já faz isso antes de subir o app).
 - **Não abre pelo celular na mesma rede**: é de propósito; o app só atende o próprio computador.
 - **"Não consegui gravar ... (EPERM)" no /catalogo**: o arquivo está aberto ou preso por outro
   programa (antivírus, editor). Feche-o e salve de novo; o catálogo não foi alterado.

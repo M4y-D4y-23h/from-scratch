@@ -1,0 +1,14 @@
+{
+  // Tarefas do VS Code usadas pelo F5 (.vscode/launch.json).
+  "version": "2.0.0",
+  "tasks": [
+    {
+      // Antes de subir o app, instala o que faltar: na primeira vez, ou depois de um `git pull` que
+      // trouxe dependência nova. Quando já está tudo instalado, leva só alguns segundos.
+      "label": "Instalar dependências (pnpm install)",
+      "type": "shell",
+      "command": "pnpm install",
+      "problemMatcher": []
+    }
+  ]
+}
