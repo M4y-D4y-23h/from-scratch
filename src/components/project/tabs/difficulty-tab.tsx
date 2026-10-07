@@ -1,3 +1,5 @@
+"use client";
+
 import { fmt, fmtHours } from "@/components/format";
 import { Glossed } from "@/components/glossary/glossary";
 import {

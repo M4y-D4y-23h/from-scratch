@@ -123,6 +123,7 @@ export type LoadedCatalog = {
 export function parseCatalogFiles(
   files: readonly CatalogFile[],
   options: CheckOptions = {},
+  hash: string = hashCatalog(files),
 ): LoadedCatalog {
   const problemas: string[] = [];
   const catalog: DroneCatalog = {
@@ -199,12 +200,26 @@ export function parseCatalogFiles(
 
   problemas.push(...checkCatalog(catalog, options));
   if (problemas.length > 0) throw new CatalogError(problemas);
-  return { catalog, hash: hashCatalog(files), arquivos: files.map((f) => f.caminho) };
+  return { catalog, hash, arquivos: files.map((f) => f.caminho) };
 }
+
+/**
+ * Último catálogo carregado de cada pasta. Ler os arquivos e calcular o hash é rápido; validar
+ * tudo (zod + regras do catálogo) é o que custa. Se o conteúdo não mudou (mesmo hash), o
+ * catálogo validado da visita anterior é reaproveitado. Ninguém altera o catálogo carregado.
+ */
+const ultimoCarregado = new Map<string, LoadedCatalog>();
 
 export function loadDroneCatalog(
   root = CATALOG_ROOT,
   options: CheckOptions = { alertasGlobais: GLOBAL_ALERT_IDS },
 ): LoadedCatalog {
-  return parseCatalogFiles(readCatalogFiles(root), options);
+  const files = readCatalogFiles(root);
+  const hash = hashCatalog(files);
+  const chave = `${root}|${JSON.stringify(options)}`;
+  const anterior = ultimoCarregado.get(chave);
+  if (anterior?.hash === hash) return anterior;
+  const loaded = parseCatalogFiles(files, options, hash);
+  ultimoCarregado.set(chave, loaded);
+  return loaded;
 }

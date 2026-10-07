@@ -1,7 +1,10 @@
+"use client";
+
 import { Clock, Wrench } from "lucide-react";
 
 import { fmtHours } from "@/components/format";
 import { Glossed } from "@/components/glossary/glossary";
+import { LazyDetails } from "@/components/lazy-details";
 import { purchaseOptions } from "@/domain/categories/drone/bom";
 import type { LocationKind } from "@/domain/core/location";
 import type { ProjectViewData } from "@/server/project-view/view";
@@ -63,20 +66,19 @@ export function LocationsTab({ data }: { data: ProjectViewData }) {
             </p>
           )}
           {g.passos.length > 0 && (
-            <details>
-              <summary className="cursor-pointer font-medium">Passos feitos aqui</summary>
+            <LazyDetails summaryClassName="cursor-pointer font-medium" summary="Passos feitos aqui">
               <ol className="mt-1 list-decimal space-y-0.5 pl-5 text-muted-foreground">
                 {g.passos.map((p) => (
                   <li key={p.id}>{p.titulo}</li>
                 ))}
               </ol>
-            </details>
+            </LazyDetails>
           )}
           {g.compras && g.compras.length > 0 && (
-            <details>
-              <summary className="cursor-pointer font-medium">
-                O que comprar e onde procurar ({g.compras.length})
-              </summary>
+            <LazyDetails
+              summaryClassName="cursor-pointer font-medium"
+              summary={`O que comprar e onde procurar (${g.compras.length})`}
+            >
               <ul className="mt-2 space-y-2">
                 {g.compras.map((c) => (
                   <li key={c.id} className="space-y-1">
@@ -87,7 +89,7 @@ export function LocationsTab({ data }: { data: ProjectViewData }) {
                   </li>
                 ))}
               </ul>
-            </details>
+            </LazyDetails>
           )}
           {g.alertas.includes("regulamentacao") && (
             <p className="rounded-md bg-muted p-2 text-xs">

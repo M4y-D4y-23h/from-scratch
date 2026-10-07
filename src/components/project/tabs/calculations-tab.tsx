@@ -1,7 +1,10 @@
+"use client";
+
 import { Check, CircleHelp, ExternalLink, TriangleAlert, X } from "lucide-react";
 
 import { fmt, fmtMinutes } from "@/components/format";
 import { Glossed } from "@/components/glossary/glossary";
+import { LazyDetails } from "@/components/lazy-details";
 import { Seal } from "@/components/seal";
 import { DEFAULT_DRONE_CONFIG } from "@/domain/categories/drone/config";
 import type { RuleResult } from "@/domain/core/validation";
@@ -136,8 +139,11 @@ function RuleCard({ regra, nomes }: { regra: RuleResult; nomes: Map<string, stri
           <span className="font-medium">O que fazer:</span> <Glossed text={regra.sugestao} />
         </p>
       )}
-      <details className="mt-2">
-        <summary className="cursor-pointer text-xs font-medium">Detalhes técnicos</summary>
+      <LazyDetails
+        className="mt-2"
+        summaryClassName="cursor-pointer text-xs font-medium"
+        summary="Detalhes técnicos"
+      >
         <div className="mt-2 space-y-2 text-xs">
           <p>{regra.explicacao_tecnica}</p>
           {regra.valores && Object.keys(regra.valores).length > 0 && (
@@ -174,7 +180,7 @@ function RuleCard({ regra, nomes }: { regra: RuleResult; nomes: Map<string, stri
             </ul>
           )}
         </div>
-      </details>
+      </LazyDetails>
       {pecas.length > 0 && (
         <div className="mt-1">
           <HighlightButton rotulo={`Regra: ${regra.titulo}`} componentes={pecas}>
@@ -361,10 +367,13 @@ export function CalculationsTab({ data }: { data: ProjectViewData }) {
         </div>
         {grupos.map((g) =>
           g.regras.length === 0 ? null : (
-            <details key={g.titulo} open={g.aberto} className="space-y-2">
-              <summary className="cursor-pointer font-semibold">
-                {g.titulo} ({g.regras.length})
-              </summary>
+            <LazyDetails
+              key={g.titulo}
+              open={g.aberto}
+              className="space-y-2"
+              summaryClassName="cursor-pointer font-semibold"
+              summary={`${g.titulo} (${g.regras.length})`}
+            >
               <ul className="mt-2 space-y-2">
                 {g.regras.map((r) => (
                   <li key={r.regra_id}>
@@ -372,7 +381,7 @@ export function CalculationsTab({ data }: { data: ProjectViewData }) {
                   </li>
                 ))}
               </ul>
-            </details>
+            </LazyDetails>
           ),
         )}
       </section>

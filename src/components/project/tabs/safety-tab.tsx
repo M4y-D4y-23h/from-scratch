@@ -1,3 +1,5 @@
+"use client";
+
 import { AlertOctagon, AlertTriangle, ExternalLink, Info, Scale } from "lucide-react";
 
 import { dataBr } from "@/components/format";

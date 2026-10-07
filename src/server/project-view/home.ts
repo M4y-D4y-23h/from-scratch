@@ -1,10 +1,11 @@
 import type { Tier } from "@/domain/categories/drone/build";
 import { DEFAULT_DRONE_CONFIG } from "@/domain/categories/drone/config";
 import { buildProjectReport } from "@/domain/categories/drone/project";
-import { solve } from "@/domain/categories/drone/solver";
 import type { CentsRange } from "@/domain/core/money";
 import type { VerificationStatus } from "@/domain/core/verification";
+import { memo } from "@/server/cache/memo";
 import type { LoadedCatalog } from "@/server/catalog/load";
+import { solveCached } from "@/server/engine/solve";
 
 /*
  * Cartões dos drones de referência na página inicial: os números principais da faixa econômica
@@ -29,9 +30,13 @@ export type ReferenceCard = {
 };
 
 export function referenceCards(loaded: LoadedCatalog): ReferenceCard[] {
+  return memo(`cards|${loaded.hash}`, () => computeCards(loaded));
+}
+
+function computeCards(loaded: LoadedCatalog): ReferenceCard[] {
   const { catalog } = loaded;
   return catalog.arquetipos.map((a) => {
-    const faixas = solve({ archetype: a, catalog, config: DEFAULT_DRONE_CONFIG }).faixas;
+    const faixas = solveCached(loaded, a).faixas;
     const eco = faixas.find((f) => f.faixa === "economica");
     const report = eco
       ? buildProjectReport(eco.build, a, catalog, DEFAULT_DRONE_CONFIG)

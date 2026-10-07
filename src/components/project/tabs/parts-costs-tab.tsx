@@ -1,7 +1,10 @@
+"use client";
+
 import { ExternalLink, Package, Store } from "lucide-react";
 
 import { dataBr, formatRange, priceWithDate, unpricedNote } from "@/components/format";
 import { Glossed } from "@/components/glossary/glossary";
+import { LazyDetails } from "@/components/lazy-details";
 import { Seal } from "@/components/seal";
 import type { BomRow, PurchaseOption } from "@/domain/categories/drone/bom";
 import type { ReadyMadeVerdict } from "@/domain/categories/drone/ready-made";
@@ -302,8 +305,11 @@ function ToolRow({ ferramenta: f }: { ferramenta: ToolView }) {
         </div>
         <ToolOwnedToggle ferramentaId={f.id} nome={f.nome} jaTenho={f.ja_tenho} />
       </div>
-      <details className="text-sm">
-        <summary className="cursor-pointer text-xs font-medium">Para que serve e cuidados</summary>
+      <LazyDetails
+        className="text-sm"
+        summaryClassName="cursor-pointer text-xs font-medium"
+        summary="Para que serve e cuidados"
+      >
         <div className="mt-2 space-y-1.5 text-muted-foreground">
           <p>
             <Glossed text={f.para_que_serve} />
@@ -330,7 +336,7 @@ function ToolRow({ ferramenta: f }: { ferramenta: ToolView }) {
             <BuyLinks opcoes={f.onde_comprar} />
           </div>
         </div>
-      </details>
+      </LazyDetails>
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { ArrowLeftRight, Crosshair, Eye } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
-import { useWorkspace } from "./workspace";
+import { useWorkspace, useWorkspaceActions } from "./workspace";
 
 /* Botões pequenos que ligam as abas ao 3D e ao diálogo de troca. */
 
@@ -24,7 +24,7 @@ export function ShowIn3DButton({ componenteId, nome }: { componenteId: string; n
 }
 
 export function SwapButton({ slot, rotulo }: { slot: string; rotulo: string }) {
-  const { abrirTroca } = useWorkspace();
+  const { abrirTroca } = useWorkspaceActions();
   return (
     <Button
       variant="outline"

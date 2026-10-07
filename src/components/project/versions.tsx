@@ -25,7 +25,7 @@ import {
 import { TIER_LABEL } from "@/domain/categories/drone/build";
 import type { ProjectOrigin, ProjectViewData } from "@/server/project-view/view";
 
-import { useWorkspace } from "./workspace";
+import { useWorkspaceActions } from "./workspace";
 
 /*
  * O seu projeto: nome, de onde veio e o histórico de versões (SPEC B.5: toda alteração gera nova
@@ -35,7 +35,7 @@ import { useWorkspace } from "./workspace";
 type Projeto = Extract<ProjectOrigin, { tipo: "projeto" }>;
 
 export function ProjectVersions({ data, origem }: { data: ProjectViewData; origem: Projeto }) {
-  const ws = useWorkspace();
+  const ws = useWorkspaceActions();
   const [pendente, startTransition] = useTransition();
   const [editando, setEditando] = useState(false);
   const [apagar, setApagar] = useState(false);

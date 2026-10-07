@@ -19,7 +19,7 @@ import {
 } from "@/domain/categories/drone/scene";
 import type { Archetype, Component, Tool } from "@/domain/categories/drone/schema";
 import { compareSizeClasses, type SizeComparison } from "@/domain/categories/drone/size-comparison";
-import { solve, type TierPlan } from "@/domain/categories/drone/solver";
+import type { TierPlan } from "@/domain/categories/drone/solver";
 import {
   allSlotAlternatives,
   type BuildChoice,
@@ -29,7 +29,9 @@ import {
 } from "@/domain/categories/drone/swap";
 import type { ValidationReport } from "@/domain/core/validation";
 import { deriveStatus, type VerificationStatus } from "@/domain/core/verification";
+import { memo } from "@/server/cache/memo";
 import type { LoadedCatalog } from "@/server/catalog/load";
+import { configKey, ownedKey, solveCached } from "@/server/engine/solve";
 import type { VersionSnapshot } from "@/server/projects/repository";
 
 /*
@@ -169,13 +171,14 @@ function sizeComparison(
   archetype: Archetype,
   faixa: Tier,
   report: ProjectReport,
-  catalog: DroneCatalog,
+  loaded: LoadedCatalog,
   config: DroneConfig,
 ): SizeComparison | undefined {
+  const { catalog } = loaded;
   if (archetype.firmware !== "ArduPilot") return undefined;
   const fpv = catalog.arquetipos.find((a) => a.firmware === "Betaflight" && a.id.includes("5pol"));
   if (!fpv) return undefined;
-  const plano5 = solve({ archetype: fpv, catalog, config }).faixas[0];
+  const plano5 = solveCached(loaded, fpv, { config }).faixas[0];
   if (!plano5) return undefined;
   return compareSizeClasses(
     archetype,
@@ -229,7 +232,21 @@ function toolViews(
   });
 }
 
-/** Monta a página a partir de um build já resolvido. */
+/** O build na chave da memória: cada peça, quantidade e de quem ela vem (kits). */
+function buildKey(build: Build): string {
+  return build.itens
+    .map(
+      (i) =>
+        `${i.slot}:${i.componente.id}:${i.quantidade_no_drone}:${i.quantidade_compra}:${i.fornecido_por ?? ""}`,
+    )
+    .join(",");
+}
+
+/**
+ * Monta a página a partir de um build já resolvido. A parte cara (relatório, alternativas de
+ * cada slot, comparação de tamanho) fica na memória do servidor por catálogo + build + opções +
+ * "já tenho"; só a origem (título, versões) é refeita a cada visita.
+ */
 function assemble(
   origem: ProjectOrigin,
   archetype: Archetype,
@@ -238,6 +255,28 @@ function assemble(
   faixa: Tier,
   deps: ViewDeps,
 ): ProjectViewData {
+  const config = deps.config ?? DEFAULT_DRONE_CONFIG;
+  const owned = deps.ferramentasQueTenho ?? new Set<string>();
+  const chave = [
+    "view",
+    deps.loaded.hash,
+    archetype.id,
+    faixa,
+    configKey(config),
+    ownedKey(owned),
+    JSON.stringify(choice),
+    buildKey(build),
+  ].join("|");
+  return { origem, ...memo(chave, () => computeView(archetype, build, choice, faixa, deps)) };
+}
+
+function computeView(
+  archetype: Archetype,
+  build: Build,
+  choice: BuildChoice,
+  faixa: Tier,
+  deps: ViewDeps,
+): Omit<ProjectViewData, "origem"> {
   const { catalog, hash } = deps.loaded;
   const config = deps.config ?? DEFAULT_DRONE_CONFIG;
   const owned = deps.ferramentasQueTenho ?? new Set<string>();
@@ -255,7 +294,6 @@ function assemble(
     prontos: report.prontos,
   };
   return {
-    origem,
     arquetipo: {
       id: archetype.id,
       nome: archetype.nome,
@@ -280,7 +318,7 @@ function assemble(
       atual: report,
     }),
     partes: scenePartsInfo(build, report.custos),
-    comparacao_tamanho: sizeComparison(archetype, faixa, report, catalog, config),
+    comparacao_tamanho: sizeComparison(archetype, faixa, report, deps.loaded, config),
     catalogo_hash: hash,
   };
 }
@@ -294,9 +332,7 @@ export function referenceBuild(
 ): { archetype: Archetype; build: Build } | undefined {
   const archetype = archetypeOf(loaded.catalog, arquetipoId);
   if (!archetype) return undefined;
-  const plano = solve({ archetype, catalog: loaded.catalog, config }).faixas.find(
-    (p) => p.faixa === faixa,
-  );
+  const plano = solveCached(loaded, archetype, { config }).faixas.find((p) => p.faixa === faixa);
   return plano ? { archetype, build: plano.build } : undefined;
 }
 

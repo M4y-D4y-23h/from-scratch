@@ -1,7 +1,10 @@
+"use client";
+
 import { Clock, Lock } from "lucide-react";
 
 import { fmt } from "@/components/format";
 import { Glossed } from "@/components/glossary/glossary";
+import { LazyDetails } from "@/components/lazy-details";
 import { DOMAIN_LABEL } from "@/domain/core/difficulty";
 import { LOCATION_LABEL } from "@/domain/core/location";
 import type { ProjectViewData } from "@/server/project-view/view";
@@ -36,32 +39,36 @@ export function AssemblyTab({ data }: { data: ProjectViewData }) {
         <ol className="space-y-2">
           {passos.map((p, i) => (
             <li key={p.id} className="rounded-lg border text-sm">
-              <details>
-                <summary className="flex cursor-pointer list-none items-start gap-3 p-3">
-                  <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-semibold">
-                    {i + 1}
-                  </span>
-                  <span className="flex-1 space-y-1">
-                    <span className="block font-medium">{p.titulo}</span>
-                    <span className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
-                      <span>
-                        <span aria-hidden="true">{LOCATION_LABEL[p.local].simbolo}</span>{" "}
-                        {LOCATION_LABEL[p.local].rotulo}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Clock aria-hidden="true" className="size-3" />
-                        {minutos(p.tempo_min)}
-                      </span>
-                      {p.checkpoint && (
-                        <span className="flex items-center gap-1 font-medium text-amber-800 dark:text-amber-300">
-                          <Lock aria-hidden="true" className="size-3" />
-                          Checklist de segurança
-                        </span>
-                      )}
-                      {p.opcional && <span>opcional</span>}
+              <LazyDetails
+                summaryClassName="flex cursor-pointer list-none items-start gap-3 p-3"
+                summary={
+                  <>
+                    <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-semibold">
+                      {i + 1}
                     </span>
-                  </span>
-                </summary>
+                    <span className="flex-1 space-y-1">
+                      <span className="block font-medium">{p.titulo}</span>
+                      <span className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+                        <span>
+                          <span aria-hidden="true">{LOCATION_LABEL[p.local].simbolo}</span>{" "}
+                          {LOCATION_LABEL[p.local].rotulo}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Clock aria-hidden="true" className="size-3" />
+                          {minutos(p.tempo_min)}
+                        </span>
+                        {p.checkpoint && (
+                          <span className="flex items-center gap-1 font-medium text-amber-800 dark:text-amber-300">
+                            <Lock aria-hidden="true" className="size-3" />
+                            Checklist de segurança
+                          </span>
+                        )}
+                        {p.opcional && <span>opcional</span>}
+                      </span>
+                    </span>
+                  </>
+                }
+              >
                 <div className="space-y-2 border-t px-3 pt-2 pb-3">
                   <p>
                     <span className="font-medium">Objetivo:</span> <Glossed text={p.objetivo} />
@@ -130,7 +137,7 @@ export function AssemblyTab({ data }: { data: ProjectViewData }) {
                     </HighlightButton>
                   )}
                 </div>
-              </details>
+              </LazyDetails>
             </li>
           ))}
         </ol>

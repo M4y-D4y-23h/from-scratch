@@ -4,7 +4,7 @@ import { useOptimistic, useTransition } from "react";
 
 import { setToolOwnedAction } from "@/server/actions/projects";
 
-import { useWorkspace } from "./workspace";
+import { useWorkspaceActions } from "./workspace";
 
 /*
  * "Já tenho esta ferramenta" (SPEC B.6): tira a ferramenta do custo deste e de todos os projetos.
@@ -19,7 +19,7 @@ export function ToolOwnedToggle({
   nome: string;
   jaTenho: boolean;
 }) {
-  const ws = useWorkspace();
+  const ws = useWorkspaceActions();
   const [pendente, startTransition] = useTransition();
   const [marcado, setMarcado] = useOptimistic(jaTenho);
   return (

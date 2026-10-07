@@ -1,10 +1,10 @@
 import { type Tier, TIER_LABEL } from "@/domain/categories/drone/build";
-import { DEFAULT_DRONE_CONFIG } from "@/domain/categories/drone/config";
 import { toolsForBuild } from "@/domain/categories/drone/costs";
-import { solve } from "@/domain/categories/drone/solver";
 import { importedPriceRange } from "@/domain/core/importacao";
 import { formatRange, priceToCents } from "@/domain/core/money";
 import type { VerificationStatus } from "@/domain/core/verification";
+import { memo } from "@/server/cache/memo";
+import { solveCached } from "@/server/engine/solve";
 
 import type { LoadedCatalog } from "./load";
 import type { CatalogKind } from "./write";
@@ -42,6 +42,10 @@ export type CatalogOverview = {
 const USD = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "USD" });
 
 export function catalogOverview(loaded: LoadedCatalog): CatalogOverview {
+  return memo(`catalogo|${loaded.hash}`, () => computeOverview(loaded));
+}
+
+function computeOverview(loaded: LoadedCatalog): CatalogOverview {
   const { catalog } = loaded;
   const arquetipos = catalog.arquetipos.map((a, i) => ({
     id: a.id,
@@ -61,7 +65,7 @@ export function catalogOverview(loaded: LoadedCatalog): CatalogOverview {
     m.set(id, (m.get(id) ?? new Set()).add(valor));
   };
   for (const a of catalog.arquetipos) {
-    for (const plano of solve({ archetype: a, catalog, config: DEFAULT_DRONE_CONFIG }).faixas) {
+    for (const plano of solveCached(loaded, a).faixas) {
       const uso = `${rotuloDe.get(a.id)} ${TIER_LABEL[plano.faixa as Tier].toLowerCase()}`;
       for (const item of plano.build.itens) {
         marcar(usoPeca, item.componente.id, uso);

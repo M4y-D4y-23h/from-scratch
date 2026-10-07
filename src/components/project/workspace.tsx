@@ -8,6 +8,10 @@ import type { TabId } from "./tab-ids";
  * Estado compartilhado da página do projeto: a aba aberta, a peça selecionada no 3D, as peças
  * destacadas (de um passo ou de uma regra) e o slot cuja troca está aberta. Assim a lista de
  * peças, as abas e o 3D conversam sem passar dados pelo servidor.
+ *
+ * Desempenho: são três contextos separados. As ações nunca mudam; a aba aberta fica sozinha
+ * (trocar de aba redesenha só as abas, não o 3D nem os botões das listas); o resto do estado
+ * (seleção, destaque, troca, aviso) é usado só por quem precisa dele.
  */
 
 export type Destaque = {
@@ -17,22 +21,30 @@ export type Destaque = {
   componentes?: readonly string[];
 };
 
-type WorkspaceValue = {
-  aba: TabId;
+type Aviso = { tipo: "ok" | "erro"; texto: string };
+
+type WorkspaceActions = {
   abrirAba: (aba: TabId) => void;
-  selecionado?: string;
   selecionar: (componenteId: string | undefined) => void;
-  destaque?: Destaque;
   destacar: (d: Destaque | undefined) => void;
-  trocaSlot?: string;
   abrirTroca: (slot: string) => void;
   fecharTroca: () => void;
-  /** Mensagem do último salvamento (ex.: "Versão 3 salva"). */
-  aviso?: { tipo: "ok" | "erro"; texto: string };
-  notificar: (aviso: { tipo: "ok" | "erro"; texto: string } | undefined) => void;
+  notificar: (aviso: Aviso | undefined) => void;
 };
 
-const WorkspaceContext = createContext<WorkspaceValue | null>(null);
+type WorkspaceState = {
+  selecionado?: string;
+  destaque?: Destaque;
+  trocaSlot?: string;
+  /** Mensagem do último salvamento (ex.: "Versão 3 salva"). */
+  aviso?: Aviso;
+};
+
+type WorkspaceValue = WorkspaceActions & WorkspaceState;
+
+const ActionsContext = createContext<WorkspaceActions | null>(null);
+const StateContext = createContext<WorkspaceState | null>(null);
+const TabContext = createContext<TabId | null>(null);
 
 /** Mostra o 3D (no celular ele fica acima das abas). */
 function scrollToViewer() {
@@ -70,34 +82,21 @@ export function WorkspaceProvider({
   const abrirTroca = useCallback((slot: string) => setTrocaSlot(slot), []);
   const fecharTroca = useCallback(() => setTrocaSlot(undefined), []);
 
-  const value = useMemo(
-    () => ({
-      aba,
-      abrirAba,
-      selecionado,
-      selecionar,
-      destaque,
-      destacar,
-      trocaSlot,
-      abrirTroca,
-      fecharTroca,
-      aviso,
-      notificar: setAviso,
-    }),
-    [
-      aba,
-      abrirAba,
-      selecionado,
-      selecionar,
-      destaque,
-      destacar,
-      trocaSlot,
-      abrirTroca,
-      fecharTroca,
-      aviso,
-    ],
+  const actions = useMemo<WorkspaceActions>(
+    () => ({ abrirAba, selecionar, destacar, abrirTroca, fecharTroca, notificar: setAviso }),
+    [abrirAba, selecionar, destacar, abrirTroca, fecharTroca],
   );
-  return <WorkspaceContext.Provider value={value}>{children}</WorkspaceContext.Provider>;
+  const state = useMemo<WorkspaceState>(
+    () => ({ selecionado, destaque, trocaSlot, aviso }),
+    [selecionado, destaque, trocaSlot, aviso],
+  );
+  return (
+    <ActionsContext.Provider value={actions}>
+      <StateContext.Provider value={state}>
+        <TabContext.Provider value={aba}>{children}</TabContext.Provider>
+      </StateContext.Provider>
+    </ActionsContext.Provider>
+  );
 }
 
 /** Mensagem do último salvamento, em qualquer lugar da página. */
@@ -125,8 +124,24 @@ export function WorkspaceNotice() {
   );
 }
 
-export function useWorkspace(): WorkspaceValue {
-  const ctx = useContext(WorkspaceContext);
-  if (!ctx) throw new Error("useWorkspace fora do WorkspaceProvider");
+/** Só as ações (nunca mudam: quem usa só isto não é redesenhado). */
+export function useWorkspaceActions(): WorkspaceActions {
+  const ctx = useContext(ActionsContext);
+  if (!ctx) throw new Error("useWorkspaceActions fora do WorkspaceProvider");
   return ctx;
+}
+
+/** A aba aberta (só as abas precisam dela). */
+export function useActiveTab(): TabId {
+  const ctx = useContext(TabContext);
+  if (!ctx) throw new Error("useActiveTab fora do WorkspaceProvider");
+  return ctx;
+}
+
+/** Ações + seleção, destaque, troca e aviso (sem a aba aberta). */
+export function useWorkspace(): WorkspaceValue {
+  const actions = useWorkspaceActions();
+  const state = useContext(StateContext);
+  if (!state) throw new Error("useWorkspace fora do WorkspaceProvider");
+  return useMemo(() => ({ ...actions, ...state }), [actions, state]);
 }
