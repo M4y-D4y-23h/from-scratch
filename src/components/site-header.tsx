@@ -1,16 +1,17 @@
-import { BookOpen, Database, Drone } from "lucide-react";
+import { BookOpen, Database, Drone, Sparkles } from "lucide-react";
 import Link from "next/link";
 
 import { ModeToggle } from "@/components/mode-toggle";
 
 /*
- * Cabeçalho comum: nome do app, atalhos para o catálogo e o glossário, e o tema. O link
+ * Cabeçalho comum: nome do app, atalhos para novo projeto, catálogo e glossário, e o tema. O link
  * "pular para o conteúdo" vem antes de tudo, para quem navega pelo teclado.
  */
 
-type Secao = "inicio" | "catalogo" | "glossario" | "projeto";
+type Secao = "inicio" | "novo" | "catalogo" | "glossario" | "projeto";
 
 const NAV = [
+  { href: "/novo", rotulo: "Novo projeto", secao: "novo", Icon: Sparkles },
   { href: "/catalogo", rotulo: "Catálogo", secao: "catalogo", Icon: Database },
   { href: "/glossario", rotulo: "Glossário", secao: "glossario", Icon: BookOpen },
 ] as const;

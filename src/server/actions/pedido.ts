@@ -75,17 +75,16 @@ async function pipeline(
 export async function analyzeRequestAction(
   pedido: unknown,
   respostas: unknown,
+  novo: unknown = true,
 ): Promise<PedidoResponse> {
   const bloqueio = await guard();
   if (bloqueio) return { ok: false, erro: bloqueio };
-  const novo =
-    respostas === undefined ||
-    respostas === null ||
-    (typeof respostas === "object" && Object.keys(respostas).length === 0);
-  const r = await pipeline(pedido, respostas, novo);
+  // Pedido enviado agora (não um clique nas perguntas): tenta a IA de novo se a última leitura
+  // foi de reserva e grava o registro de segurança uma vez.
+  const ehNovo = novo !== false;
+  const r = await pipeline(pedido, respostas, ehNovo);
   if ("erro" in r) return { ok: false, erro: r.erro };
-  // Registra uma vez por pedido enviado (os cliques nas perguntas não repetem o registro).
-  if (novo) logSafetyEvent(r.db, r.resultado.pedido, r.resultado.seguranca);
+  if (ehNovo) logSafetyEvent(r.db, r.resultado.pedido, r.resultado.seguranca);
   return { ok: true, resultado: r.resultado };
 }
 

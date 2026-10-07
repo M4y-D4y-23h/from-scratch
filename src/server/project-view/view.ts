@@ -83,6 +83,8 @@ export type ProjectOrigin =
       /** Peças que saíram do catálogo (a cópia guardada na versão foi usada). */
       pecas_fora_do_catalogo: string[];
       faixa_origem?: Tier;
+      /** O pedido em linguagem natural que criou o projeto (vazio se veio de uma referência). */
+      pedido?: string;
     };
 
 export type ProjectViewData = {
@@ -362,6 +364,7 @@ export type SavedProjectInput = {
   catalogo_hash: string;
   escolha: BuildChoice;
   pecas: Component[];
+  prompt_original?: string;
 };
 
 export function savedProjectView(
@@ -391,6 +394,7 @@ export function savedProjectView(
       catalogo_mudou: projeto.catalogo_hash !== hash,
       pecas_fora_do_catalogo: montado.faltando.map((id) => nomes.get(id) ?? id),
       faixa_origem: projeto.escolha.faixa_origem,
+      pedido: projeto.prompt_original || undefined,
     },
     archetype,
     montado.build,

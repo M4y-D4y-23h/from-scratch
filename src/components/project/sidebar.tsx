@@ -162,7 +162,9 @@ export function ProjectOriginCard({ data }: { data: ProjectViewData }) {
   return <ProjectVersions data={data} origem={o} />;
 }
 
-export function FuturePromptCard() {
+/** O pedido que criou o projeto (ou o atalho para fazer um) e o tutor, que vem na Fase 6. */
+export function PromptCard({ data }: { data: ProjectViewData }) {
+  const pedido = data.origem.tipo === "projeto" ? data.origem.pedido : undefined;
   return (
     <section
       aria-labelledby="titulo-pedido"
@@ -173,11 +175,29 @@ export function FuturePromptCard() {
         className="flex items-center gap-2 text-base font-semibold text-foreground"
       >
         <MessagesSquare aria-hidden="true" className="size-4" />
-        Pedido e tutor
+        {pedido ? "Seu pedido" : "Pedido e tutor"}
       </h2>
+      {pedido ? (
+        <blockquote className="border-l-2 pl-3 text-foreground italic">{pedido}</blockquote>
+      ) : (
+        <p>
+          Prefere descrever com as suas palavras?{" "}
+          <Link href="/novo" className="underline underline-offset-2">
+            Faça um pedido
+          </Link>{" "}
+          e escolha entre até três opções.
+        </p>
+      )}
       <p>
-        Em breve: descrever o drone com as suas palavras (Fase 4) e tirar dúvidas com um tutor que
-        conhece este projeto e olha fotos (Fase 6).
+        {pedido && (
+          <>
+            <Link href="/novo" className="underline underline-offset-2">
+              Fazer outro pedido
+            </Link>
+            .{" "}
+          </>
+        )}
+        Em breve: tirar dúvidas com um tutor que conhece este projeto e olha fotos (Fase 6).
       </p>
     </section>
   );

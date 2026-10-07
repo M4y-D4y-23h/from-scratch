@@ -44,6 +44,7 @@ export default async function SavedProjectPage(props: PageProps<"/projetos/[id]"
       catalogo_hash: v.catalogo_hash,
       escolha: v.escolha,
       pecas: v.pecas,
+      prompt_original: projeto.prompt_original,
     },
     { loaded, ferramentasQueTenho: ownedTools(db) },
   );

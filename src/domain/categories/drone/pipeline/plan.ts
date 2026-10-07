@@ -111,10 +111,6 @@ export function optionCard(plans: ArchetypePlans, t: PlannedTier, i: DroneIntent
         `${qual} ${formatRange(budgetTotal(card, i))}: cabe no seu orçamento de ${reais(i.orcamento_max_brl * 100)} só se você achar os preços mais baixos.`,
       );
   }
-  if (card.sem_preco > 0)
-    card.avisos.push(
-      `${card.sem_preco} item(ns) ainda sem preço pesquisado ficaram fora do total.`,
-    );
   if (i.limite_peso_g !== null && card.massa_g !== undefined && card.massa_g > i.limite_peso_g)
     card.avisos.push(
       `Pesa ${n(card.massa_g)} g: acima do limite de ${n(i.limite_peso_g)} g que você pediu.`,

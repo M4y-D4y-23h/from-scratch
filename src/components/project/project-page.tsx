@@ -8,7 +8,7 @@ import type { ProjectViewData } from "@/server/project-view/view";
 
 import { ProjectTabs } from "./project-tabs";
 import { ProjectViewer } from "./project-viewer";
-import { FuturePromptCard, ProjectOriginCard, ProjectSummary } from "./sidebar";
+import { ProjectOriginCard, ProjectSummary, PromptCard } from "./sidebar";
 import { SwapDialog, type SwapOrigin } from "./swap-dialog";
 import { AssemblyTab } from "./tabs/assembly-tab";
 import { CalculationsTab } from "./tabs/calculations-tab";
@@ -88,7 +88,7 @@ export function ProjectPage({
           </div>
           <div className="order-4 space-y-4 lg:order-2 xl:col-start-1 xl:row-start-2 xl:self-start">
             <ProjectOriginCard data={data} />
-            <FuturePromptCard />
+            <PromptCard data={data} />
           </div>
           <div className="order-2 lg:sticky lg:top-4 lg:order-3 lg:max-h-[calc(100dvh-2rem)] lg:self-start lg:overflow-y-auto lg:pr-1 xl:col-start-2 xl:row-span-2 xl:row-start-1">
             <ProjectViewer

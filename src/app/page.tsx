@@ -18,6 +18,7 @@ import { connection } from "next/server";
 import { dataHoraBr, fmt, fmtMinutes, formatRange, unpricedNote } from "@/components/format";
 import { Seal } from "@/components/seal";
 import { SiteHeader } from "@/components/site-header";
+import { HomeRequestForm } from "@/components/pedido/home-request-form";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { TIER_LABEL } from "@/domain/categories/drone/build";
 import { loadDroneCatalog } from "@/server/catalog/load";
@@ -107,16 +108,18 @@ export default async function HomePage() {
             a passo.
           </p>
 
+          <HomeRequestForm />
+
           <div
             role="status"
             className="flex max-w-2xl items-start gap-3 rounded-lg border border-dashed p-4 text-sm"
           >
             <Construction aria-hidden="true" className="mt-0.5 size-5 shrink-0" />
             <p>
-              <strong>Em construção (Fase 3: painéis e catálogo).</strong> Ainda não dá para criar
-              um projeto a partir de um pedido em linguagem natural (Fase 4), mas os três drones de
-              referência já mostram 3D, custos, dificuldade, onde fazer, segurança e cálculos, e
-              você pode trocar peças com tudo recalculado.
+              <strong>Em construção (Fase 4: pedido em linguagem natural).</strong> Já dá para
+              descrever o drone e receber até três opções com peças reais, ou abrir um drone de
+              referência. O guia de montagem com checkpoints vem na Fase 5 e o tutor por chat, na
+              Fase 6.
             </p>
           </div>
         </section>
@@ -204,8 +207,9 @@ export default async function HomePage() {
           {projetos.length === 0 ? (
             <p className="flex max-w-2xl items-start gap-2 rounded-lg border p-4 text-sm text-muted-foreground">
               <FolderOpen aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
-              Ainda não há projetos. Abra um drone de referência e use &ldquo;Trocar&rdquo; numa
-              peça: o From Scratch cria o seu projeto, com as trocas salvas em versões.
+              Ainda não há projetos. Descreva o drone no campo lá em cima e escolha uma opção, ou
+              abra um drone de referência e use &ldquo;Trocar&rdquo; numa peça: o From Scratch cria
+              o seu projeto, com as mudanças salvas em versões.
             </p>
           ) : (
             <ul className="divide-y rounded-lg border">
